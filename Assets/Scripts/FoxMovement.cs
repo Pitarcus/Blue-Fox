@@ -19,6 +19,7 @@ public class FoxMovement : MonoBehaviour
     public ParticleSystem m_dashParticles;
     public VisualEffect jumpParticles;
     public SkinnedMeshRenderer foxMesh;
+    
 
     [Space]
     [Header("Movement Parameters")]
@@ -71,9 +72,7 @@ public class FoxMovement : MonoBehaviour
     private bool isDashing = false;
     private bool doDash = false;
     private bool canDash = true;
-    private GameObject dashReset;
     private Material foxMaterial;
-    
 
     private void Awake()
     {
@@ -338,15 +337,15 @@ public class FoxMovement : MonoBehaviour
     {
         m_Rigidbody.drag = x;
     }
+    private void SetMaterialFresnelAmount(float x)
+    {
+        foxMaterial.SetFloat("_FresnelAmount", x);
+    }
     private void SetMaterialFesnelPower(float x) 
     {
         foxMaterial.SetFloat("_FresnelPower", x);
     }
-    private void SetMaterialFresnelAmount(float x) 
-    {
-        foxMaterial.SetFloat("_FresnelAmount", x);
-    }
-
+    
     void OnAnimatorMove()   // Handle movement alongside the root motion applied
     {
         m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
@@ -385,12 +384,11 @@ public class FoxMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("DashReset")) 
         {
+            m_CinemachineImpulseSource.GenerateImpulse(0.6f);
             if (!canDash)
                 canDashAnimation();
             canDash = true;
-            other.gameObject.SetActive(false);  // Watch for when doing OO vs AB
-            dashReset = other.gameObject;
-            Invoke("EnableDashResetObject", 1.5f);
+            
         }
         else if (other.gameObject.CompareTag("FallDeath")) 
         {
@@ -398,11 +396,6 @@ public class FoxMovement : MonoBehaviour
             canDash = true;
         }
     }
-    private void EnableDashResetObject() 
-    {
-        dashReset.SetActive(true);
-    }
-
     private void canDashAnimation() 
     {
         Tween fresnelAmount = DOVirtual.Float(0f, 1f, 0.2f, SetMaterialFresnelAmount);
