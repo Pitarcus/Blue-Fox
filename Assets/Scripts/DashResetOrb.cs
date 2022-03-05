@@ -18,7 +18,7 @@ public class DashResetOrb : MonoBehaviour
         orbCollider = GetComponent<Collider>();
 
         orbParticles = GetComponentInChildren<ParticleSystem>();
-        brokenOrbParticles = transform.GetChild(0).GetChild(0).GetComponent<ParticleSystem>();
+        brokenOrbParticles = transform.GetChild(1).GetComponent<ParticleSystem>();
     }
 
     private void OnTriggerEnter(Collider other)
