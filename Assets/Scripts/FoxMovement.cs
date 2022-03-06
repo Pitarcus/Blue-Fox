@@ -42,6 +42,7 @@ public class FoxMovement : MonoBehaviour
     public float dashSpeed = 100;
     public float dashMaxDrag = 14f;
     public float airborneDashBonus = 25f;
+    [Header("Dash Animation")]
     public float dashFresnelInitAmount = 1f;
     public float dashInitPowerAmount = 0f;
     public float dashFinalPowerAmount = 1f;
@@ -109,6 +110,7 @@ public class FoxMovement : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
         foxMaterial = foxMesh.materials[0];
+
     }
 
     void FixedUpdate()
@@ -119,7 +121,8 @@ public class FoxMovement : MonoBehaviour
             HandleJump();
             if (doDash && canDash)
                 HandleDash();
-        }
+        } 
+       
     }
 
     private void HandleMovement() 
@@ -318,7 +321,6 @@ public class FoxMovement : MonoBehaviour
         m_Rigidbody.useGravity = true;
         m_Rigidbody.drag = 0;
 
-
         // Animator stuff
         m_Animator.applyRootMotion = true;
         m_Animator.SetBool("dashing", false);
@@ -335,7 +337,7 @@ public class FoxMovement : MonoBehaviour
     }
     private void SetRigidbodyDrag(float x) 
     {
-        m_Rigidbody.drag = x;
+            m_Rigidbody.drag = x;
     }
     private void SetMaterialFresnelAmount(float x)
     {
@@ -358,8 +360,12 @@ public class FoxMovement : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground")) 
         {
             isGrounded = true;
+
             m_Animator.SetBool("isGrounded", isGrounded);
             m_Animator.applyRootMotion = true;
+
+            jumpParticles.Play();
+
             landing = false;
             if (!canDash)
                 canDashAnimation();
