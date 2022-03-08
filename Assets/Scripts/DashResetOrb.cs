@@ -6,15 +6,15 @@ using DG.Tweening;
 public class DashResetOrb : MonoBehaviour
 {
     private Material dashResetMaterial;
-    private MeshRenderer renderer;
+    private MeshRenderer m_renderer;
     private Collider orbCollider;
     private ParticleSystem orbParticles;
     private ParticleSystem brokenOrbParticles;
 
     void Start()
     {
-        renderer = GetComponent<MeshRenderer>();
-        dashResetMaterial = renderer.material;
+        m_renderer = GetComponent<MeshRenderer>();
+        dashResetMaterial = m_renderer.material;
         orbCollider = GetComponent<Collider>();
 
         orbParticles = GetComponentInChildren<ParticleSystem>();
@@ -29,7 +29,7 @@ public class DashResetOrb : MonoBehaviour
     private void AnimateDashReseter()
     {
         orbCollider.enabled = false;
-        renderer.enabled = false;
+        m_renderer.enabled = false;
        
         Debug.Log("Breaking orb...");
         orbParticles.Stop();
@@ -43,7 +43,7 @@ public class DashResetOrb : MonoBehaviour
     }
     private void EnableDashResetObject()
     {
-        renderer.enabled = true;
+        m_renderer.enabled = true;
         DOVirtual.Float(0, 1f, 0.5f, SetOrbFresnel);
         orbParticles.Play();
         orbCollider.enabled = true;
