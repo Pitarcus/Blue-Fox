@@ -167,7 +167,9 @@ public class FoxMovement : MonoBehaviour
             if (stillTimer == m_headTurnTime)
                 return;
             else
+            {
                 m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), stillTimer / m_headTurnTime);
+            }
         }
 
     }
@@ -261,7 +263,9 @@ public class FoxMovement : MonoBehaviour
     void CheckLandingDistance() // Check for the distance between the player and the ground, to trigger the landing animation
     {
         RaycastHit hit;
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayer))
+        bool raycasted = Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayer);
+        Debug.Log(raycasted);
+        if (raycasted)
         {
             if ( m_Rigidbody.velocity.y <= 0 && hit.distance <= landingDistanceFromGround)
             {
