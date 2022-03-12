@@ -24,6 +24,9 @@ public class FoxMovement : MonoBehaviour
     [Space]
     [Header("Movement Parameters")]
     public float m_turnSpeed = 20f;
+
+    [Space]
+    [Header("Head Aim Parameters")]
     public float m_minAimTargetX = -5;
     public float m_maxAimTargetX = 5;
     public float m_headTurnTime = 0.5f;
@@ -49,11 +52,11 @@ public class FoxMovement : MonoBehaviour
     public float dashFresnelTime = 0.5f;
 
     // Movement
-    Animator m_Animator;
-    Vector2 inputVector;
-    Vector3 m_Movement, desiredForward;
-    Quaternion m_Rotation = Quaternion.identity;
-    Vector3 forward, right;
+    private Animator m_Animator;
+    private Vector2 inputVector;
+    private Vector3 m_Movement, desiredForward;
+    private Quaternion m_Rotation = Quaternion.identity;
+    private Vector3 forward, right;
 
     // Head aim
     private float movingTimer = 0f;
@@ -62,7 +65,9 @@ public class FoxMovement : MonoBehaviour
     private bool headIsTurningLeft = false;
 
     // Input
-    private PlayerInput input;
+    [HideInInspector]
+    public PlayerInput input;
+    public bool canMove = true;
 
     // Jump
     private bool isJumping = false;
@@ -83,9 +88,10 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Enable();
         input.CharacterControls.Movement.performed += ctx => { inputVector = ctx.ReadValue<Vector2>(); };
         input.CharacterControls.Movement.canceled += ctx => inputVector = Vector2.zero;
+        //input.CharacterControls.GetFood.performed += PressingFoodButton;
 
         input.CharacterControls.Jump.performed += ctx => {
-            if (isGrounded && !isDashing)
+            if (isGrounded && !isDashing && canMove)
             {
                 JumpAction();
             }
@@ -115,7 +121,7 @@ public class FoxMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isDashing)
+        if (!isDashing && canMove)
         {
             HandleMovement();
             HandleJump();
@@ -317,7 +323,7 @@ public class FoxMovement : MonoBehaviour
     {
         // Tween for rigidbody's drag over dash time
         DOVirtual.Float(dashMaxDrag, 0f, .5f, SetRigidbodyDrag);
-        DOVirtual.Float(dashFresnelInitAmount, 0f, dashFresnelTime, SetMaterialFresnelAmount);
+        DOVirtual.Float(dashFresnelInitAmount, 0.5f, dashFresnelTime, SetMaterialFresnelAmount);
         DOVirtual.Float(dashInitPowerAmount, dashFinalPowerAmount, dashFresnelTime, SetMaterialFesnelPower);
 
         yield return new WaitForSeconds(.3f);
@@ -335,6 +341,7 @@ public class FoxMovement : MonoBehaviour
         isDashing = false;
         if (isGrounded)
         {
+            Invoke("canDashAnimation", 0.2f);
             canDash = true;
             m_Rigidbody.velocity = Vector3.zero;
         }
@@ -415,6 +422,11 @@ public class FoxMovement : MonoBehaviour
     }
     private void resetFresnel()
     {
-        DOVirtual.Float(1f, 0, 0.05f, SetMaterialFresnelAmount);
+        DOVirtual.Float(1f, 0f, 0.05f, SetMaterialFresnelAmount);
     }
+
+    /*private void PressingFoodButton(InputAction.CallbackContext ctx) 
+    {
+
+    }*/
 }
