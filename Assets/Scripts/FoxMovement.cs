@@ -67,6 +67,9 @@ public class FoxMovement : MonoBehaviour
     // Input
     [HideInInspector]
     public PlayerInput input;
+
+    // Movement enabler/disabler
+    [HideInInspector]
     public bool canMove = true;
 
     // Jump
@@ -121,13 +124,23 @@ public class FoxMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!isDashing && canMove)
+        if (!isDashing && canMove)  // only move when enabled and is not dashing
         {
             HandleMovement();
             HandleJump();
             if (doDash && canDash)
                 HandleDash();
-        } 
+        }
+        else if (!canMove) // When eating food, watch for animations and stuff
+        {
+            if (!isJumping && !isDashing && isGrounded)
+            {
+                m_aimTarget.localPosition = new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z);
+                m_Animator.SetBool("IsWalking", false);
+                m_Animator.SetFloat("speed", 0f);
+                m_Rigidbody.velocity = Vector3.zero;
+            }
+        }
        
     }
 

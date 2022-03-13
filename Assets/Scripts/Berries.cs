@@ -5,29 +5,28 @@ using UnityEngine;
 
 public class Berries : MonoBehaviour
 {
-    private FoxFood foxFood;
-    private FoxMovement foxMovement;
-    static public int berryValue = 10;
-    static public float maxTime = 3f;
-
-    private PlayerInput input;
-    private bool playerInRange = false;
-    private float currentTime = 0f;
-    private bool foodButtonDown = false;
-    private bool assigned = false;
-
+    
     // Shake properties
     public float shakeAmountY = 10f;
     public float shakeAmountZ = 10f;
     public float shakeFrequency = 10f;
     public GameObject berriesGameObject;
+    // Berries properties
+    static public int berryValue = 10;
+    static public float maxTime = 3f;
+
+    private FoxFood foxFood;
+    private FoxMovement foxMovement;
+    private PlayerInput input;
+    private bool playerInRange = false;
+    private float currentTime = 0f;
+    private bool foodButtonDown = false;
+    private bool assigned = false;
     private Vector3 originPosition;
-    //private Quaternion originRotation;
-    
+
     private void Start()
     {
         originPosition = berriesGameObject.transform.position;
-        //originRotation = berriesGameObject.transform.rotation;
     }
     private void Update()
     {
@@ -76,8 +75,8 @@ public class Berries : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("player NOT in range...");
             playerInRange = false;
+            foxMovement.canMove = true;
         }
     }
     private void PressingFoodButton ()
@@ -85,7 +84,6 @@ public class Berries : MonoBehaviour
         if (playerInRange)
         {
             foxMovement.canMove = false;
-            Debug.Log("Food Button PRESSED while close");
             foodButtonDown = true;
         }
     }
@@ -94,7 +92,6 @@ public class Berries : MonoBehaviour
         if (playerInRange)
         {
             foxMovement.canMove = true;
-            Debug.Log("Food Button RELEASED while close");
             foodButtonDown = false;
         }
     }
