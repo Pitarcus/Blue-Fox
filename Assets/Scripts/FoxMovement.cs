@@ -73,14 +73,14 @@ public class FoxMovement : MonoBehaviour
     public bool canMove = true;
 
     // Jump
-    private bool isJumping = false;
-    private bool isGrounded = true;
+    public bool isJumping = false;
+    public bool isGrounded = true;
     private bool landing = false;
 
     // Dash
-    private bool isDashing = false;
-    private bool doDash = false;
-    private bool canDash = true;
+    public bool isDashing = false;
+    public bool doDash = false;
+    public bool canDash = true;
     private Material foxMaterial;
 
     private void Awake()
@@ -94,7 +94,7 @@ public class FoxMovement : MonoBehaviour
         //input.CharacterControls.GetFood.performed += PressingFoodButton;
 
         input.CharacterControls.Jump.performed += ctx => {
-            if (isGrounded && !isDashing && canMove)
+            if (!isDashing && isGrounded && canMove)
             {
                 JumpAction();
             }
@@ -283,18 +283,21 @@ public class FoxMovement : MonoBehaviour
     {
         RaycastHit hit;
         bool raycasted = Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, groundLayer);
-        Debug.Log(raycasted);
         if (raycasted)
         {
             if ( m_Rigidbody.velocity.y <= 0 && hit.distance <= landingDistanceFromGround)
             {
-                Debug.Log("landing...");
                 m_Animator.SetTrigger("landing");
+                Invoke("Land", 0.2f);
                 landing = true;
             }
         }
     }
-
+    private void Land() 
+    {
+        isGrounded = true;
+        canDash = true;
+    }
     void HandleDash() // Dash motion
     {
         // Booleans
