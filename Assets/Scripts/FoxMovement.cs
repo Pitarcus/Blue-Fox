@@ -288,16 +288,11 @@ public class FoxMovement : MonoBehaviour
             if ( m_Rigidbody.velocity.y <= 0 && hit.distance <= landingDistanceFromGround)
             {
                 m_Animator.SetTrigger("landing");
-                Invoke("Land", 0.2f);
                 landing = true;
             }
         }
     }
-    private void Land() 
-    {
-        isGrounded = true;
-        canDash = true;
-    }
+  
     void HandleDash() // Dash motion
     {
         // Booleans
