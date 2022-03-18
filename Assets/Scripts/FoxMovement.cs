@@ -17,6 +17,7 @@ public class FoxMovement : MonoBehaviour
     public LayerMask groundLayer;   // For the jump
     public Transform spawn;
     public ParticleSystem m_dashParticles;
+    public VisualEffect dashWings;
     public VisualEffect jumpParticles;
     public SkinnedMeshRenderer foxMesh;
     
@@ -305,6 +306,7 @@ public class FoxMovement : MonoBehaviour
 
         // Dash Particles
         m_dashParticles.Play();
+        dashWings.Play();
 
         // Animator stuff (change the animation to jump for better movement)
         m_Animator.SetBool("dashing", true);
