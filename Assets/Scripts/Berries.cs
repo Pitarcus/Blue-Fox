@@ -1,16 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine;
-
+using Cinemachine;
 public class Berries : MonoBehaviour
 {
-    
-    // Shake properties
+    [Header("Assign in editor")]
+    public GameObject berriesGameObject;
+    public CinemachineVirtualCamera zoomedInCamera;
+
+    [Header("Shake Parameters")]
     public float shakeAmountY = 10f;
     public float shakeAmountZ = 10f;
     public float shakeFrequency = 10f;
-    public GameObject berriesGameObject;
+
+    [Header("Shake Parameters")]
+    public float zoomScale;
+
+    [Header("Berries Parameters")]
     // Berries properties
     static public int berryValue = 10;
     static public float maxTime = 3f;
@@ -33,11 +38,14 @@ public class Berries : MonoBehaviour
         if (playerInRange && foodButtonDown)
         {
             currentTime += Time.deltaTime;
-           
+
             ShakeBerries();
+
+            zoomedInCamera.Priority = 10;
 
             if (currentTime > maxTime)
             {
+                zoomedInCamera.Priority = 0;
                 foxFood.IncreaseFoodAmount(berryValue);
                 foxMovement.input.CharacterControls.GetFood.performed -= ctx => PressingFoodButton();
                 foxMovement.input.CharacterControls.GetFood.canceled -= ctx => FoodButtonReleased();
@@ -47,6 +55,7 @@ public class Berries : MonoBehaviour
         }
         else if (currentTime > 0) 
         {
+            zoomedInCamera.Priority = 0;
             currentTime -= Time.deltaTime;
         }
     }
@@ -57,6 +66,7 @@ public class Berries : MonoBehaviour
                 Mathf.PerlinNoise(Time.time * shakeFrequency, 1) * shakeAmountZ - 1f
                 );
     }
+   
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player")) 

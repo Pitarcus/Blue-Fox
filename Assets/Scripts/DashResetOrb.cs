@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -23,6 +21,7 @@ public class DashResetOrb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        TimeManager.instance.StopTime(0.05f);
         AnimateDashReseter();
         Invoke("EnableDashResetObject", 1.5f);
     }

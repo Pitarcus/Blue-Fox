@@ -3,15 +3,15 @@ using UnityEngine;
 
 public class OldTreeCamera : MonoBehaviour
 {
-    public CinemachineVirtualCamera camera;
+    public CinemachineVirtualCamera treeCamera;
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
-            camera.Priority = 10;
+            treeCamera.Priority = 10;
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-            camera.Priority = 0;
+            treeCamera.Priority = 0;
     }
 }
