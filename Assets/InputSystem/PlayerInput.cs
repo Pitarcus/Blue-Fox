@@ -62,6 +62,15 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ResetScene"",
+                    ""type"": ""Button"",
+                    ""id"": ""66c0eeee-f197-4169-bdc7-ea1acbc49504"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -196,6 +205,17 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                     ""action"": ""GetFood"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31f8ff79-8229-42b8-bde9-8353a29f1740"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ResetScene"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -231,6 +251,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         m_CharacterControls_Jump = m_CharacterControls.FindAction("Jump", throwIfNotFound: true);
         m_CharacterControls_Dash = m_CharacterControls.FindAction("Dash", throwIfNotFound: true);
         m_CharacterControls_GetFood = m_CharacterControls.FindAction("GetFood", throwIfNotFound: true);
+        m_CharacterControls_ResetScene = m_CharacterControls.FindAction("ResetScene", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -294,6 +315,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
     private readonly InputAction m_CharacterControls_Jump;
     private readonly InputAction m_CharacterControls_Dash;
     private readonly InputAction m_CharacterControls_GetFood;
+    private readonly InputAction m_CharacterControls_ResetScene;
     public struct CharacterControlsActions
     {
         private @PlayerInput m_Wrapper;
@@ -302,6 +324,7 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_CharacterControls_Jump;
         public InputAction @Dash => m_Wrapper.m_CharacterControls_Dash;
         public InputAction @GetFood => m_Wrapper.m_CharacterControls_GetFood;
+        public InputAction @ResetScene => m_Wrapper.m_CharacterControls_ResetScene;
         public InputActionMap Get() { return m_Wrapper.m_CharacterControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -323,6 +346,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @GetFood.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnGetFood;
                 @GetFood.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnGetFood;
                 @GetFood.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnGetFood;
+                @ResetScene.started -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnResetScene;
+                @ResetScene.performed -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnResetScene;
+                @ResetScene.canceled -= m_Wrapper.m_CharacterControlsActionsCallbackInterface.OnResetScene;
             }
             m_Wrapper.m_CharacterControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -339,6 +365,9 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
                 @GetFood.started += instance.OnGetFood;
                 @GetFood.performed += instance.OnGetFood;
                 @GetFood.canceled += instance.OnGetFood;
+                @ResetScene.started += instance.OnResetScene;
+                @ResetScene.performed += instance.OnResetScene;
+                @ResetScene.canceled += instance.OnResetScene;
             }
         }
     }
@@ -367,5 +396,6 @@ public partial class @PlayerInput : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnGetFood(InputAction.CallbackContext context);
+        void OnResetScene(InputAction.CallbackContext context);
     }
 }

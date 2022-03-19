@@ -84,9 +84,9 @@ public class FoxMovement : MonoBehaviour
     public bool canDash = true;
     private Material foxMaterial;
 
-    private void Awake()
+    private void OnEnable()
     {
-       input = new PlayerInput();
+        input = new PlayerInput();
 
         // Character controls are enabled by default
         input.CharacterControls.Enable();
@@ -94,19 +94,20 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Movement.canceled += ctx => inputVector = Vector2.zero;
         //input.CharacterControls.GetFood.performed += PressingFoodButton;
 
-        input.CharacterControls.Jump.performed += ctx => {
-            if (!isDashing && isGrounded && canMove)
-            {
-                JumpAction();
-            }
-        };
+        input.CharacterControls.Jump.performed += JumpAction;
+
         input.CharacterControls.Jump.canceled += ctx => { isJumping = false; };
 
-        input.CharacterControls.Dash.performed += ctx => { 
-            if (!isDashing)
-                doDash = true; 
-        };
+        input.CharacterControls.Dash.performed += DoDash;
+    }
 
+    private void OnDisable()
+    {
+        input.CharacterControls.Jump.performed -= JumpAction;
+
+        input.CharacterControls.Dash.performed -= DoDash;
+
+        input.CharacterControls.Disable();
     }
 
     void Start()
@@ -120,7 +121,6 @@ public class FoxMovement : MonoBehaviour
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
 
         foxMaterial = foxMesh.materials[0];
-
     }
 
     void FixedUpdate()
@@ -247,18 +247,21 @@ public class FoxMovement : MonoBehaviour
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
     }
-    void JumpAction() 
+    void JumpAction(InputAction.CallbackContext context) 
     {
-        m_Rigidbody.drag = 0;
-        m_Animator.applyRootMotion = false;
-        isJumping = true;
-        m_Rigidbody.velocity += Vector3.up * jumpVelocity;
-        isGrounded = false;
+        if (!isDashing && isGrounded && canMove)
+        {
+            m_Rigidbody.drag = 0;
+            m_Animator.applyRootMotion = false;
+            isJumping = true;
+            m_Rigidbody.velocity += Vector3.up * jumpVelocity;
+            isGrounded = false;
 
-        jumpParticles.Play();
+            jumpParticles.Play();
 
-        m_Animator.SetTrigger("jump");
-        m_Animator.SetBool("isGrounded", isGrounded);
+            m_Animator.SetTrigger("jump");
+            m_Animator.SetBool("isGrounded", isGrounded);
+        }
     }
     void HandleJump() 
     {
@@ -293,7 +296,12 @@ public class FoxMovement : MonoBehaviour
             }
         }
     }
-  
+
+    void DoDash(InputAction.CallbackContext context) 
+    {
+        if (!isDashing)
+            doDash = true;
+    }
     void HandleDash() // Dash motion
     {
         // Booleans

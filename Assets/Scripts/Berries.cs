@@ -1,11 +1,16 @@
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.UI;
 using Cinemachine;
+using DG.Tweening;
+
 public class Berries : MonoBehaviour
 {
     [Header("Assign in editor")]
     public GameObject berriesGameObject;
     public CinemachineVirtualCamera zoomedInCamera;
+    public GameObject UICanvas;
+    public Image slider;
 
     [Header("Shake Parameters")]
     public float shakeAmountY = 10f;
@@ -20,9 +25,10 @@ public class Berries : MonoBehaviour
     static public int berryValue = 10;
     static public float maxTime = 3f;
 
+    private bool collected = false;
+
     private FoxFood foxFood;
     private FoxMovement foxMovement;
-    private PlayerInput input;
     private bool playerInRange = false;
     private float currentTime = 0f;
     private bool foodButtonDown = false;
@@ -32,12 +38,15 @@ public class Berries : MonoBehaviour
     private void Start()
     {
         originPosition = berriesGameObject.transform.position;
+        UICanvas.SetActive(false);
     }
     private void Update()
     {
-        if (playerInRange && foodButtonDown)
+        if (!collected && playerInRange && foodButtonDown)
         {
             currentTime += Time.deltaTime;
+
+            slider.fillAmount = currentTime / maxTime;
 
             ShakeBerries();
 
@@ -46,15 +55,24 @@ public class Berries : MonoBehaviour
             if (currentTime > maxTime)
             {
                 zoomedInCamera.Priority = 0;
+
                 foxFood.IncreaseFoodAmount(berryValue);
+
                 foxMovement.input.CharacterControls.GetFood.performed -= ctx => PressingFoodButton();
                 foxMovement.input.CharacterControls.GetFood.canceled -= ctx => FoodButtonReleased();
+
                 berriesGameObject.SetActive(false);
+
+                TweenCanvasOut();
+                Invoke("DisableCanvas", 0.3f);
+
+                collected = true;
                 this.enabled = false;
             }
         }
         else if (currentTime > 0) 
         {
+            slider.fillAmount = currentTime / maxTime;
             zoomedInCamera.Priority = 0;
             currentTime -= Time.deltaTime;
         }
@@ -69,7 +87,7 @@ public class Berries : MonoBehaviour
    
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player")) 
+        if (!collected && other.CompareTag("Player")) 
         {
             if (!assigned)
             {
@@ -79,6 +97,10 @@ public class Berries : MonoBehaviour
                 foxMovement.input.CharacterControls.GetFood.canceled += ctx => FoodButtonReleased();
             }
             playerInRange = true;
+
+            UICanvas.SetActive(true);
+            DOVirtual.Float(0f, 1f, 0.3f, SetCanvasScale).SetEase(Ease.InFlash);
+
         }
     }
     private void OnTriggerExit(Collider other)
@@ -87,8 +109,23 @@ public class Berries : MonoBehaviour
         {
             playerInRange = false;
             foxMovement.canMove = true;
+            TweenCanvasOut();
         }
+
     }
+    private void TweenCanvasOut() 
+    {
+        DOVirtual.Float(1f, 0f, 0.3f, SetCanvasScale).SetEase(Ease.InFlash);
+    }
+    private void DisableCanvas()
+    { 
+        UICanvas.SetActive(false);
+    }
+    private void SetCanvasScale(float x)
+    {
+        UICanvas.transform.localScale = new Vector3(x, x, x);
+    }
+
     private void PressingFoodButton ()
     {
         if (playerInRange)
