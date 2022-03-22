@@ -1,4 +1,5 @@
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 using UnityEngine;
 using UnityEngine.UI;
 using Cinemachine;
@@ -11,6 +12,9 @@ public class Berries : MonoBehaviour
     public CinemachineVirtualCamera zoomedInCamera;
     public GameObject UICanvas;
     public Image slider;
+    public Image buttonImage;
+    public Sprite controllerSprite;
+    public Sprite keyboardSprite;
 
     [Header("Shake Parameters")]
     public float shakeAmountY = 10f;
@@ -24,22 +28,47 @@ public class Berries : MonoBehaviour
     // Berries properties
     static public int berryValue = 10;
     static public float maxTime = 3f;
+    private Vector3 originPosition;
 
-    private bool collected = false;
+    private bool collected = false; // When collected, stop working
+    private bool assigned = false; // Private variables referencing the player assigned
 
     private FoxFood foxFood;
     private FoxMovement foxMovement;
     private bool playerInRange = false;
-    private float currentTime = 0f;
+
+    // Button stuff
     private bool foodButtonDown = false;
-    private bool assigned = false;
-    private Vector3 originPosition;
+    private float currentTime = 0f;
+
+    private PlayerInput input;
 
     private void Start()
     {
         originPosition = berriesGameObject.transform.position;
         UICanvas.SetActive(false);
     }
+    // Stuf for changing UI depending on Device
+    private void OnEnable()
+    {
+        InputUser.onChange += InputUser_onChange;
+    }
+    private void OnDisable()
+    {
+        InputUser.onChange -= InputUser_onChange;
+    }
+
+    private void InputUser_onChange(InputUser arg1, InputUserChange arg2, InputDevice arg3)
+    {
+        Debug.Log("Device Change");
+        if (arg1.controlScheme.Value.name == "Gamepad") 
+        {
+            buttonImage.sprite = controllerSprite;
+        }
+        else
+            buttonImage.sprite = keyboardSprite;
+    }
+
     private void Update()
     {
         if (!collected && playerInRange && foodButtonDown)
@@ -58,8 +87,8 @@ public class Berries : MonoBehaviour
 
                 foxFood.IncreaseFoodAmount(berryValue);
 
-                foxMovement.input.CharacterControls.GetFood.performed -= ctx => PressingFoodButton();
-                foxMovement.input.CharacterControls.GetFood.canceled -= ctx => FoodButtonReleased();
+                input.CharacterControls.GetFood.performed -= ctx => PressingFoodButton();
+                input.CharacterControls.GetFood.canceled -= ctx => FoodButtonReleased();
 
                 berriesGameObject.SetActive(false);
 
@@ -93,8 +122,9 @@ public class Berries : MonoBehaviour
             {
                 foxFood = other.GetComponent<FoxFood>();
                 foxMovement = other.GetComponent<FoxMovement>();
-                foxMovement.input.CharacterControls.GetFood.performed += ctx => PressingFoodButton();
-                foxMovement.input.CharacterControls.GetFood.canceled += ctx => FoodButtonReleased();
+                input = foxMovement.input;
+                input.CharacterControls.GetFood.performed += ctx => PressingFoodButton();
+                input.CharacterControls.GetFood.canceled += ctx => FoodButtonReleased();
             }
             playerInRange = true;
 
@@ -142,4 +172,5 @@ public class Berries : MonoBehaviour
             foodButtonDown = false;
         }
     }
+    
 }
