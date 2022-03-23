@@ -71,7 +71,7 @@ public class Berries : MonoBehaviour
 
     private void Update()
     {
-        if (!collected && playerInRange && foodButtonDown)
+        if (!collected && playerInRange && foodButtonDown)  // Pressing button down
         {
             currentTime += Time.deltaTime;
 
@@ -81,7 +81,7 @@ public class Berries : MonoBehaviour
 
             zoomedInCamera.Priority = 10;
 
-            if (currentTime > maxTime)
+            if (currentTime > maxTime)  // Button pressed for long enough
             {
                 zoomedInCamera.Priority = 0;
 

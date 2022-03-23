@@ -409,7 +409,8 @@ public class FoxMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
-            isGrounded = false;
+            if(m_Rigidbody.velocity.y != 0)
+                isGrounded = false;
             m_Animator.SetBool("isGrounded", isGrounded);
             m_Animator.applyRootMotion = false;
             if (!isJumping)
