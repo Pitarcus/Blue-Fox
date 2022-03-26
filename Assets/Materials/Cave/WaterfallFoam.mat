@@ -88,7 +88,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _Erosion: -0.53
+    - _Erosion: -0.11
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -98,7 +98,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RemapVoronoi: -2.59
+    - _RemapVoronoi: -7.76
     - _RippleAmount: 0.33
     - _RippleSpeed: -0.1
     - _Smoothness: 0.5

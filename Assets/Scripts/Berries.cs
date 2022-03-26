@@ -60,13 +60,16 @@ public class Berries : MonoBehaviour
 
     private void InputUser_onChange(InputUser arg1, InputUserChange arg2, InputDevice arg3)
     {
-        Debug.Log("Device Change");
-        if (arg1.controlScheme.Value.name == "Gamepad") 
+        if (arg2 == InputUserChange.ControlsChanged)
         {
-            buttonImage.sprite = controllerSprite;
+            Debug.Log("Device Change");
+            if (arg1.controlScheme.Value.name == "Gamepad")
+            {
+                buttonImage.sprite = controllerSprite;
+            }
+            else
+                buttonImage.sprite = keyboardSprite;
         }
-        else
-            buttonImage.sprite = keyboardSprite;
     }
 
     private void Update()

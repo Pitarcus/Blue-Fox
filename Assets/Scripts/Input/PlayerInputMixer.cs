@@ -10,12 +10,13 @@ public class PlayerInputMixer : MonoBehaviour
 
     public GameObject gameInputObject;
 
-    void Start()
+    void Awake()
     {
         PlayerControls = new PlayerInput(); // implements IInputActionCollection
 
         PlayerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         PlayerInput.defaultActionMap = PlayerControls.UI.Get().name;
+        Debug.Log(PlayerControls);
         PlayerInput.actions = PlayerControls.asset;
 
         var uiInputModule = gameInputObject.GetComponentInChildren<InputSystemUIInputModule>();
