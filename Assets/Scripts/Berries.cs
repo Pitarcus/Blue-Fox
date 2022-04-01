@@ -9,20 +9,19 @@ public class Berries : MonoBehaviour
 {
     [Header("Assign in editor")]
     public GameObject berriesGameObject;
+    public ParticleSystem berriesParticles;
     public CinemachineVirtualCamera zoomedInCamera;
     public GameObject UICanvas;
     public Image slider;
     public Image buttonImage;
     public Sprite controllerSprite;
     public Sprite keyboardSprite;
+    public FoodCaught finalAnimation;
 
     [Header("Shake Parameters")]
     public float shakeAmountY = 10f;
     public float shakeAmountZ = 10f;
     public float shakeFrequency = 10f;
-
-    [Header("Shake Parameters")]
-    public float zoomScale;
 
     [Header("Berries Parameters")]
     // Berries properties
@@ -84,7 +83,7 @@ public class Berries : MonoBehaviour
 
             zoomedInCamera.Priority = 10;
 
-            if (currentTime > maxTime)  // Button pressed for long enough
+            if (currentTime > maxTime)  // BUTTON PRESSED FOR LONG ENOUGH
             {
                 zoomedInCamera.Priority = 0;
 
@@ -93,7 +92,8 @@ public class Berries : MonoBehaviour
                 input.CharacterControls.GetFood.performed -= ctx => PressingFoodButton();
                 input.CharacterControls.GetFood.canceled -= ctx => FoodButtonReleased();
 
-                berriesGameObject.SetActive(false);
+                berriesParticles.Stop();
+                finalAnimation.StartAnimation(foxMovement.transform); // Start animation that shows another mesh on the head of the fox
 
                 TweenCanvasOut();
                 Invoke("DisableCanvas", 0.3f);

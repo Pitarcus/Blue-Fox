@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509260766850333289, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9138621363836580524, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
@@ -343,6 +343,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: bc38d3b407a8e95478364e2b72477a24, type: 3}
       propertyPath: m_Name
       value: Bush2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: bc38d3b407a8e95478364e2b72477a24, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc38d3b407a8e95478364e2b72477a24, type: 3}
@@ -5342,12 +5346,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 6ab2a76db9442af41b7b8c602f282b41, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 6ab2a76db9442af41b7b8c602f282b41, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 83894763378cf154dbf055f5fae0be48, type: 2}
     - target: {fileID: 919132149155446097, guid: 6ab2a76db9442af41b7b8c602f282b41, type: 3}
       propertyPath: m_Name
       value: BushWithBerries
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 6ab2a76db9442af41b7b8c602f282b41, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ab2a76db9442af41b7b8c602f282b41, type: 3}
@@ -5967,6 +5979,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pine1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 55470d07332d142479be1d2cdd662a6d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 55470d07332d142479be1d2cdd662a6d, type: 3}
 --- !u!1 &835418361
@@ -6018,6 +6034,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
   m_PrefabInstance: {fileID: 1941285128}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &881255484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881255482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d528218b1ae675f4c8278deb3f7502aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMesh: {fileID: -3048649960396634672, guid: 35099d97d867cfb4fa7880ab9a104533, type: 3}
+  changesMesh: 1
+  hasAnimation: 0
+  unlocked: 0
 --- !u!1 &923974587
 GameObject:
   m_ObjectHideFlags: 0
@@ -6909,6 +6941,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArbolTextura1
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a617d0ce2da1e3d45a49ff96e49b411a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a617d0ce2da1e3d45a49ff96e49b411a, type: 3}
 --- !u!1 &1125335251
@@ -7306,16 +7342,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   berriesGameObject: {fileID: 881255482}
+  berriesParticles: {fileID: 189826079}
   zoomedInCamera: {fileID: 1556034106}
   UICanvas: {fileID: 1592339414}
   slider: {fileID: 949815970}
   buttonImage: {fileID: 1461260500}
   controllerSprite: {fileID: 21300000, guid: 6ace71240cb83d445ab685271a52fa77, type: 3}
   keyboardSprite: {fileID: 21300000, guid: 134da3cc645305a48ae0b838f46fbffa, type: 3}
+  finalAnimation: {fileID: 881255484}
   shakeAmountY: 0.5
   shakeAmountZ: 2
   shakeFrequency: 7
-  zoomScale: 3
 --- !u!1001 &1315807165
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7387,6 +7424,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArbolTextura1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: a617d0ce2da1e3d45a49ff96e49b411a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a617d0ce2da1e3d45a49ff96e49b411a, type: 3}
 --- !u!4 &1315807166 stripped
@@ -7408,7 +7449,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1324388185
 Transform:
@@ -8000,12 +8041,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: cbcba068b88b81745aae1e06f0f6773d, type: 3}
+      propertyPath: m_StaticShadowCaster
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: cbcba068b88b81745aae1e06f0f6773d, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 87d5026117699cc4ba900d5dccc4e71d, type: 2}
     - target: {fileID: 919132149155446097, guid: cbcba068b88b81745aae1e06f0f6773d, type: 3}
       propertyPath: m_Name
       value: Bush3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: cbcba068b88b81745aae1e06f0f6773d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbcba068b88b81745aae1e06f0f6773d, type: 3}
@@ -8073,6 +8122,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pine2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
 --- !u!4 &1702438708 stripped
@@ -8138,6 +8191,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
       propertyPath: m_Name
       value: Pine2 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
@@ -8795,6 +8852,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: bbac76887ea02084097236c86a6783ea, type: 2}
+    - target: {fileID: -5754084199372789682, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 7063521174507927398, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
     - target: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
       propertyPath: m_Name
       value: Berries
@@ -8802,6 +8863,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
       propertyPath: m_TagString
       value: Berries
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
@@ -8958,6 +9023,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
       propertyPath: m_Name
       value: Pine2
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef00cced35534b547bd8d93fdd7d4c89, type: 3}
