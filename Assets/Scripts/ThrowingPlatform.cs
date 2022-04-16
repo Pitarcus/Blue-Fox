@@ -8,15 +8,20 @@ public class ThrowingPlatform : MonoBehaviour
 
     // Parameters
     public Transform targetPosition;
+    public Transform mesh;
     public float duration = 2f;
     public float jumpVelocityMultiplier;
+
+    public bool fallingPLatform;
     public Ease easeType;
+    public bool resetPosition = true;
+    
 
     // Platform members
     private Vector3 originalPosition;
     private Vector3 movingDirection;
     private bool onOrigin = true;
-    public float jumpVelocity;  // ONLY PUBLIC FOR TESTING PURPOSES
+    private float jumpVelocity;  // ONLY PUBLIC FOR TESTING PURPOSES
 
     // References
     private GameObject player;
@@ -25,30 +30,22 @@ public class ThrowingPlatform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        originalPosition = transform.position;
-        movingDirection = targetPosition.position - transform.position;
-        movingDirection.Normalize();
+        if (!fallingPLatform)
+        {
+            originalPosition = transform.position;
+            movingDirection = targetPosition.position - transform.position;
+            movingDirection.Normalize();
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (onOrigin)
         {
-            // Create the sequence of the movement of the platform
-            Sequence movementSequence = DOTween.Sequence();
-
-            movementSequence.Append(transform.DOMove(targetPosition.position, duration, false)).SetEase(easeType);
-            movementSequence.AppendInterval(1f);
-            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)).OnComplete(OnOrigin);
-
-            // Create the sequence of the values for the inertia of the player jump
-            Sequence jumpSequence = DOTween.Sequence();
-            jumpSequence.Append(DOVirtual.Float(0f, 1f, duration / 3, ChangeJumpVelocity));
-            jumpSequence.AppendInterval(duration / 3);
-            jumpSequence.Append(DOVirtual.Float(1f, 0f, duration / 3, ChangeJumpVelocity));
-            //DOVirtual.Float(0f, 0.9f, duration + 0.2f, ChangeJumpVelocity).SetEase(Ease.InOutElastic).OnComplete(ResetJumpVelocity);
-
-            onOrigin = false;
+            if (fallingPLatform)
+                FallingPlatform();
+            else
+                ThrowPlatform();
         }
     }
 
@@ -61,6 +58,41 @@ public class ThrowingPlatform : MonoBehaviour
     {
         onOrigin = true;
     }
+
+    private void ThrowPlatform() 
+    {
+        // Create the sequence of the movement of the platform
+        Sequence movementSequence = DOTween.Sequence();
+
+        movementSequence.Append(transform.DOShakePosition(duration / 5));   // May change for a child mesh
+        movementSequence.Join(transform.DOMove(targetPosition.position, duration, false).SetEase(easeType));
+
+        if (resetPosition)
+        {
+            movementSequence.AppendInterval(1f);
+            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)).OnComplete(OnOrigin);
+        }
+
+        // Create the sequence of the values for the inertia of the player jump
+        Sequence jumpSequence = DOTween.Sequence();
+        jumpSequence.Append(DOVirtual.Float(0f, 1f, duration, ChangeJumpVelocity).SetEase(easeType));
+        jumpSequence.AppendInterval(0.1f);
+        jumpSequence.Append(DOVirtual.Float(1f, 0f, 0.3f, ChangeJumpVelocity));
+        //DOVirtual.Float(0f, 0.9f, duration + 0.2f, ChangeJumpVelocity).SetEase(Ease.InOutElastic).OnComplete(ResetJumpVelocity);
+
+        onOrigin = false;
+    }
+    private void FallingPlatform() 
+    {
+        // Create the sequence of the movement of the platform
+        Sequence movementSequence = DOTween.Sequence();
+
+        movementSequence.Append(mesh.DOShakePosition(0.5f, 1.2f, 20, 90, false, false));
+        movementSequence.AppendInterval(0.5f);
+        movementSequence.Join(transform.DOMove(transform.position - new Vector3(0, 200), 3f, false)).SetEase(Ease.InQuart);
+
+        onOrigin = false;
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (player == null) 
@@ -68,7 +100,8 @@ public class ThrowingPlatform : MonoBehaviour
             player = other.gameObject;
             playerRb = player.GetComponent<Rigidbody>();
         }
-        player.transform.parent = transform;
+        if (!fallingPLatform)
+            player.transform.parent = transform;
     }
 
     private void OnTriggerExit(Collider other)
