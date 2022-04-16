@@ -82,16 +82,16 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CloudScale: 10
-    - _CloudSpeed: 0.001
-    - _CloudStep: 0.114
-    - _CloudTransparency: 0.9
+    - _CloudScale: 50
+    - _CloudSpeed: 0.004
+    - _CloudStep: 0.17
+    - _CloudTransparency: 0.85
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistortionScale: 100
-    - _DistortionSpeed: 0.006
+    - _DistortionSpeed: 0.003
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0

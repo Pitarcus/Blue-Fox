@@ -85,7 +85,7 @@ Material:
     - _CloudScale: 10
     - _CloudSpeed: 0.001
     - _CloudStep: 0.1
-    - _CloudTransparency: 0.58
+    - _CloudTransparency: 0.3
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1

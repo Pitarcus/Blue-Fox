@@ -40,6 +40,7 @@ public class FoxMovement : MonoBehaviour
     public float fallMultiplier = 2.5f;
     public float lowJumpMultiplier = 2f;
     public float landingDistanceFromGround = 5f;
+    public float maxJumpTime = 2.5f;
 
     [Space]
     [Header("Dash Parameters")]
@@ -77,6 +78,7 @@ public class FoxMovement : MonoBehaviour
     public bool isJumping = false;
     public bool isGrounded = true;
     private bool landing = false;
+    private float jumpTimer = 0f;    // To check for how much the player is jumping
 
     // Dash
     public bool isDashing = false;
@@ -267,16 +269,17 @@ public class FoxMovement : MonoBehaviour
     {
         if (!isGrounded) // Only handle jump when airborne
         {
+            if (jumpTimer < maxJumpTime)
+                jumpTimer += Time.deltaTime;
+            Debug.Log(jumpTimer);
             m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * jumpMovementSpeed);
             if (m_Rigidbody.velocity.y < fallSpeedThreshold)    // Chacter is falling after max height
             {   
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
-                
             }
-            else if (m_Rigidbody.velocity.y > fallSpeedThreshold && !isJumping) // Player released the jump button mid-jump
+            else if (m_Rigidbody.velocity.y > fallSpeedThreshold && (!isJumping || jumpTimer >= maxJumpTime)) // Player released the jump button mid-jump
             {
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
-                
             }
 
             if (!landing)
@@ -382,7 +385,9 @@ public class FoxMovement : MonoBehaviour
     
     void OnAnimatorMove()   // Handle movement alongside the root motion applied
     {
+
         m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
+
         m_Rigidbody.MoveRotation(m_Rotation);
     }
 
@@ -403,6 +408,8 @@ public class FoxMovement : MonoBehaviour
                 canDashAnimation();
             canDash = true;
             dashSpeed -= airborneDashBonus;
+
+            jumpTimer = 0f;
         }
     }
     private void OnCollisionExit(Collision collision)

@@ -10991,7 +10991,7 @@ MonoBehaviour:
   dashWings: {fileID: 2501529368753105294}
   jumpParticles: {fileID: 2501529370681615507}
   foxMesh: {fileID: 2874795270692303636}
-  m_turnSpeed: 5
+  m_turnSpeed: 6
   m_minAimTargetX: -5
   m_maxAimTargetX: 5
   m_headTurnTime: 0.5
