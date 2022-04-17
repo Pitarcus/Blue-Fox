@@ -271,8 +271,9 @@ public class FoxMovement : MonoBehaviour
         {
             if (jumpTimer < maxJumpTime)
                 jumpTimer += Time.deltaTime;
-            Debug.Log(jumpTimer);
+           
             m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * jumpMovementSpeed);
+
             if (m_Rigidbody.velocity.y < fallSpeedThreshold)    // Chacter is falling after max height
             {   
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
