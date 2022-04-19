@@ -16,7 +16,6 @@ public class ThrowingPlatform : MonoBehaviour
     public Ease easeType;
     public bool resetPosition = true;
     
-
     // Platform members
     private Vector3 originalPosition;
     private Vector3 movingDirection;
@@ -30,6 +29,7 @@ public class ThrowingPlatform : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        originalPosition = transform.position;
         if (!fallingPLatform)
         {
             originalPosition = transform.position;
@@ -84,7 +84,6 @@ public class ThrowingPlatform : MonoBehaviour
     }
     private void FallingPlatform() 
     {
-        Debug.Log("falling");
         // Create the sequence of the movement of the platform
         Sequence movementSequence = DOTween.Sequence();
 
@@ -92,6 +91,11 @@ public class ThrowingPlatform : MonoBehaviour
         movementSequence.AppendInterval(0.5f);
         movementSequence.Join(transform.DOMove(transform.position - new Vector3(0, 200), 3f, false)).SetEase(Ease.InQuart);
 
+        if (resetPosition)
+        {
+            movementSequence.AppendInterval(1f);
+            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)).OnComplete(OnOrigin);
+        }
         onOrigin = false;
     }
     private void OnTriggerEnter(Collider other)
