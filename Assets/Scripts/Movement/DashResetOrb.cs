@@ -21,7 +21,7 @@ public class DashResetOrb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        TimeManager.instance.StopTime(0.05f);
+        TimeManager.instance.PauseTime(0.05f);
         AnimateDashReseter();
         Invoke("EnableDashResetObject", 1.5f);
     }

@@ -16,7 +16,6 @@ public class PlayerInputMixer : MonoBehaviour
 
         PlayerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         PlayerInput.defaultActionMap = PlayerControls.UI.Get().name;
-        Debug.Log(PlayerControls);
         PlayerInput.actions = PlayerControls.asset;
 
         var uiInputModule = gameInputObject.GetComponentInChildren<InputSystemUIInputModule>();

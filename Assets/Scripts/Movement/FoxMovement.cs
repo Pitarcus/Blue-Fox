@@ -55,10 +55,12 @@ public class FoxMovement : MonoBehaviour
 
     // Movement
     private Animator m_Animator;
-    private Vector2 inputVector;
+    [HideInInspector]
+    public Vector2 inputVector;
     private Vector3 m_Movement, desiredForward;
     private Quaternion m_Rotation = Quaternion.identity;
-    private Vector3 forward, right;
+    [HideInInspector]
+    public Vector3 forward, right; // Vectors to correct view and direction control
 
     // Head aim
     private float movingTimer = 0f;
@@ -73,6 +75,7 @@ public class FoxMovement : MonoBehaviour
     // Movement enabler/disabler
     [HideInInspector]
     public bool canMove = true;
+    private bool canJump = true;
 
     // Jump
     public bool isJumping = false;
@@ -86,14 +89,14 @@ public class FoxMovement : MonoBehaviour
     public bool canDash = true;
     private Material foxMaterial;
 
-    private void OnEnable()
+    public void OnEnable()
     {
         input = new PlayerInput();
 
         // Character controls are enabled by default
         input.CharacterControls.Enable();
-        input.CharacterControls.Movement.performed += ctx => { inputVector = ctx.ReadValue<Vector2>(); };
-        input.CharacterControls.Movement.canceled += ctx => inputVector = Vector2.zero;
+        input.CharacterControls.Movement.performed += OnMovementPerformed;
+        input.CharacterControls.Movement.canceled += OnMovementCancelled;
         //input.CharacterControls.GetFood.performed += PressingFoodButton;
 
         input.CharacterControls.Jump.performed += JumpAction;
@@ -103,8 +106,11 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Dash.performed += DoDash;
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
+        input.CharacterControls.Movement.performed -= OnMovementPerformed;
+        input.CharacterControls.Movement.canceled -= OnMovementCancelled;
+
         input.CharacterControls.Jump.performed -= JumpAction;
 
         input.CharacterControls.Dash.performed -= DoDash;
@@ -112,17 +118,35 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Disable();
     }
 
+    public void OnMovementPerformed(InputAction.CallbackContext context) 
+    {
+        inputVector = context.ReadValue<Vector2>();
+    }
+
+    public void OnMovementCancelled(InputAction.CallbackContext context) 
+    { 
+        inputVector = Vector2.zero; 
+        CalculateForwardVectors(); 
+    }
+
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
 
+        CalculateForwardVectors();
+
+        foxMaterial = foxMesh.materials[0];
+
+        //canDash = false;
+    }
+
+    public void CalculateForwardVectors() 
+    {
         forward = m_mainCamera.transform.forward;
         forward.y = 0;
         forward = forward.normalized;
         right = Quaternion.Euler(new Vector3(0, 90, 0)) * forward;
-
-        foxMaterial = foxMesh.materials[0];
     }
 
     void FixedUpdate()
@@ -183,11 +207,15 @@ public class FoxMovement : MonoBehaviour
         }
         else
         {
-            m_headConstraint.weight = 0;
+            headIsTurningLeft = false;
+            headIsTurningRight = false;
             movingTimer = 0;
             stillTimer += Time.deltaTime;
-            if (stillTimer == m_headTurnTime)
+            if (stillTimer >= m_headTurnTime)
+            {
+                m_headConstraint.weight = 0;
                 return;
+            }
             else
             {
                 m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), stillTimer / m_headTurnTime);
@@ -202,11 +230,22 @@ public class FoxMovement : MonoBehaviour
 
         movingTimer += Time.deltaTime;
 
-        if (movingTimer == m_headTurnTime)
-        {
-            return;
-        }
         // Move the target's local X according to the direction the fox is facing
+        if (Mathf.Approximately(m_Rotation.eulerAngles.y, transform.rotation.eulerAngles.y))  // When there is no rotation left target to x = 0 (centered)
+        {
+            Debug.Log(headIsTurningRight);
+            Debug.Log(headIsTurningLeft);
+            if ((headIsTurningRight || headIsTurningLeft))
+            {
+                Debug.Log("START head to normal");
+                movingTimer = 0;
+                headIsTurningLeft = false;
+                headIsTurningRight = false;
+            }
+            Debug.Log("turning head to normal...");
+            m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
+        }
+
         else if (m_Rotation.eulerAngles.y > transform.rotation.eulerAngles.y) // When rotating to the right target to x = maxAimTargetX
         {
             if (!headIsTurningRight)    // If there was another movement, reset the timer (and position of the head)
@@ -238,16 +277,7 @@ public class FoxMovement : MonoBehaviour
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(m_minAimTargetX, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
 
-        else if (m_Rotation.eulerAngles.y == transform.rotation.eulerAngles.y)  // When there is no rotation left target to x = 0 (centered)
-        {
-            if (headIsTurningRight || headIsTurningLeft)
-            {
-                movingTimer = 0;
-                headIsTurningLeft = false;
-                headIsTurningRight = false;
-            }
-            m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
-        }
+        
     }
     void JumpAction(InputAction.CallbackContext context) 
     {
