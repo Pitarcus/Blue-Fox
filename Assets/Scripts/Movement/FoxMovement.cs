@@ -233,16 +233,12 @@ public class FoxMovement : MonoBehaviour
         // Move the target's local X according to the direction the fox is facing
         if (Mathf.Approximately(m_Rotation.eulerAngles.y, transform.rotation.eulerAngles.y))  // When there is no rotation left target to x = 0 (centered)
         {
-            Debug.Log(headIsTurningRight);
-            Debug.Log(headIsTurningLeft);
             if ((headIsTurningRight || headIsTurningLeft))
             {
-                Debug.Log("START head to normal");
                 movingTimer = 0;
                 headIsTurningLeft = false;
                 headIsTurningRight = false;
             }
-            Debug.Log("turning head to normal...");
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
 

@@ -10871,6 +10871,7 @@ GameObject:
   - component: {fileID: 2501529370288690791}
   - component: {fileID: 2501529370288690785}
   - component: {fileID: 2501529370288690815}
+  - component: {fileID: 888590632315299240}
   - component: {fileID: 2501529370288690784}
   - component: {fileID: 2501529370288690812}
   m_Layer: 0
@@ -11010,6 +11011,9 @@ MonoBehaviour:
   dashInitPowerAmount: -0.5
   dashFinalPowerAmount: 0.5
   dashFresnelTime: 0.6
+  inputVector: {x: 0, y: 0}
+  forward: {x: 0, y: 0, z: 0}
+  right: {x: 0, y: 0, z: 0}
   canMove: 1
   isJumping: 0
   isGrounded: 1
@@ -11029,6 +11033,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foodAmount: 0
+--- !u!114 &888590632315299240
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3347967160236765854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9539c2607c58194e911c6d53be66eee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  footStepEvent:
+    Guid:
+      Data1: -1950650507
+      Data2: 1075662352
+      Data3: -1184309116
+      Data4: -2025631045
+    Path: event:/SFX/Ambience/Fox_Footsteps
 --- !u!114 &2501529370288690784
 MonoBehaviour:
   m_ObjectHideFlags: 0
