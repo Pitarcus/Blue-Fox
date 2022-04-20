@@ -8,21 +8,27 @@ public class AnimateBars : MonoBehaviour
     public RectTransform topBar;
     public RectTransform botBar;
 
+    public float topStartY;
+    public float botStartY;
+
     private void Start()
     {
-        topBar.anchoredPosition = new Vector3(0, 50);
-        botBar.anchoredPosition = new Vector3(0, -50);
+        topStartY = topBar.anchoredPosition.y;
+        botStartY = botBar.anchoredPosition.y;
+
+        topBar.anchoredPosition = new Vector3(0, -topStartY);
+        botBar.anchoredPosition = new Vector3(0, -botStartY);
     }
 
     public void PlayEnterBars() 
     {
-        topBar.DOAnchorPosY(-30, animationDuration);
-        botBar.DOAnchorPosY(30, animationDuration);
+        topBar.DOAnchorPosY(topStartY, animationDuration);
+        botBar.DOAnchorPosY(botStartY, animationDuration);
     }
 
     public void PlayExitBars()
     {
-        topBar.DOAnchorPosY(30, animationDuration);
-        botBar.DOAnchorPosY(-30, animationDuration);
+        topBar.DOAnchorPosY(-topStartY, animationDuration);
+        botBar.DOAnchorPosY(-botStartY, animationDuration);
     }
 }

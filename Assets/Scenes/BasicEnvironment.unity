@@ -467,7 +467,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509260766850333289, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9138621363836580524, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
@@ -6581,7 +6581,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 835418362}
-  m_RootOrder: 9
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &313487762
 BoxCollider:
@@ -8290,13 +8290,13 @@ Transform:
   - {fileID: 509805986}
   - {fileID: 154208968}
   - {fileID: 639506646}
+  - {fileID: 1324388185}
   - {fileID: 543450652488547696}
   - {fileID: 1644206768}
   - {fileID: 2012866091}
-  - {fileID: 1333867612}
-  - {fileID: 1324388185}
-  - {fileID: 1184000867}
   - {fileID: 313487761}
+  - {fileID: 1333867612}
+  - {fileID: 1184000867}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11085,7 +11085,7 @@ Transform:
   - {fileID: 1702438708}
   - {fileID: 1797265429}
   m_Father: {fileID: 835418362}
-  m_RootOrder: 7
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1328231868
 GameObject:
@@ -15459,6 +15459,18 @@ PrefabInstance:
       propertyPath: m_UiScaleMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2180517894285975846, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517894285975846, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517894285975846, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
     - target: {fileID: 2180517894285975848, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -15554,6 +15566,22 @@ PrefabInstance:
     - target: {fileID: 2180517894387832126, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517894387832126, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517894387832126, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -75
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517895029047215, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 2180517895029047215, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 75
       objectReference: {fileID: 0}
     - target: {fileID: 5192739014644648998, guid: af92da28113170c46bfe9b2a0081bc5b, type: 3}
       propertyPath: animationDuration

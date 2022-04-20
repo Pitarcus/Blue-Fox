@@ -11755,6 +11755,18 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 835639320}
+    - target: {fileID: 4211615804677437692, guid: 263ca6668b4bc2b4aa205ef2162a176c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211615804941760884, guid: 263ca6668b4bc2b4aa205ef2162a176c, type: 3}
+      propertyPath: m_Weight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4211615804941760885, guid: 263ca6668b4bc2b4aa205ef2162a176c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4465340195260641899, guid: 263ca6668b4bc2b4aa205ef2162a176c, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -12777,9 +12789,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1545090265}
   - component: {fileID: 1545090261}
-  - component: {fileID: 1545090264}
   - component: {fileID: 1545090263}
   - component: {fileID: 1545090262}
+  - component: {fileID: 1545090266}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -12897,14 +12909,6 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
---- !u!81 &1545090264
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1545090260}
-  m_Enabled: 1
 --- !u!4 &1545090265
 Transform:
   m_ObjectHideFlags: 0
@@ -12920,6 +12924,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -5.657, y: 55.591, z: 0.159}
+--- !u!114 &1545090266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1545090260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
+  ListenerNumber: -1
 --- !u!1 &1571432916
 GameObject:
   m_ObjectHideFlags: 0
@@ -15586,7 +15604,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7509260766850333289, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9138621363836580524, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Color.a
