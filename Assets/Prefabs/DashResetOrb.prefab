@@ -5000,6 +5000,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f873a9ccaa2e4664592a34133042fe5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  breakingOrbEvent:
+    Guid:
+      Data1: -54210584
+      Data2: 1264730067
+      Data3: 1061191340
+      Data4: -779621458
+    Path: event:/SFX/DashOrbBreaking
 --- !u!1 &8941329412555878280
 GameObject:
   m_ObjectHideFlags: 0

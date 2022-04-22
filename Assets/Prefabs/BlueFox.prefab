@@ -10993,6 +10993,20 @@ MonoBehaviour:
   dashWings: {fileID: 2501529368753105294}
   jumpParticles: {fileID: 2501529370681615507}
   foxMesh: {fileID: 2874795270692303636}
+  dashSoundEvent:
+    Guid:
+      Data1: 393997755
+      Data2: 1171153313
+      Data3: 436440231
+      Data4: -1664507762
+    Path: event:/SFX/BlueFox/Dash
+  dashResetEvent:
+    Guid:
+      Data1: 1752335441
+      Data2: 1190322392
+      Data3: -1830188108
+      Data4: 1423340371
+    Path: event:/SFX/BlueFox/DashReset
   m_turnSpeed: 5.5
   m_minAimTargetX: -5
   m_maxAimTargetX: 5

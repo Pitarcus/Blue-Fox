@@ -13,10 +13,12 @@ public class FoxFootSteps : MonoBehaviour
     };
 
     public FMODUnity.EventReference footStepEvent;
+
     // reference to the instance of the event
-    FMOD.Studio.EventInstance footSteps;
-    
-    FMOD.Studio.PARAMETER_ID materialParameterId;
+    private FMOD.Studio.EventInstance footSteps;
+
+    private FMOD.Studio.PARAMETER_ID materialParameterId;
+    private GroundTypes currentMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -34,16 +36,19 @@ public class FoxFootSteps : MonoBehaviour
 
     private void OnDestroy()
     {
-        footSteps.release();
+       
     }
 
     public void SetMaterial(GroundTypes material)
     {
-        footSteps.setParameterByID(materialParameterId, (float)material);
+        currentMaterial = material;
     }
 
     public void PlayFootstep() 
     {
-        footSteps.start();
+        FMOD.Studio.EventInstance footstep = FMODUnity.RuntimeManager.CreateInstance(footStepEvent);
+        footstep.setParameterByID(materialParameterId, (float)currentMaterial);
+        footstep.start();
+        footstep.release();
     }
 }

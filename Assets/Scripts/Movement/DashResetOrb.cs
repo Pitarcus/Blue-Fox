@@ -8,6 +8,7 @@ public class DashResetOrb : MonoBehaviour
     private Collider orbCollider;
     private ParticleSystem orbParticles;
     private ParticleSystem brokenOrbParticles;
+    public FMODUnity.EventReference breakingOrbEvent;
 
     void Start()
     {
@@ -21,6 +22,7 @@ public class DashResetOrb : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        FMODUnity.RuntimeManager.PlayOneShot(breakingOrbEvent, transform.position);
         TimeManager.instance.PauseTime(0.05f);
         AnimateDashReseter();
         Invoke("EnableDashResetObject", 1.5f);
@@ -30,7 +32,6 @@ public class DashResetOrb : MonoBehaviour
         orbCollider.enabled = false;
         m_renderer.enabled = false;
        
-        Debug.Log("Breaking orb...");
         orbParticles.Stop();
         brokenOrbParticles.Play();
 

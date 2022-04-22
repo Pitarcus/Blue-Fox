@@ -20,7 +20,9 @@ public class FoxMovement : MonoBehaviour
     public VisualEffect dashWings;
     public VisualEffect jumpParticles;
     public SkinnedMeshRenderer foxMesh;
-    
+    // Event references for FMOD sounds
+    public FMODUnity.EventReference dashSoundEvent; 
+    public FMODUnity.EventReference dashResetEvent;
 
     [Space]
     [Header("Movement Parameters")]
@@ -88,6 +90,8 @@ public class FoxMovement : MonoBehaviour
     public bool doDash = false;
     public bool canDash = true;
     private Material foxMaterial;
+    private int fresnelAmountPropertyIndex;
+    private int fresnelPowerPropertyIndex;
 
     public void OnEnable()
     {
@@ -134,9 +138,10 @@ public class FoxMovement : MonoBehaviour
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
 
-        CalculateForwardVectors();
+        CalculateForwardVectors(); // Function that calculates the vectors for correcting movement depending on the camera's view
 
         foxMaterial = foxMesh.materials[0];
+        
 
         //canDash = false;
     }
@@ -158,7 +163,7 @@ public class FoxMovement : MonoBehaviour
             if (doDash && canDash)
                 HandleDash();
         }
-        else if (!canMove) // When eating food, watch for animations and stuff
+        else if (!canMove) // When eating food, watch for animations and stuff (force idle)
         {
             if (!isJumping && !isDashing && isGrounded)
             {
@@ -330,7 +335,9 @@ public class FoxMovement : MonoBehaviour
     void DoDash(InputAction.CallbackContext context) 
     {
         if (!isDashing)
+        {
             doDash = true;
+        }
     }
     void HandleDash() // Dash motion
     {
@@ -339,6 +346,7 @@ public class FoxMovement : MonoBehaviour
         doDash = false;
         isDashing = true;
 
+        FMODUnity.RuntimeManager.PlayOneShot(dashSoundEvent);
         // Camera shake
         m_CinemachineImpulseSource.GenerateImpulse();
 
@@ -445,10 +453,12 @@ public class FoxMovement : MonoBehaviour
         {
             if(m_Rigidbody.velocity.y != 0)
                 isGrounded = false;
+
             m_Animator.SetBool("isGrounded", isGrounded);
             m_Animator.applyRootMotion = false;
             if (!isJumping)
                 m_Animator.SetTrigger("falling");
+
             dashSpeed += airborneDashBonus;
         }
     }
@@ -457,6 +467,7 @@ public class FoxMovement : MonoBehaviour
     {
         if (other.gameObject.CompareTag("DashReset")) 
         {
+            FMODUnity.RuntimeManager.PlayOneShot(dashResetEvent);
             m_CinemachineImpulseSource.GenerateImpulse(0.6f);
             if (!canDash)
                 canDashAnimation();
@@ -478,11 +489,9 @@ public class FoxMovement : MonoBehaviour
     }
     private void resetFresnel()
     {
+        if (!isDashing)
+            FMODUnity.RuntimeManager.PlayOneShot(dashResetEvent);
         DOVirtual.Float(1f, 0f, 0.05f, SetMaterialFresnelAmount);
     }
 
-    /*private void PressingFoodButton(InputAction.CallbackContext ctx) 
-    {
-
-    }*/
 }
