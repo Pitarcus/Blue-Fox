@@ -34,11 +34,6 @@ public class FoxFootSteps : MonoBehaviour
         materialParameterId = materialParameterDescription.id;
     }
 
-    private void OnDestroy()
-    {
-       
-    }
-
     public void SetMaterial(GroundTypes material)
     {
         currentMaterial = material;
