@@ -1062,8 +1062,8 @@
             "serializedVersion": "2",
             "x": -1672.0,
             "y": 680.7999877929688,
-            "width": 125.60009765625,
-            "height": 117.60009765625
+            "width": 125.5999755859375,
+            "height": 117.60003662109375
         }
     },
     "m_Slots": [
@@ -1166,7 +1166,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Opacity",
     "m_StageCapability": 3,
-    "m_Value": 1.0,
+    "m_Value": 14.520000457763672,
     "m_DefaultValue": 1.0,
     "m_Labels": []
 }
@@ -2393,9 +2393,9 @@
         "m_Position": {
             "serializedVersion": "2",
             "x": -1504.800048828125,
-            "y": 812.7999267578125,
-            "width": 120.0,
-            "height": 148.79998779296876
+            "y": 838.4000854492188,
+            "width": 119.2000732421875,
+            "height": 149.5999755859375
         }
     },
     "m_Slots": [
@@ -2437,7 +2437,7 @@
     "m_ShaderOutputName": "B",
     "m_StageCapability": 3,
     "m_Value": {
-        "x": 0.5099999904632568,
+        "x": 0.47999998927116396,
         "y": 0.0,
         "z": 0.0,
         "w": 0.0
@@ -2965,7 +2965,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Scale",
     "m_StageCapability": 3,
-    "m_Value": 10.0,
+    "m_Value": 77.0999984741211,
     "m_DefaultValue": 500.0,
     "m_Labels": []
 }

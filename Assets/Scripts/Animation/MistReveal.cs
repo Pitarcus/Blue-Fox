@@ -37,7 +37,7 @@ public class MistReveal : MonoBehaviour
         for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
         {
             int i = currentMaterial;
-            DOVirtual.Float(startRevealValue, endRevealValue, transitionDuration, x=>ChangeMaterialRevealValue(x, i));
+            DOVirtual.Float(startRevealValue, endRevealValue, transitionDuration, x=>ChangeMaterialRevealValue(x, i)).SetEase(Ease.Linear);
         }
     }
 
@@ -63,5 +63,13 @@ public class MistReveal : MonoBehaviour
             mistObjects[i].SetActive(false);
         }
         colliders.SetActive(false);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            RevealMist();
+        }
     }
 }

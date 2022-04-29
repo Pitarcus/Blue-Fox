@@ -360,6 +360,7 @@ public class FoxMovement : MonoBehaviour
 
         // Actual forces calculation
         m_Rigidbody.velocity = Vector3.zero;
+        m_Rigidbody.angularVelocity = Vector3.zero;
 
         Vector3 dir;
         if (m_Movement != Vector3.zero)
