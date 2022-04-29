@@ -5,14 +5,16 @@ using DG.Tweening;
 
 public class MistReveal : MonoBehaviour
 {
+    public GameObject[] mistObjects;
+    public GameObject colliders;
+    public Collider trigger;
 
     public float startRevealValue = -1f;
     public float endRevealValue = 2f;
     public float transitionDuration = 5f;
 
-    public GameObject[] mistObjects;
-
-    public GameObject colliders;
+    
+    
     private List<Material> mistMaterials = new List<Material>();
 
     private int propertiesId;
@@ -27,6 +29,7 @@ public class MistReveal : MonoBehaviour
     public void RevealMist() 
     {
         colliders.SetActive(true);
+        trigger.enabled = false;
 
         for (int i = 0; i < mistObjects.Length; i++)
         {

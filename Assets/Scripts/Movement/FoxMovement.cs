@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using DG.Tweening;
 using Cinemachine;
 using UnityEngine.VFX;
+using UnityEngine.Rendering.Universal;
 
 public class FoxMovement : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class FoxMovement : MonoBehaviour
     // Event references for FMOD sounds
     public FMODUnity.EventReference dashSoundEvent; 
     public FMODUnity.EventReference dashResetEvent;
+    public DecalProjector shadowDecal;
 
     [Space]
     [Header("Movement Parameters")]
@@ -84,6 +86,8 @@ public class FoxMovement : MonoBehaviour
     public bool isGrounded = true;
     private bool landing = false;
     private float jumpTimer = 0f;    // To check for how much the player is jumping
+    private float maxShadowWidth = 3;
+    private float maxShadowHeight = 6;
 
     // Dash
     public bool isDashing = false;
@@ -313,9 +317,11 @@ public class FoxMovement : MonoBehaviour
             {
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
-
-            if (!landing)
-            CheckLandingDistance();
+            if(!landing)
+                CheckLandingDistance();
+            RaycastHit hit;
+            Physics.Raycast(transform.position, Vector3.down, out hit, 50, groundLayer);
+            shadowDecal.size = new Vector3(maxShadowWidth - maxShadowWidth * hit.distance / 20, maxShadowHeight - maxShadowHeight * hit.distance / 20, 15);
         }
     }
     void CheckLandingDistance() // Check for the distance between the player and the ground, to trigger the landing animation
@@ -330,6 +336,7 @@ public class FoxMovement : MonoBehaviour
                 landing = true;
             }
         }
+        
     }
 
     void DoDash(InputAction.CallbackContext context) 
@@ -358,7 +365,7 @@ public class FoxMovement : MonoBehaviour
         m_Animator.SetBool("dashing", true);
         m_Animator.applyRootMotion = false;
 
-        // Actual forces calculation
+        // Stop all velocities (stop body)
         m_Rigidbody.velocity = Vector3.zero;
         m_Rigidbody.angularVelocity = Vector3.zero;
 
@@ -446,6 +453,8 @@ public class FoxMovement : MonoBehaviour
             dashSpeed -= airborneDashBonus;
 
             jumpTimer = 0f;
+
+            shadowDecal.size = new Vector3(maxShadowWidth, maxShadowHeight, 15);
         }
     }
     private void OnCollisionExit(Collision collision)
