@@ -8,6 +8,7 @@ public class AutomaticMovement : MonoBehaviour
     public FoxMovement playerMovement;
     public AnimateBars bars;
     public Transform targetPosition;
+    public bool useBars = true;
 
     private bool move = false;
     private Vector2 movementVector;
@@ -20,7 +21,8 @@ public class AutomaticMovement : MonoBehaviour
 
     public void StartAutomaticMovement() 
     {
-        bars.PlayEnterBars();
+        if(useBars)
+            bars.PlayEnterBars();
         playerMovement.OnDisable();
         move = true;
         movementVector = Vector3.zero;
@@ -41,10 +43,13 @@ public class AutomaticMovement : MonoBehaviour
             else
                 movementVector.x = 0;
 
+            
             if (playerMovement.transform.position.z < targetPosition.position.z)
-                movementVector.y = 1;
+                    movementVector.y = 1;
             else
                 StopAutomaticMovement();
+
+           
 
             if (move)
                 playerMovement.inputVector = movementVector;
@@ -56,7 +61,8 @@ public class AutomaticMovement : MonoBehaviour
         move = false;
         playerMovement.inputVector = Vector2.zero;
         playerMovement.OnEnable();
-        bars.PlayExitBars();
+        if(useBars)
+            bars.PlayExitBars();
         Invoke("RecalculateCameraVectors", 1.2f);
     }
 

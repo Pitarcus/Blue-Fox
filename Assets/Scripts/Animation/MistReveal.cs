@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using FMOD;
 
 public class MistReveal : MonoBehaviour
 {
     public GameObject[] mistObjects;
+    public GameObject[] enemies;
     public GameObject colliders;
     public Collider trigger;
 
@@ -13,8 +15,9 @@ public class MistReveal : MonoBehaviour
     public float endRevealValue = 2f;
     public float transitionDuration = 5f;
 
-    
-    
+    public FMODUnity.EventReference mistRevealEvent;
+    private FMOD.Studio.EventInstance mistReveal;
+
     private List<Material> mistMaterials = new List<Material>();
 
     private int propertiesId;
@@ -24,6 +27,8 @@ public class MistReveal : MonoBehaviour
     {
         // Get reference of the readvalue property, get better performance calling the SetFloat of the material
         propertiesId = Shader.PropertyToID("_RevealValue");
+
+        mistReveal = FMODUnity.RuntimeManager.CreateInstance(mistRevealEvent);
     }
 
     public void RevealMist() 
@@ -42,8 +47,18 @@ public class MistReveal : MonoBehaviour
             int i = currentMaterial;
             DOVirtual.Float(startRevealValue, endRevealValue, transitionDuration, x=>ChangeMaterialRevealValue(x, i)).SetEase(Ease.Linear);
         }
-    }
 
+        Invoke("SpawnEnemies", transitionDuration - 1f);
+
+        mistReveal.start();
+    }
+    void SpawnEnemies() 
+    {
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemies[i].SetActive(true);
+        }
+    }
     public void HideMist() 
     {
         for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
