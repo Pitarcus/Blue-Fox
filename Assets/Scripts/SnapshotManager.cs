@@ -21,12 +21,10 @@ public class SnapshotManager : MonoBehaviour
         
         if (SceneManager.GetActiveScene().name == "Cave") 
         {
-            Debug.Log("Chanching snapshot to: Cave");
             snapshot = FMODUnity.RuntimeManager.CreateInstance(caveSnapshot);
         }   
         else 
         {
-            Debug.Log("Chanching snapshot to: Outdoors");
             snapshot = FMODUnity.RuntimeManager.CreateInstance(outDoorsSnapshot);
         }
         snapshot.start();

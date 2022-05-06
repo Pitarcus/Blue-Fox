@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 
-public class EnemyBehaviour : MonoBehaviour
+public class MeleeEnemyFX : MonoBehaviour
 {
     public FMODUnity.EventReference walkingEvent;
     public FMODUnity.EventReference attackEvent;
@@ -50,7 +50,6 @@ public class EnemyBehaviour : MonoBehaviour
     }
     public void PlayRecovery()
     {
-        Debug.Log("Recovering");
         weak.setParameterByID(recoveryParameterId, 1f);
         weak.release();
     }
