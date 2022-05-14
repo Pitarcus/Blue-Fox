@@ -6,21 +6,29 @@ using FMOD;
 
 public class MistReveal : MonoBehaviour
 {
+    [Header("Assign in Editor")]
     public GameObject[] mistObjects;
     public GameObject[] enemies;
     public GameObject colliders;
     public Collider trigger;
+    public ParticleSystem fog;
 
+    [Space]
+    [Header("Magical Field & Enemies Spawn")]
     public float startRevealValue = -1f;
     public float endRevealValue = 2f;
     public float transitionDuration = 5f;
 
+    // Sound Stuff
     public FMODUnity.EventReference mistRevealEvent;
     private FMOD.Studio.EventInstance mistReveal;
 
     private List<Material> mistMaterials = new List<Material>();
 
     private int propertiesId;
+
+    private GameObject player;
+    private FoxHealth foxHealth;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +37,10 @@ public class MistReveal : MonoBehaviour
         propertiesId = Shader.PropertyToID("_RevealValue");
 
         mistReveal = FMODUnity.RuntimeManager.CreateInstance(mistRevealEvent);
+
+        player = GameObject.FindGameObjectWithTag("Player");
+        foxHealth = player.GetComponent<FoxHealth>();
+        foxHealth.playerDeath.AddListener(HideMistSnap);
     }
 
     public void RevealMist() 
@@ -59,6 +71,15 @@ public class MistReveal : MonoBehaviour
             enemies[i].SetActive(true);
         }
     }
+
+    void DeSpawnEnemies()
+    {
+        for (int i = 0; i < enemies.Length; i++)
+        {
+            enemies[i].GetComponent<EnemyBehaviour>().Reset();
+            enemies[i].SetActive(false);
+        }
+    }
     public void HideMist() 
     {
         for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
@@ -66,7 +87,30 @@ public class MistReveal : MonoBehaviour
             int i = currentMaterial;
             DOVirtual.Float(endRevealValue, startRevealValue, transitionDuration + 3f, x => ChangeMaterialRevealValue(x, i));
         }
+        mistReveal.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        mistReveal.release();
+
+        fog.Stop();
+
         Invoke("DisableMist", transitionDuration + 3f);
+    }
+
+    public void HideMistSnap()
+    {
+        for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
+        {
+            int i = currentMaterial;
+            DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
+        }
+        mistReveal.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        mistReveal.release();
+
+        DeSpawnEnemies();
+        fog.Stop();
+
+        DisableMist();
+
+        trigger.enabled = true;
     }
 
     private void ChangeMaterialRevealValue(float x, int material) 

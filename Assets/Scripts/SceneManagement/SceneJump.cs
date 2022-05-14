@@ -21,12 +21,11 @@ public class SceneJump : MonoBehaviour
         // Debug.Log("Changing scene...");
 
         Time.timeScale = 1;
+        transition.SetTrigger("Start");
         StartCoroutine(LoadLevel(index));
     }
     IEnumerator LoadLevel(int levelIndex)
     {
-        transition.SetTrigger("Start");
-
         yield return new WaitForSeconds(transitionTime);
        
         SceneManager.LoadScene(levelIndex);

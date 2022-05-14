@@ -14,6 +14,8 @@ public class FoxMovement : MonoBehaviour
     public CinemachineImpulseSource m_CinemachineImpulseSource;
     public Transform m_aimTarget;
     public MultiAimConstraint m_headConstraint;
+    public Transform m_tailTarget;
+    public ChainIKConstraint m_tailConstraint;
     public Rigidbody m_Rigidbody;   // For movement
     public LayerMask groundLayer;   // For the jump
     public Transform spawn;
@@ -79,7 +81,8 @@ public class FoxMovement : MonoBehaviour
     // Movement enabler/disabler
     [HideInInspector]
     public bool canMove = true;
-    private bool canJump = true;
+    [HideInInspector]
+    public bool canJump = true;
 
     // Jump
     public bool isJumping = false;
@@ -105,7 +108,7 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Enable();
         input.CharacterControls.Movement.performed += OnMovementPerformed;
         input.CharacterControls.Movement.canceled += OnMovementCancelled;
-        //input.CharacterControls.GetFood.performed += PressingFoodButton;
+        //input.CharacterControls.GetFood.performed += PressingFoodButton; // FOOD INPUT IS MANAGED BY BERRIES
 
         input.CharacterControls.Jump.performed += JumpAction;
 
@@ -175,9 +178,9 @@ public class FoxMovement : MonoBehaviour
                 m_Animator.SetBool("IsWalking", false);
                 m_Animator.SetFloat("speed", 0f);
                 m_Rigidbody.velocity = Vector3.zero;
+                m_Rigidbody.angularVelocity = Vector3.zero;
             }
         }
-       
     }
 
     private void HandleMovement() 
@@ -212,6 +215,7 @@ public class FoxMovement : MonoBehaviour
         if (isWalking)
         {
             m_headConstraint.weight = 1;
+            m_tailConstraint.weight = 1;
             ManageHeadAim();
         }
         else
@@ -223,11 +227,13 @@ public class FoxMovement : MonoBehaviour
             if (stillTimer >= m_headTurnTime)
             {
                 m_headConstraint.weight = 0;
+                m_tailConstraint.weight = 0;
                 return;
             }
             else
             {
                 m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), stillTimer / m_headTurnTime);
+                m_tailTarget.localPosition = Vector3.Lerp(m_tailTarget.localPosition, new Vector3(0, m_tailTarget.localPosition.y, m_tailTarget.localPosition.z), stillTimer / m_headTurnTime);
             }
         }
 
@@ -249,6 +255,7 @@ public class FoxMovement : MonoBehaviour
                 headIsTurningRight = false;
             }
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
+            m_tailTarget.localPosition = Vector3.Lerp(m_tailTarget.localPosition, new Vector3(0, m_tailTarget.localPosition.y, m_tailTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
 
         else if (m_Rotation.eulerAngles.y > transform.rotation.eulerAngles.y) // When rotating to the right target to x = maxAimTargetX
@@ -264,6 +271,7 @@ public class FoxMovement : MonoBehaviour
                 headIsTurningLeft = false;
             }
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(m_maxAimTargetX, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
+            m_tailTarget.localPosition = Vector3.Lerp(m_tailTarget.localPosition, new Vector3(m_maxAimTargetX, m_tailTarget.localPosition.y, m_tailTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
 
         else if (m_Rotation.eulerAngles.y < transform.rotation.eulerAngles.y) // When rotating to the left target to x = minAimTargetX
@@ -280,6 +288,7 @@ public class FoxMovement : MonoBehaviour
                 headIsTurningRight = false;
             }
             m_aimTarget.localPosition = Vector3.Lerp(m_aimTarget.localPosition, new Vector3(m_minAimTargetX, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z), movingTimer / m_headTurnTime);
+            m_tailTarget.localPosition = Vector3.Lerp(m_tailTarget.localPosition, new Vector3(m_minAimTargetX, m_tailTarget.localPosition.y, m_tailTarget.localPosition.z), movingTimer / m_headTurnTime);
         }
 
         
@@ -288,6 +297,24 @@ public class FoxMovement : MonoBehaviour
     {
         if (!isDashing && isGrounded && canMove)
         {
+            m_Animator.ResetTrigger("landing");
+            m_Rigidbody.drag = 0;
+            m_Animator.applyRootMotion = false;
+            isJumping = true;
+            m_Rigidbody.velocity += Vector3.up * jumpVelocity;
+            isGrounded = false;
+
+            jumpParticles.Play();
+
+            m_Animator.SetTrigger("jump");
+            m_Animator.SetBool("isGrounded", isGrounded);
+        }
+    }
+    public void JumpActionAuto()
+    {
+        if (!isDashing && isGrounded && canMove)
+        {
+            m_Animator.ResetTrigger("landing");
             m_Rigidbody.drag = 0;
             m_Animator.applyRootMotion = false;
             isJumping = true;
@@ -302,7 +329,7 @@ public class FoxMovement : MonoBehaviour
     }
     void HandleJump() 
     {
-        if (!isGrounded) // Only handle jump when airborne
+        if (!isGrounded && canJump) // Only handle jump when airborne
         {
             if (jumpTimer < maxJumpTime)
                 jumpTimer += Time.deltaTime;
@@ -336,7 +363,6 @@ public class FoxMovement : MonoBehaviour
                 landing = true;
             }
         }
-        
     }
 
     void DoDash(InputAction.CallbackContext context) 
@@ -428,7 +454,6 @@ public class FoxMovement : MonoBehaviour
     
     void OnAnimatorMove()   // Handle movement alongside the root motion applied
     {
-
         m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * m_Animator.deltaPosition.magnitude);
 
         m_Rigidbody.MoveRotation(m_Rotation);
@@ -482,12 +507,10 @@ public class FoxMovement : MonoBehaviour
             if (!canDash)
                 canDashAnimation();
             canDash = true;
-            
         }
         else if (other.gameObject.CompareTag("FallDeath")) 
         {
             transform.position = spawn.position;
-            canDash = true;
         }
     }
     private void canDashAnimation() 

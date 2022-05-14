@@ -100,7 +100,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
-    - _FresnelPower: 0.52
+    - _FresnelPower: 0.57
     - _FresnelThreshold: -0.599
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -124,7 +124,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _GalaxyColor: {r: 9.734288, g: 4.739732, b: 9.479464, a: 0}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
-    - _StarsOffset: {r: 0.2, g: 0, b: 0, a: 0}
+    - _StarsOffset: {r: 0, g: 0, b: 1.2, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &4918266647593954237
 MonoBehaviour:

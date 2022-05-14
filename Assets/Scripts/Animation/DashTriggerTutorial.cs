@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,6 +6,7 @@ public class DashTriggerTutorial : MonoBehaviour
 {
 
     public float stopTimeDuration = 0.3f;
+    public UnityEvent dashTutorialComplete;
     private PlayerInput playerInput;
     private FoxMovement playerMovement;
     private TimeManager timeManagerInstanceReference;
@@ -29,5 +29,6 @@ public class DashTriggerTutorial : MonoBehaviour
         timeManagerInstanceReference.SmoothPlayTime(0.05f);
         playerInput.CharacterControls.Dash.performed -= OnDashPressed;
         this.gameObject.SetActive(false);
+        dashTutorialComplete.Invoke();
     }
 }

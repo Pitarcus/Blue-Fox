@@ -25,8 +25,8 @@ public class Berries : MonoBehaviour
 
     [Header("Berries Parameters")]
     // Berries properties
-    static public int berryValue = 10;
-    static public float maxTime = 3f;
+    public int berryValue = 10;
+    public float maxTime = 3f;
     private Vector3 originPosition;
 
     private bool collected = false; // When collected, stop working
@@ -40,6 +40,7 @@ public class Berries : MonoBehaviour
     private bool foodButtonDown = false;
     private float currentTime = 0f;
 
+    // Input is assigned when entering trigger and is gotten from main player input (FoxMovement)
     private PlayerInput input;
 
     private void Start()
@@ -57,6 +58,7 @@ public class Berries : MonoBehaviour
         InputUser.onChange -= InputUser_onChange;
     }
 
+    // Manage UI type
     private void InputUser_onChange(InputUser arg1, InputUserChange arg2, InputDevice arg3)
     {
         if (arg2 == InputUserChange.ControlsChanged)
@@ -159,7 +161,7 @@ public class Berries : MonoBehaviour
         UICanvas.transform.localScale = new Vector3(x, x, x);
     }
 
-    private void PressingFoodButton ()
+    private void PressingFoodButton()
     {
         if (playerInRange)
         {
@@ -167,7 +169,7 @@ public class Berries : MonoBehaviour
             foodButtonDown = true;
         }
     }
-    private void FoodButtonReleased ()
+    private void FoodButtonReleased()
     {
         if (playerInRange)
         {

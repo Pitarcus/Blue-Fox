@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using DG.Tweening;
 
@@ -14,9 +15,11 @@ public class EnemyWeakSpot : MonoBehaviour
     public FMODUnity.EventReference enemyHitEvent;
     public float explosionStrength;
 
-
+    private bool invulnerable = true;
     private Rigidbody playerRb;
     private FoxMovement foxMovement;
+
+    public UnityEvent onWeakSpotHit;
 
     void Start()
     {
@@ -36,8 +39,11 @@ public class EnemyWeakSpot : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !invulnerable && other.GetComponent<FoxMovement>().isDashing)
         {
+            onWeakSpotHit.Invoke();
+
+            invulnerable = true;
             EnemyHit();
 
             // Handle Player velocity and control to avoid undesired triggers
@@ -46,6 +52,7 @@ public class EnemyWeakSpot : MonoBehaviour
             Invoke("EnablePlayerMovement", 0.2f);
             playerRb.AddExplosionForce(explosionStrength, transform.position, 10f);
 
+            // Sound for hitting the weakspot
             FMODUnity.RuntimeManager.PlayOneShot(enemyHitEvent, transform.position);
             TimeManager.instance.PauseTime(0.05f);
         }
@@ -59,12 +66,14 @@ public class EnemyWeakSpot : MonoBehaviour
     // SetVulnerable runs when the enemy starts being vulnerable (weak animation)
     public void SetVulnerable()
     {
+        invulnerable = false;
         orbCollider.enabled = true;
         orbParticles.Play();
     }
 
     public void SetInvulnerable()
     {
+        invulnerable = true;
         orbCollider.enabled = false;
         orbParticles.Stop();
         m_renderer.enabled = true;
@@ -87,5 +96,14 @@ public class EnemyWeakSpot : MonoBehaviour
     private void SetOrbFresnel(float x)
     {
         dashResetMaterial.SetFloat("_FresnelAmount", x);
+    }
+
+    public void DestroyWeakSpot() 
+    {
+        DOVirtual.Float(1f, 0f, 0.2f, SetOrbFresnel);
+        orbCollider.enabled = false;
+
+        orbParticles.Stop();
+        brokenOrbParticles.Play();
     }
 }

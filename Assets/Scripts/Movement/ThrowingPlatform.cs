@@ -87,32 +87,38 @@ public class ThrowingPlatform : MonoBehaviour
         // Create the sequence of the movement of the platform
         Sequence movementSequence = DOTween.Sequence();
 
-        movementSequence.Append(mesh.DOShakePosition(0.2f, 1, 30, 10, false, true));
+        movementSequence.Append(mesh.DOShakePosition(0.2f, 2, 30, 90, false, true));
         movementSequence.AppendInterval(0.5f);
-        movementSequence.Join(transform.DOMove(transform.position - new Vector3(0, 200), 3f, false)).SetEase(Ease.InQuart);
+        movementSequence.Join(transform.DOMove(transform.position - new Vector3(0, 300), duration, false)).SetEase(Ease.InQuart);
 
         if (resetPosition)
         {
             movementSequence.AppendInterval(1f);
-            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)).OnComplete(OnOrigin);
+            movementSequence.Append(transform.DOMove(originalPosition, duration + 5f, false)).OnComplete(OnOrigin);
         }
         onOrigin = false;
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (player == null) 
+        if (other.CompareTag("Player"))
         {
-            player = other.gameObject;
-            playerRb = player.GetComponent<Rigidbody>();
+            if (player == null)
+            {
+                player = other.gameObject;
+                playerRb = player.GetComponent<Rigidbody>();
+            }
+            if (!fallingPLatform)
+                player.transform.parent = transform;
         }
-        if (!fallingPLatform)
-            player.transform.parent = transform;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        player.transform.parent = null;
-        playerRb.velocity += movingDirection * jumpVelocity * jumpVelocityMultiplier;
+        if (other.CompareTag("Player"))
+        {
+            player.transform.parent = null;
+            playerRb.velocity += movingDirection * jumpVelocity * jumpVelocityMultiplier;
+        }
     }
     /*
     IEnumerator StartThrowing() 

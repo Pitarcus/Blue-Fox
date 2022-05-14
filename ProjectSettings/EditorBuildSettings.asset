@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TechnicalAspects.unity
     guid: 57b594c396b77b14c8e8425d482713b8
   - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 34c33bda2ef54634ea878fb020241e35
+  - enabled: 1
     path: Assets/Scenes/Cave.unity
     guid: 31b0fab33e3d8fa4bad85adc178519fc
   - enabled: 1

@@ -176,7 +176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetPosition: {fileID: 0}
   mesh: {fileID: 4802215078746704034}
-  duration: 2
+  duration: 0.8
   jumpVelocityMultiplier: 60
   fallingPLatform: 1
   easeType: 1

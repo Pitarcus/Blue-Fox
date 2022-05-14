@@ -12,11 +12,11 @@ public class SnapshotManager : MonoBehaviour
 
     private void Awake()
     {
-        SceneManager.sceneLoaded += SetSnapShot;
-        SceneManager.sceneUnloaded += ResetSnapShot;
+        SceneManager.sceneLoaded += SetSnapshot;
+        SceneManager.sceneUnloaded += ResetSnapshot;
     }
 
-    void SetSnapShot(Scene scene, LoadSceneMode mode)
+    void SetSnapshot(Scene scene, LoadSceneMode mode)
     {
         
         if (SceneManager.GetActiveScene().name == "Cave") 
@@ -30,9 +30,10 @@ public class SnapshotManager : MonoBehaviour
         snapshot.start();
     }
 
-    private void ResetSnapShot(Scene scene)
+    private void ResetSnapshot(Scene scene)
     {
-        SceneManager.sceneLoaded -= SetSnapShot;
+        SceneManager.sceneLoaded -= SetSnapshot;
+        SceneManager.sceneUnloaded -= ResetSnapshot;
         snapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         snapshot.release();
     }

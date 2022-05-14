@@ -25,7 +25,6 @@ public class MeleeEnemyFX : MonoBehaviour
         weakEventDescription.getParameterDescriptionByName("Recovery", out recoveryParameterDescription);
 
         recoveryParameterId = recoveryParameterDescription.id;
-        weak.release();
     }
     public void PlayWalking()
     {
@@ -44,18 +43,29 @@ public class MeleeEnemyFX : MonoBehaviour
     }
     public void PlayWeak()
     {
-        weak = FMODUnity.RuntimeManager.CreateInstance(weakEvent);
         FMODUnity.RuntimeManager.AttachInstanceToGameObject(weak, transform);
         weak.start();
     }
     public void PlayRecovery()
-    {
+    { 
         weak.setParameterByID(recoveryParameterId, 1f);
+    }
+
+    public void PlayDeath()
+    {
+        weak.setParameterByID(recoveryParameterId, 0f);
+        weak.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         weak.release();
+        // Other sound of death
     }
 
     public void PlayAttackVFX()
     {
         attackVFX.Play();
+    }
+
+    public void StopAll()
+    {
+        weak.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
 }
