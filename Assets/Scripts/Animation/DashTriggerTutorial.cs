@@ -16,6 +16,7 @@ public class DashTriggerTutorial : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerMovement = other.gameObject.GetComponent<FoxMovement>();
+            playerMovement.playerCanDash = true;
             playerInput = playerMovement.input;
 
             playerInput.CharacterControls.Dash.performed += OnDashPressed;

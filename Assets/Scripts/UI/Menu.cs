@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using UnityEngine;
 using DG.Tweening;
 using Cinemachine;
@@ -7,7 +6,10 @@ using Cinemachine;
 public class Menu : MonoBehaviour
 {
     public RectTransform mainButtons;
+    public GameObject firstMainButtonsSelected;
+
     public RectTransform optionsButtons;
+    public GameObject firstOptionsButtonsSelected;
 
     public CinemachineVirtualCamera mainCamera;
     public CinemachineVirtualCamera optionsCamera;
@@ -20,6 +22,8 @@ public class Menu : MonoBehaviour
 
         mainCamera.Priority = 0;
         optionsCamera.Priority = 10;
+
+        EventSystem.current.SetSelectedGameObject(firstOptionsButtonsSelected); 
     }
 
     public void CloseOptionsMenu()
@@ -30,5 +34,7 @@ public class Menu : MonoBehaviour
 
         mainCamera.Priority = 10;
         optionsCamera.Priority = 0;
+
+        EventSystem.current.SetSelectedGameObject(firstMainButtonsSelected);
     }
 }

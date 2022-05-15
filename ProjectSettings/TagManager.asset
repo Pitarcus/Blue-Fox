@@ -9,6 +9,8 @@ TagManager:
   - DashReset
   - Berries
   - Damager
+  - JumpUITrigger
+  - DashUITrigger
   layers:
   - Default
   - TransparentFX

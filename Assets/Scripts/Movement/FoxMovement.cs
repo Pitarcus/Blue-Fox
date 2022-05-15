@@ -84,6 +84,8 @@ public class FoxMovement : MonoBehaviour
     [HideInInspector]
     public bool canJump = true;
 
+    public bool playerCanDash = true;
+
     // Jump
     public bool isJumping = false;
     public bool isGrounded = true;
@@ -93,12 +95,13 @@ public class FoxMovement : MonoBehaviour
     private float maxShadowHeight = 6;
 
     // Dash
+    [HideInInspector]
     public bool isDashing = false;
-    public bool doDash = false;
-    public bool canDash = true;
+    private bool doDash = false;
+    private bool canDash = true;
     private Material foxMaterial;
-    private int fresnelAmountPropertyIndex;
-    private int fresnelPowerPropertyIndex;
+    /*private int fresnelAmountPropertyIndex; // POSSIBLE OPTIMIZATION OF MATERIAL ANIMATION
+    private int fresnelPowerPropertyIndex;*/
 
     public void OnEnable()
     {
@@ -367,7 +370,7 @@ public class FoxMovement : MonoBehaviour
 
     void DoDash(InputAction.CallbackContext context) 
     {
-        if (!isDashing)
+        if (!isDashing && playerCanDash)
         {
             doDash = true;
         }
