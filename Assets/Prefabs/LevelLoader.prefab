@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb9d8de4b5b2ad54e9088eefdda39e93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transition: {fileID: 0}
+  transition: {fileID: 7698318811451263308}
   transitionTime: 0
 --- !u!1 &8764892758830076063
 GameObject:

@@ -351,6 +351,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1810595389}
     m_Modifications:
+    - target: {fileID: 1181504018294914631, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5454916959622460079, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
+      propertyPath: transitionTime
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 7448170076448750440, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -398,18 +406,6 @@ PrefabInstance:
     - target: {fileID: 7448170076448750443, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
       propertyPath: m_Name
       value: LEVEL LOADER
-      objectReference: {fileID: 0}
-    - target: {fileID: 7448170076448750443, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7509260766850333289, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
-      propertyPath: m_Color.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9138621363836580524, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
-      propertyPath: m_Color.a
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f16075a92f30894488c577ead5cbc9d4, type: 3}
@@ -22900,9 +22896,29 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1329970069}
     m_Modifications:
+    - target: {fileID: 486951076, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: textureCamera
+      value: 
+      objectReference: {fileID: 963194227}
+    - target: {fileID: 958220772, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1932377955, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1932377955, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3667871925634932080, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
       propertyPath: m_Name
       value: Pixel Camera Setup
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925634932080, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3667871925634932081, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
       propertyPath: m_RootOrder
@@ -22948,10 +22964,54 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529489, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529489, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529492, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_Depth
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529492, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_TargetTexture
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529492, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_OcclusionCulling
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529492, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_CullingMask.m_Bits
+      value: 983
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529493, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_CameraType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529493, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_Cameras.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3667871925851529493, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
       propertyPath: m_Cameras.Array.data[0]
       value: 
       objectReference: {fileID: 563682813}
+    - target: {fileID: 3667871925851529494, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871925851529494, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3667871926438583417, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 35f3bec1bf982304b869f6dccd8b1751, type: 3}
 --- !u!1001 &5985845195228810533

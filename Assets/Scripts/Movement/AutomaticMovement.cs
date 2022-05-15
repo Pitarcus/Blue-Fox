@@ -82,7 +82,7 @@ public class AutomaticMovement : MonoBehaviour
         playerMovement.OnEnable();
         if(useBars)
             bars.PlayExitBars();
-        Invoke("RecalculateCameraVectors", 1.2f);
+        Invoke("RecalculateCameraVectors", 1.3f);
 
         if (useMusic)
         {
