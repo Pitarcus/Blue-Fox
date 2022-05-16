@@ -12,17 +12,23 @@ public class FoxMovement : MonoBehaviour
     [Header("Assign in Editor")]
     public Camera m_mainCamera;
     public CinemachineImpulseSource m_CinemachineImpulseSource;
+
+    // Contraints for animation
     public Transform m_aimTarget;
     public MultiAimConstraint m_headConstraint;
     public Transform m_tailTarget;
     public ChainIKConstraint m_tailConstraint;
+
     public Rigidbody m_Rigidbody;   // For movement
     public LayerMask groundLayer;   // For the jump
+
     public Transform spawn;
+
     public ParticleSystem m_dashParticles;
     public VisualEffect dashWings;
     public VisualEffect jumpParticles;
     public SkinnedMeshRenderer foxMesh;
+
     // Event references for FMOD sounds
     public FMODUnity.EventReference dashSoundEvent; 
     public FMODUnity.EventReference dashResetEvent;
@@ -67,6 +73,8 @@ public class FoxMovement : MonoBehaviour
     private Quaternion m_Rotation = Quaternion.identity;
     [HideInInspector]
     public Vector3 forward, right; // Vectors to correct view and direction control
+    [HideInInspector]
+    public bool isMoving = false;   // Boolean to inform wether the player is moving or not (HealthUI)
 
     // Head aim
     private float movingTimer = 0f;
@@ -83,7 +91,6 @@ public class FoxMovement : MonoBehaviour
     public bool canMove = true;
     [HideInInspector]
     public bool canJump = true;
-
     public bool playerCanDash = true;
 
     // Jump
@@ -111,7 +118,7 @@ public class FoxMovement : MonoBehaviour
         input.CharacterControls.Enable();
         input.CharacterControls.Movement.performed += OnMovementPerformed;
         input.CharacterControls.Movement.canceled += OnMovementCancelled;
-        //input.CharacterControls.GetFood.performed += PressingFoodButton; // FOOD INPUT IS MANAGED BY BERRIES
+        //input.CharacterControls.GetFood.performed += PressingFoodButton; // FOOD INPUT IS MANAGED BY BERRIES AND OTHERS
 
         input.CharacterControls.Jump.performed += JumpAction;
 
@@ -135,12 +142,16 @@ public class FoxMovement : MonoBehaviour
     public void OnMovementPerformed(InputAction.CallbackContext context) 
     {
         inputVector = context.ReadValue<Vector2>();
+
+        isMoving = true;
     }
 
     public void OnMovementCancelled(InputAction.CallbackContext context) 
     { 
         inputVector = Vector2.zero; 
-        CalculateForwardVectors(); 
+        CalculateForwardVectors();
+
+        isMoving = false;
     }
 
     void Start()
@@ -151,9 +162,6 @@ public class FoxMovement : MonoBehaviour
         CalculateForwardVectors(); // Function that calculates the vectors for correcting movement depending on the camera's view
 
         foxMaterial = foxMesh.materials[0];
-        
-
-        //canDash = false;
     }
 
     public void CalculateForwardVectors() 
@@ -347,8 +355,11 @@ public class FoxMovement : MonoBehaviour
             {
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
+
             if(!landing)
                 CheckLandingDistance();
+
+            // Modify shadow decal under the player
             RaycastHit hit;
             Physics.Raycast(transform.position, Vector3.down, out hit, 50, groundLayer);
             shadowDecal.size = new Vector3(maxShadowWidth - maxShadowWidth * hit.distance / 20, maxShadowHeight - maxShadowHeight * hit.distance / 20, 15);
@@ -529,5 +540,4 @@ public class FoxMovement : MonoBehaviour
             FMODUnity.RuntimeManager.PlayOneShot(dashResetEvent);
         DOVirtual.Float(1f, 0f, 0.05f, SetMaterialFresnelAmount);
     }
-
 }

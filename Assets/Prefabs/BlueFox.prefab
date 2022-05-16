@@ -11461,6 +11461,7 @@ MonoBehaviour:
   inputVector: {x: 0, y: 0}
   forward: {x: 0, y: 0, z: 0}
   right: {x: 0, y: 0, z: 0}
+  isMoving: 0
   canMove: 1
   canJump: 1
   playerCanDash: 0
@@ -11484,7 +11485,10 @@ MonoBehaviour:
   playerDeath:
     m_PersistentCalls:
       m_Calls: []
-  health: 15
+  playerHit:
+    m_PersistentCalls:
+      m_Calls: []
+  health: 30
   maxHurtMaterialValue: 0.6
   slowMoSnapshotEvent:
     Guid:

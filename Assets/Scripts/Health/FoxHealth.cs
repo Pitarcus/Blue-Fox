@@ -11,10 +11,11 @@ public class FoxHealth : MonoBehaviour
     public Animator sceneUIAnimation;
 
     public UnityEvent playerDeath;  // Event that informs Mist 
+    public UnityEvent<int> playerHit; 
 
     [Space]
     [Header("Parameters")]
-    public int health = 15;
+    public int health = 30;
     public float maxHurtMaterialValue;
     public FMODUnity.EventReference slowMoSnapshotEvent;
 
@@ -49,7 +50,9 @@ public class FoxHealth : MonoBehaviour
         if (other.CompareTag("Damager") && !damaged && !foxMovement.isDashing)
         {
             damaged = true;
-            health -= 5;    // Change this value depending on the damager
+            health -= 10;    // Change this value depending on the damager
+
+            playerHit.Invoke(health);
 
             if (health > 0)
             {
@@ -84,14 +87,14 @@ public class FoxHealth : MonoBehaviour
     {
         Debug.Log("Dead");
         timeManager.PauseTime(1.5f);
+        //timeManager.SmoothStopTime(0.1f, true, 1.4f);
 
         PlayUIOut();
         // Play particles and hide mesh
 
         // Reload everything
-        Invoke("PrepareScene", 1.4f);
-        Invoke("ReSpawnPlayer", 3f);
-        Invoke("PlayUIIn", 3f);
+        Invoke("PrepareScene", 0.1f);
+        Invoke("ReSpawnPlayer", 0.8f);
 
         //haha ha ckeado
 
@@ -100,9 +103,8 @@ public class FoxHealth : MonoBehaviour
 
     private void PrepareScene() 
     {
-        Debug.Log("Preparing scene: 1.5f after");
         foxRb.position = foxMovement.spawn.position;
-        foxRb.rotation = Quaternion.identity;
+        foxRb.transform.rotation = Quaternion.Euler(0, 0, 0);
         playerDeath.Invoke();
     }
 
@@ -118,8 +120,8 @@ public class FoxHealth : MonoBehaviour
 
     private void ReSpawnPlayer()
     {
-        sceneUIAnimation.SetTrigger("End");
-        health = 15;
+        PlayUIIn();
+        health = 30;
         damaged = false;
     }
 
