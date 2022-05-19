@@ -1,11 +1,30 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FoxFood : MonoBehaviour
 {
-    public int foodAmount = 0;
+    public static int foodAmount = 0;
+    public UnityEvent<int> foodChanged;
+
+    private void Start()
+    {
+        IncreaseFoodAmount(0);
+    }
+
+    public int GetFoodAmount() 
+    {
+        return foodAmount;
+    }
+
+    public void ResetFoodAmount()
+    {
+        foodAmount = 0;
+        foodChanged.Invoke(foodAmount);
+    }
 
     public void IncreaseFoodAmount(int amount) 
     {
         foodAmount += amount;
+        foodChanged.Invoke(foodAmount);
     }
 }

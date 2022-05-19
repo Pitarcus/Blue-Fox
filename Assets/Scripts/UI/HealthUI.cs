@@ -21,6 +21,7 @@ public class HealthUI : MonoBehaviour
     public Color hurtColor;
 
     private bool healthShowing = false;
+    private bool playerHit = false;
 
     FoxHealth foxHealth;
     FoxMovement foxMovement;
@@ -42,6 +43,11 @@ public class HealthUI : MonoBehaviour
         heartsGroupPosition.anchoredPosition = new Vector2(heartsGroupPosition.anchoredPosition.x, 100);
     }
 
+    private void OnDisable()
+    {
+        foxHealth.playerDeath.RemoveListener(ResetHealthBar);
+    }
+
     private void Update()
     {
         if(!foxMovement.isMoving && !healthShowing) 
@@ -51,34 +57,35 @@ public class HealthUI : MonoBehaviour
             if(timer > timeToShow)
             {
                 timer = 0;
-                healthShowing = true;
                 ShowHealth(transitionTime);
             }
         }
-        else if (foxMovement.isMoving && healthShowing)
+        else if (foxMovement.isMoving && healthShowing && !playerHit)
         {
             timer = 0;
             HideHealth();
-            healthShowing = false;
         }
-        
     }
 
     void ShowHealth(float transitionTime)
     {
+        healthShowing = true;
         //DOVirtual.Float(100, 0, 0.2f, MoveHearts);
         heartsGroupPosition.DOAnchorPosY(0, transitionTime).SetUpdate(true);
-        heartsGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true);
+        heartsGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true).SetEase(Ease.InOutQuad);
     }
 
     void HideHealth() 
     {
         heartsGroupPosition.DOAnchorPosY(100, transitionTime).SetUpdate(true);
         heartsGroupAlpha.DOFade(0, transitionTime - 0.1f).SetUpdate(true);
+        healthShowing = false;
+        playerHit = false;
     }
 
     void LowerHealthUI(int health)
     {
+        playerHit = true;
         int newWidth = health/10 * 60 + 5;
 
         if (health > 0)

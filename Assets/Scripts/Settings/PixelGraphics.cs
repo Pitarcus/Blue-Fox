@@ -9,6 +9,7 @@ public class PixelGraphics : MonoBehaviour
 
     public RenderTexture renderTexture;
 
+    [SerializeField]
     public static bool pixel = true;
 
     private int originakMask;

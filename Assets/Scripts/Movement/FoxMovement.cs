@@ -522,11 +522,9 @@ public class FoxMovement : MonoBehaviour
                 canDashAnimation();
             canDash = true;
         }
-        else if (other.gameObject.CompareTag("FallDeath")) 
-        {
-            transform.position = spawn.position;
-        }
+        
     }
+
     private void canDashAnimation() 
     {
         Tween fresnelAmount = DOVirtual.Float(0f, 1f, 0.2f, SetMaterialFresnelAmount);

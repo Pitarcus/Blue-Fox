@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5376417373944252180}
   - component: {fileID: 6727615590502849454}
   m_Layer: 0
-  m_Name: Pine
+  m_Name: Pine_LOD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -103,7 +103,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 5376417373944252180}
-  - screenRelativeHeight: 0.1
+  - screenRelativeHeight: 0.13451539
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 6727615590991200743}

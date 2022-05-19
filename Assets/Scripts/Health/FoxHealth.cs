@@ -1,11 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Events;
+using Cinemachine;
 
 public class FoxHealth : MonoBehaviour
 {
     [Header("Assign in editor")]
     public SkinnedMeshRenderer foxMR;
+    public ParticleSystem deathParticles;
     private Material hurtMaterial;
 
     public Animator sceneUIAnimation;
@@ -20,11 +22,13 @@ public class FoxHealth : MonoBehaviour
     public FMODUnity.EventReference slowMoSnapshotEvent;
 
     private bool damaged = false;
+    private bool dead = false;
     private Rigidbody foxRb;
     private FoxMovement foxMovement;
     private TimeManager timeManager;
     private FMOD.Studio.EventInstance slowMoSnapshot;
     private FMOD.Studio.PARAMETER_ID slowMoIntensityParameterId;
+
 
     private void Start()
     {
@@ -44,6 +48,8 @@ public class FoxHealth : MonoBehaviour
 
         slowMoIntensityParameterId = slowMoParameterDescription.id;
         slowMoSnapshot.start();
+
+        CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -61,8 +67,16 @@ public class FoxHealth : MonoBehaviour
             }
             else
             {
-                ManageDeath();
+                if(!dead)
+                    ManageDeath();
             }
+        }
+        else if (other.gameObject.CompareTag("FallDeath"))
+        {
+            foxMovement.m_CinemachineImpulseSource.GenerateImpulse();
+            if(!dead)
+                ManageDeath();
+            
         }
     }
 
@@ -86,26 +100,21 @@ public class FoxHealth : MonoBehaviour
     void ManageDeath()
     {
         Debug.Log("Dead");
+        dead = true;
+        foxMovement.m_CinemachineImpulseSource.GenerateImpulse();
         timeManager.PauseTime(1.5f);
-        //timeManager.SmoothStopTime(0.1f, true, 1.4f);
 
         PlayUIOut();
+        
         // Play particles and hide mesh
+        deathParticles.Play();
+        foxMovement.foxMesh.enabled = false;
 
+        playerDeath.Invoke();
         // Reload everything
-        Invoke("PrepareScene", 0.1f);
-        Invoke("ReSpawnPlayer", 0.8f);
-
-        //haha ha ckeado
+        Invoke("ReSpawnPlayer", 0.5f);
 
         // ALSO MANAGE FOOD
-    }
-
-    private void PrepareScene() 
-    {
-        foxRb.position = foxMovement.spawn.position;
-        foxRb.transform.rotation = Quaternion.Euler(0, 0, 0);
-        playerDeath.Invoke();
     }
 
     private void PlayUIOut()
@@ -120,9 +129,13 @@ public class FoxHealth : MonoBehaviour
 
     private void ReSpawnPlayer()
     {
+        foxMovement.foxMesh.enabled = true;
+        foxRb.position = foxMovement.spawn.position;
+        foxRb.transform.rotation = Quaternion.Euler(0, 0, 0);
         PlayUIIn();
         health = 30;
         damaged = false;
+        dead = false;
     }
 
     private void EnableMovement()

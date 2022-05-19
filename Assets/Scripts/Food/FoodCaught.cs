@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Events;
 using UnityEngine;
 using DG.Tweening;
 
@@ -7,18 +6,27 @@ public class FoodCaught : MonoBehaviour
 {
     [Header("Assign in Editor")]
     public Mesh newMesh;
+    private FoxFood foxFood;
 
     [Header("Parameters")]
     public bool changesMesh;
-    public bool hasAnimation;
+    //public bool hasAnimation;
     public bool unlocked = false;
+    public bool destroyAfter = true;
+    public int extraValue = 0;
+    public float objectScale = 1f;
 
+
+    public UnityEvent foodTriggered;
     private MeshFilter mesh;
     private Transform fox;
     private Collider col;
 
-    private void Start()
+    private void OnEnable()
     {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        foxFood = player.GetComponent<FoxFood>();
+
         if (unlocked)
             Destroy(this.gameObject);
 
@@ -29,6 +37,11 @@ public class FoodCaught : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            foodTriggered.Invoke();
+
+            foxFood.IncreaseFoodAmount(extraValue);
+
+            // Animate
             transform.DOScale(Vector3.zero, 0.2f).OnComplete(ShowInHead);
             fox = other.transform;
             col.enabled = false;
@@ -46,15 +59,16 @@ public class FoodCaught : MonoBehaviour
 
         transform.parent = fox;
         transform.localPosition = new Vector3(0, 18, 4);
-        transform.DOScale(Vector3.one * 1.2f, 0.2f).SetEase(Ease.InCubic);
+        transform.DOScale(Vector3.one * objectScale * 1.2f,  0.2f).SetEase(Ease.InCubic);
         Invoke("AnimateOut", 1.5f);
     }
 
     void AnimateOut() 
     {
-        Destroy(gameObject, 1f);
+        if(destroyAfter)
+            Destroy(gameObject, 1f);
         transform.DOLocalMoveY(25, 0.6f).SetEase(Ease.InBounce);
-        transform.DOScale(0, 0.6f).SetEase(Ease.InCubic);
+        transform.DOScale(0,0.6f).SetEase(Ease.InCubic);
     }
 
 }

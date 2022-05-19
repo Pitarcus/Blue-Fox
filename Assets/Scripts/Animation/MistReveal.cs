@@ -76,7 +76,8 @@ public class MistReveal : MonoBehaviour
     {
         for (int i = 0; i < enemies.Length; i++)
         {
-            enemies[i].GetComponent<EnemyBehaviour>().Reset();
+            if(enemies[i].activeInHierarchy)
+                enemies[i].GetComponent<EnemyBehaviour>().Reset();
             enemies[i].SetActive(false);
         }
     }
@@ -97,11 +98,32 @@ public class MistReveal : MonoBehaviour
 
     public void HideMistSnap()
     {
-        for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
-        {
-            int i = currentMaterial;
-            DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
-        }
+        Invoke("HideMistSnap2", 0.1f);
+        /*if(fog.gameObject.activeInHierarchy)
+            for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
+            {
+                int i = currentMaterial;
+                DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
+            }
+        mistReveal.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        mistReveal.release();
+
+        DeSpawnEnemies();
+        fog.Stop();
+
+        DisableMist();
+
+        trigger.enabled = true;*/
+    }
+
+    private void HideMistSnap2()
+    {
+        if (fog.gameObject.activeInHierarchy)
+            for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
+            {
+                int i = currentMaterial;
+                DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
+            }
         mistReveal.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         mistReveal.release();
 

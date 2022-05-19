@@ -11,6 +11,7 @@ TagManager:
   - Damager
   - JumpUITrigger
   - DashUITrigger
+  - FoodBag
   layers:
   - Default
   - TransparentFX

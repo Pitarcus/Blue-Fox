@@ -4940,5 +4940,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d528218b1ae675f4c8278deb3f7502aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 0}
+  newMesh: {fileID: 0}
+  changesMesh: 0
   unlocked: 0
+  extraValue: 5
