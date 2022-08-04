@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.Rendering;
+using Cinemachine;
 
 public class EnemyWeakSpot : MonoBehaviour
 {
@@ -12,6 +12,8 @@ public class EnemyWeakSpot : MonoBehaviour
     private ParticleSystem orbParticles;
     private ParticleSystem brokenOrbParticles;
 
+    public Volume hurtVolume;
+
     public FMODUnity.EventReference enemyHitEvent;
     public float explosionStrength;
 
@@ -19,9 +21,12 @@ public class EnemyWeakSpot : MonoBehaviour
     private Rigidbody playerRb;
     private FoxMovement foxMovement;
 
+    private CinemachineImpulseSource m_CinemachineImpulseSource;
+
     public UnityEvent onWeakSpotHit;
 
-    void Start()
+
+    private void Awake()
     {
         m_renderer = GetComponent<MeshRenderer>();
         dashResetMaterial = m_renderer.material;
@@ -32,14 +37,19 @@ public class EnemyWeakSpot : MonoBehaviour
         playerRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
         foxMovement = GameObject.FindGameObjectWithTag("Player").GetComponent<FoxMovement>();
 
+        m_CinemachineImpulseSource = transform.parent.gameObject.GetComponent<CinemachineImpulseSource>();
+    }
+    void Start()
+    {
         orbParticles.Stop();
 
         orbCollider.enabled = false;
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !invulnerable && other.GetComponent<FoxMovement>().isDashing)
+        if (other.CompareTag("Player") && !invulnerable && other.GetComponent<FoxMovement>().isDashing) // ENEMY HIT
         {
             onWeakSpotHit.Invoke();
 
@@ -55,7 +65,18 @@ public class EnemyWeakSpot : MonoBehaviour
             // Sound for hitting the weakspot
             FMODUnity.RuntimeManager.PlayOneShot(enemyHitEvent, transform.position);
             TimeManager.instance.PauseTime(0.05f);
+
+            // Camera shake
+            m_CinemachineImpulseSource.GenerateImpulse();
+
+            // Post Processing
+            DOVirtual.Float(1f, 0f, 0.5f, SetVolumeWeight);
         }
+    }
+
+    private void SetVolumeWeight(float x)
+    {
+        hurtVolume.weight = x;
     }
 
     private void EnablePlayerMovement()
@@ -98,12 +119,14 @@ public class EnemyWeakSpot : MonoBehaviour
         dashResetMaterial.SetFloat("_FresnelAmount", x);
     }
 
-    public void DestroyWeakSpot() 
+    public void DestroyWeakSpot() // Happens when enemy killed
     {
         DOVirtual.Float(1f, 0f, 0.2f, SetOrbFresnel);
         orbCollider.enabled = false;
 
         orbParticles.Stop();
         brokenOrbParticles.Play();
+
+        m_CinemachineImpulseSource.GenerateImpulse(1.2f);
     }
 }

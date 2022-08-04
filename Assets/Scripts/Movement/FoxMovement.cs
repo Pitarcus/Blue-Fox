@@ -6,12 +6,14 @@ using DG.Tweening;
 using Cinemachine;
 using UnityEngine.VFX;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.Events;
 
 public class FoxMovement : MonoBehaviour
 {
     [Header("Assign in Editor")]
     public Camera m_mainCamera;
     public CinemachineImpulseSource m_CinemachineImpulseSource;
+
 
     // Contraints for animation
     public Transform m_aimTarget;
@@ -32,6 +34,7 @@ public class FoxMovement : MonoBehaviour
     // Event references for FMOD sounds
     public FMODUnity.EventReference dashSoundEvent; 
     public FMODUnity.EventReference dashResetEvent;
+    public FMODUnity.EventReference jumpSoundEvent;
     public DecalProjector shadowDecal;
 
     [Space]
@@ -53,6 +56,7 @@ public class FoxMovement : MonoBehaviour
     public float lowJumpMultiplier = 2f;
     public float landingDistanceFromGround = 5f;
     public float maxJumpTime = 2.5f;
+    public float coyoteTime = 0.25f;
 
     [Space]
     [Header("Dash Parameters")]
@@ -90,16 +94,18 @@ public class FoxMovement : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
     [HideInInspector]
-    public bool canJump = true;
+    public bool playerCanJump = true;
     public bool playerCanDash = true;
 
     // Jump
     public bool isJumping = false;
     public bool isGrounded = true;
+    private bool canJump = true;    // Variable that allows jump (coyote time implemented)
     private bool landing = false;
     private float jumpTimer = 0f;    // To check for how much the player is jumping
     private float maxShadowWidth = 3;
     private float maxShadowHeight = 6;
+    private float coyoteTimer = 0f;
 
     // Dash
     [HideInInspector]
@@ -110,10 +116,15 @@ public class FoxMovement : MonoBehaviour
     /*private int fresnelAmountPropertyIndex; // POSSIBLE OPTIMIZATION OF MATERIAL ANIMATION
     private int fresnelPowerPropertyIndex;*/
 
-    public void OnEnable()
+    // Strawberries
+    public UnityEvent onTrueGround;    // Event to inform Strawberries of true ground
+
+    private void Awake()
     {
         input = new PlayerInput();
-
+    }
+    public void OnEnable()
+    {
         // Character controls are enabled by default
         input.CharacterControls.Enable();
         input.CharacterControls.Movement.performed += OnMovementPerformed;
@@ -129,6 +140,8 @@ public class FoxMovement : MonoBehaviour
 
     public void OnDisable()
     {
+        doDash = false; // When respawning, do not let dash play
+
         input.CharacterControls.Movement.performed -= OnMovementPerformed;
         input.CharacterControls.Movement.canceled -= OnMovementCancelled;
 
@@ -164,7 +177,7 @@ public class FoxMovement : MonoBehaviour
         foxMaterial = foxMesh.materials[0];
     }
 
-    public void CalculateForwardVectors() 
+    public void CalculateForwardVectors()   // Refresh the vectors depending on the view
     {
         forward = m_mainCamera.transform.forward;
         forward.y = 0;
@@ -183,7 +196,7 @@ public class FoxMovement : MonoBehaviour
         }
         else if (!canMove) // When eating food, watch for animations and stuff (force idle)
         {
-            if (!isJumping && !isDashing && isGrounded)
+            if (!isJumping && !isDashing && canJump)
             {
                 m_aimTarget.localPosition = new Vector3(0, m_aimTarget.localPosition.y, m_aimTarget.localPosition.z);
                 m_Animator.SetBool("IsWalking", false);
@@ -191,6 +204,23 @@ public class FoxMovement : MonoBehaviour
                 m_Rigidbody.velocity = Vector3.zero;
                 m_Rigidbody.angularVelocity = Vector3.zero;
             }
+        }
+    }
+
+    private void Update()
+    {
+        if(!isGrounded)
+        {
+            coyoteTimer += Time.deltaTime;
+            if(coyoteTimer > coyoteTime)
+            {
+                canJump = false;
+            }
+        }
+        else
+        {
+            coyoteTimer = 0f;
+            canJump = true;
         }
     }
 
@@ -212,7 +242,7 @@ public class FoxMovement : MonoBehaviour
         bool hasVerticalInput = !Mathf.Approximately(vertical, 0f);
         bool isWalking = hasHorizontalInput || hasVerticalInput;
 
-        if (!isJumping && !isDashing && isGrounded)
+        if (!isJumping && !isDashing && canJump)
         {
             m_Animator.SetBool("IsWalking", isWalking);
             m_Animator.SetFloat("speed", new Vector2(Mathf.Abs(horizontal), Mathf.Abs(vertical)).magnitude);
@@ -306,14 +336,22 @@ public class FoxMovement : MonoBehaviour
     }
     void JumpAction(InputAction.CallbackContext context) 
     {
-        if (!isDashing && isGrounded && canMove)
+        if (!isDashing && canJump && canMove)
         {
+            FMODUnity.RuntimeManager.PlayOneShot(jumpSoundEvent);
+
             m_Animator.ResetTrigger("landing");
-            m_Rigidbody.drag = 0;
             m_Animator.applyRootMotion = false;
-            isJumping = true;
+
+            m_Rigidbody.drag = 0;
+
+            if (!isGrounded) // In case of a coyote jump, reset Y velocity
+                m_Rigidbody.velocity = new Vector3(m_Rigidbody.velocity.x, 0, m_Rigidbody.velocity.z);
             m_Rigidbody.velocity += Vector3.up * jumpVelocity;
+
+            isJumping = true;
             isGrounded = false;
+            canJump = false;
 
             jumpParticles.Play();
 
@@ -326,11 +364,14 @@ public class FoxMovement : MonoBehaviour
         if (!isDashing && isGrounded && canMove)
         {
             m_Animator.ResetTrigger("landing");
-            m_Rigidbody.drag = 0;
             m_Animator.applyRootMotion = false;
-            isJumping = true;
+
+            m_Rigidbody.drag = 0;
             m_Rigidbody.velocity += Vector3.up * jumpVelocity;
+
+            isJumping = true;
             isGrounded = false;
+            canJump = false;
 
             jumpParticles.Play();
 
@@ -338,20 +379,20 @@ public class FoxMovement : MonoBehaviour
             m_Animator.SetBool("isGrounded", isGrounded);
         }
     }
-    void HandleJump() 
+    void HandleJump() // Manage airborne movement
     {
-        if (!isGrounded && canJump) // Only handle jump when airborne
+        if (!isGrounded && playerCanJump) // Only handle jump when airborne
         {
             if (jumpTimer < maxJumpTime)
                 jumpTimer += Time.deltaTime;
            
             m_Rigidbody.MovePosition(m_Rigidbody.position + m_Movement * jumpMovementSpeed);
 
-            if (m_Rigidbody.velocity.y < fallSpeedThreshold)    // Chacter is falling after max height
+            if (m_Rigidbody.velocity.y < fallSpeedThreshold && !canJump)    // Chacter is falling after max height
             {   
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
             }
-            else if (m_Rigidbody.velocity.y > fallSpeedThreshold && (!isJumping || jumpTimer >= maxJumpTime)) // Player released the jump button mid-jump
+            else if (m_Rigidbody.velocity.y > fallSpeedThreshold && !canJump && (!isJumping || jumpTimer >= maxJumpTime) ) // Player released the jump button mid-jump
             {
                 m_Rigidbody.velocity += Vector3.up * Physics.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
             }
@@ -476,8 +517,18 @@ public class FoxMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)  // Getting the collision with the ground objects (player is grounded)
     {
         
-        if (collision.gameObject.CompareTag("Ground")) 
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True")) 
         {
+            if (collision.gameObject.CompareTag("Ground_True"))
+            {
+                onTrueGround.Invoke(); // Inform Strawberries
+            }
+
+            if (Mathf.Approximately(inputVector.magnitude, 0))
+            {
+                m_Rigidbody.velocity = Vector3.zero;
+            }
+
             isGrounded = true;
 
             m_Animator.SetBool("isGrounded", isGrounded);
@@ -486,6 +537,7 @@ public class FoxMovement : MonoBehaviour
             jumpParticles.Play();
 
             landing = false;
+
             if (!canDash)
                 canDashAnimation();
             canDash = true;
@@ -496,9 +548,10 @@ public class FoxMovement : MonoBehaviour
             shadowDecal.size = new Vector3(maxShadowWidth, maxShadowHeight, 15);
         }
     }
+
     private void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True"))
         {
             if(m_Rigidbody.velocity.y != 0)
                 isGrounded = false;

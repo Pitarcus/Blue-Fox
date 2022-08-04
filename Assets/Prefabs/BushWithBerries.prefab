@@ -121,27 +121,18 @@ MonoBehaviour:
   controllerSprite: {fileID: 21300000, guid: 6ace71240cb83d445ab685271a52fa77, type: 3}
   keyboardSprite: {fileID: 21300000, guid: 134da3cc645305a48ae0b838f46fbffa, type: 3}
   finalAnimation: {fileID: 2026640945691878493}
+  bushSoundEvent:
+    Guid:
+      Data1: -793042330
+      Data2: 1317629888
+      Data3: 594569616
+      Data4: 1777266113
+    Path: event:/SFX/Ambience/Bush
   shakeAmountY: 0.5
   shakeAmountZ: 2
   shakeFrequency: 7
   berryValue: 1
-  maxTime: 3
---- !u!114 &2026640945691878493
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216388487394595896}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d528218b1ae675f4c8278deb3f7502aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  newMesh: {fileID: -3048649960396634672, guid: 35099d97d867cfb4fa7880ab9a104533, type: 3}
-  changesMesh: 1
-  unlocked: 0
-  extraValue: 0
+  maxTime: 2
 --- !u!1 &2026640944930717258
 GameObject:
   m_ObjectHideFlags: 0
@@ -153,6 +144,7 @@ GameObject:
   - component: {fileID: 2026640944930717261}
   - component: {fileID: 2026640944930717263}
   - component: {fileID: 2026640944930717260}
+  - component: {fileID: 3037580916324460853}
   m_Layer: 5
   m_Name: Base_pixel
   m_TagString: Untagged
@@ -220,6 +212,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &3037580916324460853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026640944930717258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ff227d44199464bacf3892d6d499b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2026640945111765171
 GameObject:
   m_ObjectHideFlags: 0
@@ -5345,6 +5349,27 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
   m_PrefabInstance: {fileID: 2026640944497600873}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2026640945691878493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1216388487394595896}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d528218b1ae675f4c8278deb3f7502aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMesh: {fileID: -3048649960396634672, guid: 35099d97d867cfb4fa7880ab9a104533, type: 3}
+  changesMesh: 1
+  unlocked: 0
+  destroyAfter: 1
+  extraValue: 0
+  objectScale: 1
+  foodTriggered:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1993593041054060162 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}

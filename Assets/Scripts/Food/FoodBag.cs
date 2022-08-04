@@ -26,20 +26,26 @@ public class FoodBag : MonoBehaviour
         bagAnimation.SetActive(false);
     }
 
-    // Called when player dies
+    // Called when player dies.
+    // If player has more than 0 food, the bag should spawn. If a bag is already alive it should disappear.
     private void SpawnFoodBag()
     {
-        bagAnimation.SetActive(true);
-        caughtMesh.enabled = false;
+        if (foxFood.GetFoodAmount() > 0)
+        {
+            bagAnimation.SetActive(true);
+            caughtMesh.enabled = false;
 
-        transform.position = foxHealth.transform.position;//new Vector3(foxHealth.transform.position.x, 0, foxHealth.transform.position.z);
-        if(foxHealth.transform.position.y < 0)
-            transform.DOMoveY(0, 2f).SetEase(Ease.InCubic).SetUpdate(true).OnComplete(EnableCollider);
-        else
-            transform.DOMoveY(10, 2f).SetEase(Ease.InCubic).SetUpdate(true).OnComplete(EnableCollider);
+            transform.position = foxHealth.transform.position;//new Vector3(foxHealth.transform.position.x, 0, foxHealth.transform.position.z);
+            if (foxHealth.transform.position.y < 0)
+                transform.DOMoveY(foxHealth.lastHeightValue + 4f, 2f).SetEase(Ease.InCubic).SetUpdate(true).OnComplete(EnableCollider);
+            else
+                transform.DOMoveY(10, 2f).SetEase(Ease.InCubic).SetUpdate(true).OnComplete(EnableCollider);
 
-        foodCaught.extraValue = foxFood.GetFoodAmount();
-        foxFood.ResetFoodAmount();
+            
+
+            foodCaught.extraValue = foxFood.GetFoodAmount();
+            foxFood.ResetFoodAmount();
+        }
     }
     private void EnableCollider()
     {

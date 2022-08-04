@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1181504018294914631}
   - component: {fileID: 2181845677201610676}
   - component: {fileID: 7698318811451263308}
+  - component: {fileID: 1622607514}
   m_Layer: 0
   m_Name: MountainTransition
   m_TagString: Untagged
@@ -59,7 +60,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &2181845677201610676
 MonoBehaviour:
@@ -104,6 +105,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1622607514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2280101300331392777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b81266a0107a1a54d84c0559d3a51eb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionIN:
+    Guid:
+      Data1: -1208154964
+      Data2: 1192382007
+      Data3: 1865666438
+      Data4: -68294239
+    Path: event:/SFX/Ambience/UI_Transition_IN
+  transitionOUT:
+    Guid:
+      Data1: -399508873
+      Data2: 1167935665
+      Data3: -577160527
+      Data4: 1000886242
+    Path: event:/SFX/Ambience/UI_Transition_OUT
 --- !u!1 &4875408309683486039
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +523,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

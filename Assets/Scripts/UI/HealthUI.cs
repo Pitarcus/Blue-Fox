@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using UnityEngine.InputSystem;
 
 public class HealthUI : MonoBehaviour
 {
@@ -14,78 +15,71 @@ public class HealthUI : MonoBehaviour
 
     [Space]
     [Header("Parameters")]
-    public float timeToShow = 3f;
-    private float timer = 0f;
     public float transitionTime = 0.3f;
     public Color originalColor;
     public Color hurtColor;
+    public float hiddenY = 100f;
+    public float shownY = 0f;
 
-    private bool healthShowing = false;
-    private bool playerHit = false;
+    private bool healthShowing = true;
 
     FoxHealth foxHealth;
     FoxMovement foxMovement;
+    PlayerInput input;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         foxHealth = player.GetComponent<FoxHealth>();
-        foxHealth.playerHit.AddListener(LowerHealthUI);
-        foxHealth.playerDeath.AddListener(ResetHealthBar);
-
         foxMovement = player.GetComponent<FoxMovement>();
+    }
+    private void OnEnable()
+    {
+        foxHealth.playerHit.AddListener(LowerHealthUI);
+    }
+    void Start()
+    {
+        input = foxMovement.input;
+        input.CharacterControls.ShowUI.performed += ToggleHealthUI;
 
         heartsGroupAlpha = heartsGroupPosition.GetComponent<CanvasGroup>();
-
-        // Init values
-        heartsGroupAlpha.alpha = 0f;
-        heartsGroupPosition.anchoredPosition = new Vector2(heartsGroupPosition.anchoredPosition.x, 100);
     }
 
     private void OnDisable()
     {
-        foxHealth.playerDeath.RemoveListener(ResetHealthBar);
+        foxHealth.playerHit.RemoveListener(LowerHealthUI);
+
+        input.CharacterControls.ShowUI.performed -= ToggleHealthUI;
     }
 
-    private void Update()
-    {
-        if(!foxMovement.isMoving && !healthShowing) 
-        {
-            timer += Time.deltaTime;
 
-            if(timer > timeToShow)
-            {
-                timer = 0;
-                ShowHealth(transitionTime);
-            }
-        }
-        else if (foxMovement.isMoving && healthShowing && !playerHit)
-        {
-            timer = 0;
+    void ToggleHealthUI(InputAction.CallbackContext context)
+    {
+        if (healthShowing)
             HideHealth();
-        }
+        else
+            ShowHealth();
     }
-
-    void ShowHealth(float transitionTime)
+    public void ShowHealth()
     {
-        healthShowing = true;
-        //DOVirtual.Float(100, 0, 0.2f, MoveHearts);
-        heartsGroupPosition.DOAnchorPosY(0, transitionTime).SetUpdate(true);
-        heartsGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true).SetEase(Ease.InOutQuad);
+        if (!healthShowing)
+        {
+            healthShowing = true;
+            //DOVirtual.Float(100, 0, 0.2f, MoveHearts);
+            heartsGroupPosition.DOAnchorPosY(shownY, transitionTime).SetUpdate(true);
+            heartsGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true).SetEase(Ease.InOutQuad);
+        }
     }
 
     void HideHealth() 
     {
-        heartsGroupPosition.DOAnchorPosY(100, transitionTime).SetUpdate(true);
+        heartsGroupPosition.DOAnchorPosY(hiddenY, transitionTime).SetUpdate(true);
         heartsGroupAlpha.DOFade(0, transitionTime - 0.1f).SetUpdate(true);
         healthShowing = false;
-        playerHit = false;
     }
 
     void LowerHealthUI(int health)
     {
-        playerHit = true;
         int newWidth = health/10 * 60 + 5;
 
         if (health > 0)
@@ -96,20 +90,21 @@ public class HealthUI : MonoBehaviour
         {
             AnimateHeartsHurt(newWidth, true);
         }
-        Invoke("HideHealth", 1.2f);
     }
 
     void AnimateHeartsHurt(float newWidth, bool update)
     {
-        // Showing animation
         Sequence movement = DOTween.Sequence();
-        movement.SetUpdate(update);
-        movement.AppendCallback(() => ShowHealth(0.1f));
 
         // Health mask width
-        movement.Join(
-            DOVirtual.Float(heartsMask.rect.width, newWidth, 0.2f, ChangeMaskWidth) 
-        );
+        if (update)
+            movement.Join(
+              DOVirtual.Float(heartsMask.rect.width, newWidth, 0.2f, ChangeMaskWidth)
+          ).OnComplete(ResetHealthBar);
+        else
+            movement.Join(
+                DOVirtual.Float(heartsMask.rect.width, newWidth, 0.2f, ChangeMaskWidth) 
+            );
         // Shake
         movement.Insert(0.1f,
                 heartsGroupPosition.DOShakeAnchorPos(0.2f, 20f, 12)
@@ -122,6 +117,7 @@ public class HealthUI : MonoBehaviour
         {
             seq.Insert(0, image.DOColor(hurtColor, 0.2f).OnComplete(() => ResetHeartColor(image, update)));
         }
+
     }
 
     void ResetHeartColor(Image image, bool update)

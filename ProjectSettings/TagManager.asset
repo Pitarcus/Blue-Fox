@@ -12,6 +12,8 @@ TagManager:
   - JumpUITrigger
   - DashUITrigger
   - FoodBag
+  - TimeManager
+  - Ground_True
   layers:
   - Default
   - TransparentFX

@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Events;
 using Cinemachine;
+using System.Collections;
 
 public class FoxHealth : MonoBehaviour
 {
@@ -12,8 +13,15 @@ public class FoxHealth : MonoBehaviour
 
     public Animator sceneUIAnimation;
 
-    public UnityEvent playerDeath;  // Event that informs Mist 
-    public UnityEvent<int> playerHit; 
+    public UnityEvent playerDeath;  // Event that informs Mist & Foodbag & Strawberries
+    public UnityEvent<int> playerHit;
+
+    public UnityEvent playerRespawned;
+
+    public UnityEngine.Rendering.Volume hurtVolume;
+
+    public FMODUnity.EventReference foxHurtSoundEvent;
+
 
     [Space]
     [Header("Parameters")]
@@ -21,7 +29,8 @@ public class FoxHealth : MonoBehaviour
     public float maxHurtMaterialValue;
     public FMODUnity.EventReference slowMoSnapshotEvent;
 
-    private bool damaged = false;
+    [HideInInspector] public float lastHeightValue = 0f;
+    private bool damaged = false;   // invulnerability boolean
     private bool dead = false;
     private Rigidbody foxRb;
     private FoxMovement foxMovement;
@@ -29,14 +38,13 @@ public class FoxHealth : MonoBehaviour
     private FMOD.Studio.EventInstance slowMoSnapshot;
     private FMOD.Studio.PARAMETER_ID slowMoIntensityParameterId;
 
+    private CinemachineImpulseSource m_CinemachineImpulseSource;
 
-    private void Start()
+    private void Awake()
     {
         hurtMaterial = foxMR.material;
         foxRb = GetComponent<Rigidbody>();
         foxMovement = GetComponent<FoxMovement>();
-
-        timeManager = TimeManager.instance;
 
         // Get id for intensity parameter in SlowMotionEnemy Snapshot
         slowMoSnapshot = FMODUnity.RuntimeManager.CreateInstance(slowMoSnapshotEvent);
@@ -47,6 +55,15 @@ public class FoxHealth : MonoBehaviour
         slowMoEventDescription.getParameterDescriptionByName("Intensity", out slowMoParameterDescription);
 
         slowMoIntensityParameterId = slowMoParameterDescription.id;
+
+
+        m_CinemachineImpulseSource = foxMovement.m_CinemachineImpulseSource;
+    }
+
+    private void Start()
+    {
+        timeManager = TimeManager.instance;
+       
         slowMoSnapshot.start();
 
         CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
@@ -59,6 +76,10 @@ public class FoxHealth : MonoBehaviour
             health -= 10;    // Change this value depending on the damager
 
             playerHit.Invoke(health);
+
+            m_CinemachineImpulseSource.GenerateImpulse();
+
+            FMODUnity.RuntimeManager.PlayOneShot(foxHurtSoundEvent);
 
             if (health > 0)
             {
@@ -73,10 +94,17 @@ public class FoxHealth : MonoBehaviour
         }
         else if (other.gameObject.CompareTag("FallDeath"))
         {
-            foxMovement.m_CinemachineImpulseSource.GenerateImpulse();
             if(!dead)
                 ManageDeath();
             
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if(collision.collider.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True"))
+        {
+            lastHeightValue = transform.position.y;
         }
     }
 
@@ -112,7 +140,8 @@ public class FoxHealth : MonoBehaviour
 
         playerDeath.Invoke();
         // Reload everything
-        Invoke("ReSpawnPlayer", 0.5f);
+        //Invoke("ReSpawnPlayer", 0.5f);
+        StartCoroutine(ReSpawnPlayer(true, 2f));
 
         // ALSO MANAGE FOOD
     }
@@ -127,15 +156,21 @@ public class FoxHealth : MonoBehaviour
         sceneUIAnimation.SetTrigger("End");
     }
 
-    private void ReSpawnPlayer()
+    public IEnumerator ReSpawnPlayer(bool triggerUI, float delayTime)
     {
-        foxMovement.foxMesh.enabled = true;
+        yield return new WaitForSecondsRealtime(delayTime);
+
         foxRb.position = foxMovement.spawn.position;
+        foxMovement.foxMesh.enabled = true;
+        foxMovement.m_Rigidbody.velocity = Vector3.zero;
         foxRb.transform.rotation = Quaternion.Euler(0, 0, 0);
-        PlayUIIn();
+        if(triggerUI)
+            PlayUIIn();
         health = 30;
         damaged = false;
         dead = false;
+
+        playerRespawned.Invoke();
     }
 
     private void EnableMovement()
@@ -159,6 +194,9 @@ public class FoxHealth : MonoBehaviour
         Sequence slowSound = DOTween.Sequence();
         slowSound.Append(DOVirtual.Float(0f, 100f, 0.3f, SetSlowMoSnapshotIntensity));
         slowSound.Append(DOVirtual.Float(100f, 0f, 0.6f, SetSlowMoSnapshotIntensity));
+
+        // Post Processing
+        DOVirtual.Float(1, 0, 0.8f, ChangeVolumeIntensity);
     }
     private void ChangeHurtValue(float x) 
     {
@@ -169,4 +207,10 @@ public class FoxHealth : MonoBehaviour
     {
         slowMoSnapshot.setParameterByID(slowMoIntensityParameterId, x);
     }
+
+    private void ChangeVolumeIntensity(float x)
+    {
+        hurtVolume.weight = x;
+    }
+
 }

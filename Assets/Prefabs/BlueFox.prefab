@@ -290,6 +290,7 @@ MonoBehaviour:
   confirmGamepad: {fileID: 0}
   imageOnTopOfPlayer: {fileID: 1387625150}
   UICanvas: {fileID: 120971500}
+  dashTut: {fileID: 0}
 --- !u!1 &1972700172
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1038,7 @@ MonoBehaviour:
     m_MaintainOffset: 0
     m_ConstrainedAxes:
       x: 0
-      y: 1
+      y: 0
       z: 1
 --- !u!1 &2501529369083985388
 GameObject:
@@ -11440,19 +11441,27 @@ MonoBehaviour:
       Data3: -1830188108
       Data4: 1423340371
     Path: event:/SFX/BlueFox/DashReset
+  jumpSoundEvent:
+    Guid:
+      Data1: 1657602650
+      Data2: 1120282814
+      Data3: -1884501575
+      Data4: -2138794914
+    Path: event:/SFX/BlueFox/Fox_Jump
   shadowDecal: {fileID: 2846296137051066473}
   m_turnSpeed: 6
   m_minAimTargetX: -5
   m_maxAimTargetX: 5
   m_headTurnTime: 0.5
-  jumpVelocity: 25
+  jumpVelocity: 35
   jumpMovementSpeed: 0.6
-  fallSpeedThreshold: 20
-  fallMultiplier: 20
-  lowJumpMultiplier: 10
+  fallSpeedThreshold: 30
+  fallMultiplier: 14
+  lowJumpMultiplier: 8.2
   landingDistanceFromGround: 9
-  maxJumpTime: 2
-  dashSpeed: 250
+  maxJumpTime: 3
+  coyoteTime: 0.18
+  dashSpeed: 225
   dashMaxDrag: 14
   airborneDashBonus: 40
   dashFresnelInitAmount: 3
@@ -11460,11 +11469,11 @@ MonoBehaviour:
   dashFinalPowerAmount: 0.5
   dashFresnelTime: 0.6
   inputVector: {x: 0, y: 0}
-  forward: {x: 0, y: 0, z: 0}
-  right: {x: 0, y: 0, z: 0}
+  forward: {x: 0.70710677, y: 0, z: 0.70710677}
+  right: {x: 0.70710677, y: 0, z: -0.7071067}
   isMoving: 0
   canMove: 1
-  canJump: 1
+  playerCanJump: 1
   playerCanDash: 0
   isJumping: 0
   isGrounded: 1
@@ -11490,6 +11499,17 @@ MonoBehaviour:
   playerHit:
     m_PersistentCalls:
       m_Calls: []
+  playerRespawned:
+    m_PersistentCalls:
+      m_Calls: []
+  hurtVolume: {fileID: 0}
+  foxHurtSoundEvent:
+    Guid:
+      Data1: -1463625726
+      Data2: 1093347335
+      Data3: -1260081995
+      Data4: -606564895
+    Path: event:/SFX/BlueFox/Fox_Hurt
   health: 30
   maxHurtMaterialValue: 0.6
   slowMoSnapshotEvent:
@@ -11499,6 +11519,7 @@ MonoBehaviour:
       Data3: -1005365855
       Data4: 1695875872
     Path: snapshot:/EnemySlowMo
+  lastHeightValue: 0
 --- !u!114 &2501529370288690815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11514,6 +11535,13 @@ MonoBehaviour:
   foodChanged:
     m_PersistentCalls:
       m_Calls: []
+  foodObtainedEvent:
+    Guid:
+      Data1: -894776273
+      Data2: 1186735844
+      Data3: 2020320647
+      Data4: 374701665
+    Path: event:/SFX/Ambience/Object_Obtained
 --- !u!114 &888590632315299240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11708,6 +11736,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b607546b96208468f8484f2333bc9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uiInputModule: {fileID: 0}
   gameInputObject: {fileID: 0}
 --- !u!1 &3434270820138920982
 GameObject:
@@ -17846,6 +17875,7 @@ GameObject:
   - component: {fileID: 6166557380977821271}
   - component: {fileID: 4922448113901920611}
   - component: {fileID: 4868913229511815506}
+  - component: {fileID: 5479649714264489578}
   m_Layer: 8
   m_Name: DeadParticles
   m_TagString: Untagged
@@ -22706,6 +22736,18 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &5479649714264489578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8269270460942867774}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06ff227d44199464bacf3892d6d499b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8310052691663765580
 GameObject:
   m_ObjectHideFlags: 0

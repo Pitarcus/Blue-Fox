@@ -13,6 +13,7 @@ public class FoodCaught : MonoBehaviour
     //public bool hasAnimation;
     public bool unlocked = false;
     public bool destroyAfter = true;
+    public bool instaGet = true;
     public int extraValue = 0;
     public float objectScale = 1f;
 
@@ -35,18 +36,24 @@ public class FoodCaught : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && instaGet)
         {
-            foodTriggered.Invoke();
-
-            foxFood.IncreaseFoodAmount(extraValue);
-
-            // Animate
-            transform.DOScale(Vector3.zero, 0.2f).OnComplete(ShowInHead);
-            fox = other.transform;
-            col.enabled = false;
+            FoodCaughtFunction(other.transform);
         }
     }
+
+    public void FoodCaughtFunction( Transform foxTransform)
+    {
+        foodTriggered.Invoke();
+
+        foxFood.IncreaseFoodAmount(extraValue);
+
+        // Animate
+        transform.DOScale(Vector3.zero, 0.2f).OnComplete(ShowInHead);
+        fox = foxTransform;
+        col.enabled = false;
+    }
+
     public void StartAnimation(Transform foxTransform) 
     {
         transform.DOScale(Vector3.zero, 0.2f).OnComplete(ShowInHead);

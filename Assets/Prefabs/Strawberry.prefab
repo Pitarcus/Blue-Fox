@@ -4826,6 +4826,7 @@ GameObject:
   - component: {fileID: 389476388146898030}
   - component: {fileID: 389476388146898027}
   - component: {fileID: 389476388146898029}
+  - component: {fileID: 3159959417889385909}
   m_Layer: 0
   m_Name: Strawberry
   m_TagString: Untagged
@@ -4841,7 +4842,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695484430200991991}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -22, y: 27, z: -2.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4911,7 +4912,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2
+  m_Radius: 2.3
   m_Center: {x: -0.08345741, y: 0.23442316, z: -0.04254991}
 --- !u!114 &389476388146898027
 MonoBehaviour:
@@ -4927,7 +4928,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   turnSpeed: 0.5
   upAmplitude: -0.1
-  upPeriod: 0.3
+  upPeriod: 0.4
 --- !u!114 &389476388146898029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4943,4 +4944,27 @@ MonoBehaviour:
   newMesh: {fileID: 0}
   changesMesh: 0
   unlocked: 0
+  destroyAfter: 1
+  instaGet: 0
   extraValue: 5
+  objectScale: 1
+  foodTriggered:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3159959417889385909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695484430200991991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 672d125d1681aff40a6d77b1f30b1437, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodCaughtScript: {fileID: 389476388146898029}
+  floatingSineAnimation: {fileID: 389476388146898027}
+  trigger: {fileID: 389476388146898030}
+  foodOffset: {x: 3, y: 10, z: 0}
+  smoothTime: 0.3

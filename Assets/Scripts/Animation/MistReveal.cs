@@ -8,7 +8,7 @@ public class MistReveal : MonoBehaviour
 {
     [Header("Assign in Editor")]
     public GameObject[] mistObjects;
-    public GameObject[] enemies;
+    public List<GameObject> enemies;
     public GameObject colliders;
     public Collider trigger;
     public ParticleSystem fog;
@@ -30,6 +30,8 @@ public class MistReveal : MonoBehaviour
     private GameObject player;
     private FoxHealth foxHealth;
 
+    private int remainingEnemies;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +40,29 @@ public class MistReveal : MonoBehaviour
 
         player = GameObject.FindGameObjectWithTag("Player");
         foxHealth = player.GetComponent<FoxHealth>();
-        foxHealth.playerDeath.AddListener(HideMistSnap);
+        //foxHealth.playerDeath.AddListener(HideMistSnap);
+        foxHealth.playerRespawned.AddListener(HideMistSnap2);
+
+        remainingEnemies = 0;
+
+        foreach(GameObject enemy in enemies)
+        {
+            if (!enemy.GetComponent<EnemyBehaviour>().dead)
+                remainingEnemies++;
+        }
+        
+    }
+
+    private void CheckRemainingEnemies() 
+    {
+        remainingEnemies = 0;
+        foreach (GameObject enemy in enemies)
+        {
+            if (!enemy.GetComponent<EnemyBehaviour>().dead)
+            {
+                remainingEnemies++;
+            }
+        }
     }
 
     public void RevealMist() 
@@ -66,37 +90,55 @@ public class MistReveal : MonoBehaviour
     }
     void SpawnEnemies() 
     {
-        for (int i = 0; i < enemies.Length; i++)
+        for (int i = 0; i < enemies.Count; i++)
         {
             enemies[i].SetActive(true);
         }
     }
 
-    void DeSpawnEnemies()
+    void DeSpawnEnemies()   // Resets or destroys enemies depending on their state
     {
-        for (int i = 0; i < enemies.Length; i++)
+        if (enemies.Count > 0)
         {
-            if(enemies[i].activeInHierarchy)
-                enemies[i].GetComponent<EnemyBehaviour>().Reset();
-            enemies[i].SetActive(false);
+            for (int i = enemies.Count - 1; i >= 0; i--)
+            {
+                if (enemies[i].GetComponent<EnemyBehaviour>().dead) // destroy and remove all dead enemies
+                {
+                    remainingEnemies--;
+                    GameObject aux = enemies[i];
+                    enemies.Remove(enemies[i]);
+                    Destroy(aux);
+                }
+                else if (enemies[i].activeInHierarchy)  // Reset and hide all remaining enemies
+                {
+                    enemies[i].GetComponent<EnemyBehaviour>().Reset();
+                    enemies[i].SetActive(false);
+                }
+            }
         }
     }
-    public void HideMist() 
+
+    public void HideMist() // Called when an enemy is dead
     {
-        for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
+        CheckRemainingEnemies();
+        
+        if (remainingEnemies == 0)
         {
-            int i = currentMaterial;
-            DOVirtual.Float(endRevealValue, startRevealValue, transitionDuration + 3f, x => ChangeMaterialRevealValue(x, i));
+            for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
+            {
+                int i = currentMaterial;
+                DOVirtual.Float(endRevealValue, startRevealValue, transitionDuration + 3f, x => ChangeMaterialRevealValue(x, i));
+            }
+            mistReveal.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+            mistReveal.release();
+
+            fog.Stop();
+
+            Invoke("DisableMist", transitionDuration + 0.1f);
         }
-        mistReveal.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-        mistReveal.release();
-
-        fog.Stop();
-
-        Invoke("DisableMist", transitionDuration + 3f);
     }
 
-    public void HideMistSnap()
+    public void HideMistSnap()  // Called when the player dies
     {
         Invoke("HideMistSnap2", 0.1f);
         /*if(fog.gameObject.activeInHierarchy)
@@ -116,7 +158,7 @@ public class MistReveal : MonoBehaviour
         trigger.enabled = true;*/
     }
 
-    private void HideMistSnap2()
+    private void HideMistSnap2()    // Called when the player dies
     {
         if (fog.gameObject.activeInHierarchy)
             for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
@@ -124,10 +166,9 @@ public class MistReveal : MonoBehaviour
                 int i = currentMaterial;
                 DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
             }
-        mistReveal.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        mistReveal.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         mistReveal.release();
 
-        DeSpawnEnemies();
         fog.Stop();
 
         DisableMist();
@@ -135,6 +176,7 @@ public class MistReveal : MonoBehaviour
         trigger.enabled = true;
     }
 
+    
     private void ChangeMaterialRevealValue(float x, int material) 
     {
         mistMaterials[material].SetFloat(propertiesId, x);
@@ -147,13 +189,16 @@ public class MistReveal : MonoBehaviour
             mistObjects[i].SetActive(false);
         }
         colliders.SetActive(false);
+        DeSpawnEnemies();
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            RevealMist();
+            CheckRemainingEnemies();
+            if(remainingEnemies > 0)
+                RevealMist();
         }
     }
 }

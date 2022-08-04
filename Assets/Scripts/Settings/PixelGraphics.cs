@@ -5,7 +5,7 @@ using UnityEngine;
 public class PixelGraphics : MonoBehaviour
 {
     public GameObject pixelSetUp;
-    public Camera textureCamera;
+    public Camera textureCamera;    // Main camera that renders to the texture
 
     public RenderTexture renderTexture;
 
@@ -42,7 +42,7 @@ public class PixelGraphics : MonoBehaviour
         pixelSetUp.SetActive(true);
         textureCamera.targetTexture = renderTexture;
 
-        textureCamera.cullingMask |= (0 << LayerMask.NameToLayer("UI"));
+        textureCamera.cullingMask |= (0 << LayerMask.NameToLayer("UI"));    // Not rendering UI camera
     }
 
     private void DisablePixelCamera()
@@ -51,6 +51,6 @@ public class PixelGraphics : MonoBehaviour
         pixelSetUp.SetActive(false);
         textureCamera.targetTexture = null;
 
-        textureCamera.cullingMask = -1;
+        textureCamera.cullingMask = -1; // render all layers
     }
 }

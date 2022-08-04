@@ -25,6 +25,8 @@ public class EnemyBehaviour : MonoBehaviour
     private Animator enemyAnimator;
     private GameObject player;
 
+    [HideInInspector] public bool dead = false;
+
     private bool following = true;
     private bool recovering = false;
     private bool vulnerable = false;
@@ -40,8 +42,6 @@ public class EnemyBehaviour : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         transform.LookAt(player.transform.position);
         fx = GetComponent<MeleeEnemyFX>();
-
-        
     }
     private void OnEnable()
     {
@@ -127,6 +127,9 @@ public class EnemyBehaviour : MonoBehaviour
         }
         else // Enemy dead
         {
+            dead = true;
+            Debug.Log("Enemy says is dead: " + dead);
+
             feathers.Stop();
             smoke.Stop();
 
@@ -139,12 +142,6 @@ public class EnemyBehaviour : MonoBehaviour
 
             mistObject.HideMist();
 
-            Invoke("DestroyEnemy", 7f);
         }
-    }
-
-    void DestroyEnemy()
-    {
-        Destroy(gameObject);
     }
 }

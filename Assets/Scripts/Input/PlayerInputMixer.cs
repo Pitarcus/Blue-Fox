@@ -6,6 +6,10 @@ using UnityEngine.InputSystem.UI;
 public class PlayerInputMixer : MonoBehaviour
 {
     public PlayerInput PlayerControls { get; private set; }
+
+    public InputUI InputUI { get; private set; }
+
+    public InputSystemUIInputModule uiInputModule;
     public UnityEngine.InputSystem.PlayerInput PlayerInput { get; private set; }
 
     public GameObject gameInputObject;
@@ -13,13 +17,14 @@ public class PlayerInputMixer : MonoBehaviour
     void Awake()
     {
         PlayerControls = new PlayerInput(); // implements IInputActionCollection
+        InputUI = new InputUI();
 
         PlayerInput = GetComponent<UnityEngine.InputSystem.PlayerInput>();
         PlayerInput.defaultActionMap = PlayerControls.UI.Get().name;
         PlayerInput.actions = PlayerControls.asset;
 
-        var uiInputModule = gameInputObject.GetComponentInChildren<InputSystemUIInputModule>();
-        uiInputModule.actionsAsset = PlayerControls.asset;
+        //var uiInputModule = gameInputObject.GetComponentInChildren<InputSystemUIInputModule>();
+        uiInputModule.actionsAsset = InputUI.asset;
 
         PlayerInput.uiInputModule = uiInputModule;
     }
@@ -34,5 +39,9 @@ public class PlayerInputMixer : MonoBehaviour
     public void SwitchInputToUI()
     {
         PlayerInput.currentActionMap = PlayerControls.UI.Get();
+    }
+    public void SwitchInputToMovement()
+    {
+        PlayerInput.currentActionMap = PlayerControls.CharacterControls.Get();
     }
 }

@@ -8,6 +8,7 @@ public class MeleeEnemyFX : MonoBehaviour
     public FMODUnity.EventReference walkingEvent;
     public FMODUnity.EventReference attackEvent;
     public FMODUnity.EventReference weakEvent;
+    public FMODUnity.EventReference deathEvent;
     public VisualEffect attackVFX;
 
     private FMOD.Studio.PARAMETER_ID recoveryParameterId;
@@ -53,10 +54,11 @@ public class MeleeEnemyFX : MonoBehaviour
 
     public void PlayDeath()
     {
+        FMODUnity.RuntimeManager.PlayOneShot(deathEvent, transform.position);
+
         weak.setParameterByID(recoveryParameterId, 0f);
         weak.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         weak.release();
-        // Other sound of death
     }
 
     public void PlayAttackVFX()

@@ -6,6 +6,11 @@ public class FoxFood : MonoBehaviour
     public static int foodAmount = 0;
     public UnityEvent<int> foodChanged;
 
+    public FMODUnity.EventReference foodObtainedEvent;
+
+    [HideInInspector]
+    public int potentialStrawberries = 0;
+
     private void Start()
     {
         IncreaseFoodAmount(0);
@@ -26,5 +31,8 @@ public class FoxFood : MonoBehaviour
     {
         foodAmount += amount;
         foodChanged.Invoke(foodAmount);
+
+        if(amount > 0)
+            FMODUnity.RuntimeManager.PlayOneShot(foodObtainedEvent);
     }
 }

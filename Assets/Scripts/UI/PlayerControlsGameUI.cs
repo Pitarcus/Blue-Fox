@@ -24,6 +24,9 @@ public class PlayerControlsGameUI : MonoBehaviour
     public Image imageOnTopOfPlayer;
     public GameObject UICanvas;
 
+    [Space] [Tooltip("Leave unassigned if dash button is not going to appear in animation")]
+    public DashTriggerTutorial dashTut;
+
 
     private void Start()
     {
@@ -32,10 +35,12 @@ public class PlayerControlsGameUI : MonoBehaviour
         currentJump = jumpKeyboard;
         currentDash = dashKeyboard;
         currentConfirm = confirmKeyboard;
+
+        if(dashTut != null)
+            dashTut.dashTutorialComplete.AddListener(TweenCanvasOut);
     }
     private void Update()
     {
-        transform.LookAt(Camera.main.transform);
         transform.LookAt(2 * transform.position - Camera.main.transform.position);
     }
     private void OnEnable()
@@ -82,17 +87,17 @@ public class PlayerControlsGameUI : MonoBehaviour
             TweenCanvasIn();
         }
     }
-
+    private void OnTriggerExit(Collider other)
+    {
+        if (dashTut == null)
+            TweenCanvasOut();
+    }
     private void TweenCanvasIn()
     {
         UICanvas.SetActive(true);
         DOVirtual.Float(0f, 1f, 0.3f, SetCanvasScale).SetEase(Ease.InFlash).SetUpdate(true);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        TweenCanvasOut();
-    }
     private void TweenCanvasOut()
     {
         DOVirtual.Float(1f, 0f, 0.3f, SetCanvasScale).SetEase(Ease.InFlash).OnComplete(() => UICanvas.SetActive(false));

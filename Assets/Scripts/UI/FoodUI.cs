@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
+using UnityEngine.InputSystem;
 
 public class FoodUI : MonoBehaviour
 {
@@ -10,23 +11,20 @@ public class FoodUI : MonoBehaviour
     public RectTransform foodGroupPosition;
     private CanvasGroup foodGroupAlpha;
     public TextMeshProUGUI foodAmountText;
+    public HealthUI healthUI;
 
     [Space]
     [Header("Parameters")]
-    public float timeToShow = 3f;
-    private float timer = 0f;
     public float transitionTime = 0.3f;
     public float hiddenY = -50f;
     public float shownY = 25f;
 
     private bool foodShowing = false;
-    private bool updating = false;
 
     FoxFood foxFood;
     FoxMovement foxMovement;
-
-    // Start is called before the first frame update
-    void Start()
+    PlayerInput input;
+    private void Awake()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         foxFood = player.GetComponent<FoxFood>();
@@ -34,7 +32,13 @@ public class FoodUI : MonoBehaviour
 
         foxMovement = player.GetComponent<FoxMovement>();
 
+
         foodGroupAlpha = foodGroupPosition.GetComponent<CanvasGroup>();
+    }
+    void Start()
+    {
+        input = foxMovement.input;
+        input.CharacterControls.ShowUI.performed += ToggleFoodUI;
 
         // Init values
         foodGroupAlpha.alpha = 0f;
@@ -43,32 +47,25 @@ public class FoodUI : MonoBehaviour
     private void OnDisable()
     {
         foxFood.foodChanged.RemoveListener(UpdateFoodUI);
+        input.CharacterControls.ShowUI.performed -= ToggleFoodUI;
     }
 
-    private void Update()
+    void ToggleFoodUI(InputAction.CallbackContext context) 
     {
-        if (!foxMovement.isMoving && !foodShowing)
-        {
-            timer += Time.deltaTime;
-
-            if (timer > timeToShow)
-            {
-                timer = 0;
-                ShowFood(transitionTime);
-            }
-        }
-        else if (foxMovement.isMoving && foodShowing && !updating)
-        {
-            timer = 0;
+        if (foodShowing)
             HideFood();
-        }
+        else
+            ShowFood();
     }
 
-    void ShowFood(float transitionTime)
+    void ShowFood()
     {
-        foodShowing = true;
-        foodGroupPosition.DOAnchorPosY(shownY, transitionTime).SetUpdate(true);
-        foodGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true).SetEase(Ease.InOutQuad);
+        if (!foodShowing)
+        {
+            foodShowing = true;
+            foodGroupPosition.DOAnchorPosY(shownY, transitionTime).SetUpdate(true);
+            foodGroupAlpha.DOFade(1, transitionTime + 0.2f).SetUpdate(true).SetEase(Ease.InOutQuad);
+        }
     }
 
     void HideFood()
@@ -80,15 +77,10 @@ public class FoodUI : MonoBehaviour
 
     void UpdateFoodUI(int foodAmount)
     {
-        ShowFood(transitionTime);
-        updating = true;
+        ShowFood();
+        healthUI.ShowHealth();
         // manage numbers particles and stuff
         foodAmountText.text = foodAmount.ToString();
-        Invoke("StopUpdating", 0.5f);
     }
 
-    void StopUpdating()
-    {
-        updating = false;
-    }
 }

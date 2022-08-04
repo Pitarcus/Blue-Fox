@@ -16,7 +16,10 @@ public class Berries : MonoBehaviour
     public Image buttonImage;
     public Sprite controllerSprite;
     public Sprite keyboardSprite;
-    public FoodCaught finalAnimation;
+    public FoodCaught finalAnimation;   // Animation of food on top of the head of the fox
+
+    public FMODUnity.EventReference bushSoundEvent;
+    public FMOD.Studio.EventInstance bushSoundInstance;
 
     [Header("Shake Parameters")]
     public float shakeAmountY = 10f;
@@ -47,7 +50,11 @@ public class Berries : MonoBehaviour
     {
         originPosition = berriesGameObject.transform.position;
         UICanvas.SetActive(false);
+
+        bushSoundInstance = FMODUnity.RuntimeManager.CreateInstance(bushSoundEvent);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(bushSoundInstance, transform);
     }
+
     // Stuf for changing UI depending on Device
     private void OnEnable()
     {
@@ -102,6 +109,10 @@ public class Berries : MonoBehaviour
 
                 collected = true;
                 this.enabled = false;
+
+                // Sound
+                bushSoundInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+                bushSoundInstance.release();
             }
         }
         else if (currentTime > 0) 
@@ -123,13 +134,15 @@ public class Berries : MonoBehaviour
     {
         if (!collected && other.CompareTag("Player")) 
         {
-            if (!assigned)
+            if (!assigned)  // Only first time
             {
                 foxFood = other.GetComponent<FoxFood>();
                 foxMovement = other.GetComponent<FoxMovement>();
                 input = foxMovement.input;
                 input.CharacterControls.GetFood.performed += ctx => PressingFoodButton();
                 input.CharacterControls.GetFood.canceled += ctx => FoodButtonReleased();
+
+                assigned = true;
             }
             playerInRange = true;
 
@@ -167,6 +180,9 @@ public class Berries : MonoBehaviour
         {
             foxMovement.canMove = false;
             foodButtonDown = true;
+
+            bushSoundInstance.start();
+            bushSoundInstance.setParameterByName("IsGathering", 0);
         }
     }
     private void FoodButtonReleased()
@@ -175,6 +191,8 @@ public class Berries : MonoBehaviour
         {
             foxMovement.canMove = true;
             foodButtonDown = false;
+
+            bushSoundInstance.setParameterByName("IsGathering", 1);
         }
     }
     

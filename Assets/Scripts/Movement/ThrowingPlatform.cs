@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using FMODUnity;
 using UnityEngine;
 using DG.Tweening;
 
@@ -7,20 +6,41 @@ public class ThrowingPlatform : MonoBehaviour
 {
 
     // Parameters
-    public Transform targetPosition;
-    public Transform mesh;
-    public float duration = 2f;
-    public float jumpVelocityMultiplier;
 
-    public bool fallingPLatform;
+    public bool fallingPlatform;
+    
+    [Header("COMMON")]
     public Ease easeType;
     public bool resetPosition = true;
-    
+    [Tooltip("Mesh that is child of this object that shows the shake")] public Transform mesh;
+    public float duration = 2f;
+    public float jumpVelocityMultiplier;
+    public float shakeDuration = 0.3f;
+    public float shakeStrenght = 1f;
+    public int shakeVibrato = 10;
+
+    [Header("Falling platforms")]
+    public FMODUnity.EventReference fallingPlatformSoundEvent;
+    public ParticleSystem fallingPlatformParticles;
+
+    [Header("Throwing platforms")]
+    public FMODUnity.EventReference throwingPlatformSoundEvent;
+    [Tooltip("On Not Falling Platforms")]
+    public Transform targetPosition;
+    [Tooltip("On Not Falling Platforms")]
+    public Animator throwingPlatformClogs;
+    public MeshRenderer lightMeshRenderer;
+    public Color redColor;
+    public Color greenColor;
+
+    private Material lightMaterial;
+
     // Platform members
     private Vector3 originalPosition;
     private Vector3 movingDirection;
     private bool onOrigin = true;
-    private float jumpVelocity;  // ONLY PUBLIC FOR TESTING PURPOSES
+    private float jumpVelocity;  // the bonus of the jump when leaving the platform
+    private bool onPlatform = false;
 
     // References
     private GameObject player;
@@ -30,11 +50,13 @@ public class ThrowingPlatform : MonoBehaviour
     void Start()
     {
         originalPosition = transform.position;
-        if (!fallingPLatform)
+        if (!fallingPlatform)
         {
             originalPosition = transform.position;
             movingDirection = targetPosition.position - transform.position;
             movingDirection.Normalize();
+
+            lightMaterial = lightMeshRenderer.material;
         }
     }
 
@@ -42,10 +64,12 @@ public class ThrowingPlatform : MonoBehaviour
     {
         if (onOrigin)
         {
-            if (fallingPLatform)
+            if (fallingPlatform)
                 FallingPlatform();
             else
+            {
                 ThrowPlatform();
+            }
         }
     }
 
@@ -57,15 +81,33 @@ public class ThrowingPlatform : MonoBehaviour
     void OnOrigin() 
     {
         onOrigin = true;
+
+        lightMaterial.SetColor("_EmissionColor", redColor);
+
+        if (onPlatform)
+        {
+            if (fallingPlatform)
+                FallingPlatform();
+            else
+            {
+                ThrowPlatform();
+            }
+        }
     }
 
     private void ThrowPlatform() 
     {
+        //FMODUnity.RuntimeManager.PlayOneShot(throwingPlatformSoundEvent, transform.position);
+
+        throwingPlatformClogs.SetTrigger("Move");
+
+        lightMaterial.SetColor("_EmissionColor", greenColor);
+
         // Create the sequence of the movement of the platform
         Sequence movementSequence = DOTween.Sequence();
 
-        movementSequence.Append(transform.DOShakePosition(duration / 5));   // May change for a child mesh
-        movementSequence.Join(transform.DOMove(targetPosition.position, duration, false).SetEase(easeType));
+        movementSequence.Append(mesh.DOShakePosition(shakeDuration, shakeStrenght, shakeVibrato));   // May change for a child mesh
+        movementSequence.Join(transform.DOMove(targetPosition.position, duration, false).SetEase(easeType));    // Throw movement
 
         if (resetPosition)
         {
@@ -84,10 +126,14 @@ public class ThrowingPlatform : MonoBehaviour
     }
     private void FallingPlatform() 
     {
+        FMODUnity.RuntimeManager.PlayOneShot(fallingPlatformSoundEvent, transform.position);
+
+        fallingPlatformParticles.Play();
+
         // Create the sequence of the movement of the platform
         Sequence movementSequence = DOTween.Sequence();
 
-        movementSequence.Append(mesh.DOShakePosition(0.2f, 2, 30, 90, false, true));
+        movementSequence.Append(mesh.DOShakePosition(shakeDuration, shakeStrenght, shakeVibrato));
         movementSequence.AppendInterval(0.5f);
         movementSequence.Join(transform.DOMove(transform.position - new Vector3(0, 300), duration, false)).SetEase(Ease.InQuart);
 
@@ -102,13 +148,18 @@ public class ThrowingPlatform : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            onPlatform = true;
             if (player == null)
             {
                 player = other.gameObject;
                 playerRb = player.GetComponent<Rigidbody>();
             }
-            if (!fallingPLatform)
+            if (!fallingPlatform)
+            {
                 player.transform.parent = transform;
+                Physics.SyncTransforms();
+            }
+            
         }
     }
 
@@ -116,29 +167,10 @@ public class ThrowingPlatform : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            onPlatform = false;
             player.transform.parent = null;
             playerRb.velocity += movingDirection * jumpVelocity * jumpVelocityMultiplier;
         }
     }
-    /*
-    IEnumerator StartThrowing() 
-    {
-        for (int i = 0; i < 10; i++)
-            platformRigidbody.AddForce(velocityMultiplier * movingDirection);
-
-        yield return new WaitForSeconds(.3f);
-
-        while (transform.position  != targetPosition.position - movingDirection * 2)
-        {
-            platformRigidbody.velocity = velocityMultiplier * movingDirection;
-        }
-
-
-    }
-
-    void StopThrowing() 
-    {
-
-    }*/
 }
 

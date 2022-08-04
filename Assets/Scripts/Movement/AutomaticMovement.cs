@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 public class AutomaticMovement : MonoBehaviour
@@ -20,11 +19,17 @@ public class AutomaticMovement : MonoBehaviour
 
     private void Start()
     {
-        if (useMusic)
+        // Check if event is playing, if not, play it again.
+        FMOD.Studio.PLAYBACK_STATE state;
+        worldIntro.getPlaybackState(out state);
+        if (useMusic && state != FMOD.Studio.PLAYBACK_STATE.PLAYING)
         {
             worldIntro = FMODUnity.RuntimeManager.CreateInstance(worldIntroEvent);
             worldIntro.start();
         }
+
+        if(useMusic)
+            SceneManager.sceneUnloaded += StopMusic;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -88,6 +93,11 @@ public class AutomaticMovement : MonoBehaviour
         {
             worldIntro.setParameterByName("WorldIntroPart", 2f);
         }
+    }
+
+    void StopMusic(Scene scene) 
+    {
+        worldIntro.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     private void RecalculateCameraVectors() 
