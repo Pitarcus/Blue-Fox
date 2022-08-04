@@ -8,6 +8,8 @@ public class LightingManager : MonoBehaviour
     public LightingConditions preset;
     public float dayPeriod = 24;
 
+    public bool rotateAllDirections = false;
+
     [SerializeField]private float timeOfDay;
 
 
@@ -34,7 +36,10 @@ public class LightingManager : MonoBehaviour
         if(directionalLight != null)
         {
             directionalLight.color = preset.DirectionalColor.Evaluate(timePercent);
-            directionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, -100f, 0));
+            if(!rotateAllDirections)
+                directionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) - 90f, -100f, 0));
+            else
+                directionalLight.transform.localRotation = Quaternion.Euler(new Vector3((timePercent * 360f) + 55f, (timePercent * 2 * 360f) - 45f, 0));
         }
     }
 

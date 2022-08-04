@@ -84,15 +84,15 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _CloudScale: 50
-    - _CloudSpeed: 0.004
-    - _CloudStep: 0.17
-    - _CloudTransparency: 0.85
+    - _CloudSpeed: 0.07
+    - _CloudStep: 0.16
+    - _CloudTransparency: 1.57
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DistortionScale: 100
-    - _DistortionSpeed: 0.008
+    - _DistortionSpeed: -0.1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
     - _GlossMapScale: 0
