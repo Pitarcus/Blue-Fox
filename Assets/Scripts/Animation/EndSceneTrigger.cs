@@ -3,18 +3,25 @@ using UnityEngine;
 
 public class EndSceneTrigger : MonoBehaviour
 {
-
-    [SerializeField]
-    private Collider trigger;
     [SerializeField]
     private LightingManager lightingManager;
     [SerializeField]
     private Material newSkyboxMaterial;
     [SerializeField]
     private GameObject clouds;
+    [SerializeField]
+    private GameObject starParticles;
+    [SerializeField]
+    private ParticleSystem appleParticles;
 
-    private static bool entered = false;
-    private static float currentLightSpeed = 25f;
+    private bool entered = false;
+
+    private Material originalSkybox;
+
+    private void Awake()
+    {
+        originalSkybox = RenderSettings.skybox;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -22,31 +29,26 @@ public class EndSceneTrigger : MonoBehaviour
         {
             if (!entered)
             {
-                trigger.enabled = false;
-
                 // Show last Clouds and change skybox material
                 clouds.SetActive(true);
                 RenderSettings.skybox = newSkyboxMaterial;
 
+                appleParticles.Play();
+
                 // Control light rotation speed and change of color through lighting manager
                 lightingManager.enabled = true;
-                SetLightSpeed(currentLightSpeed);
 
                 entered = true;
             }
-            else
-            {
-                trigger.enabled = false;
-
-                SetLightSpeed(currentLightSpeed - 5);
-                currentLightSpeed = currentLightSpeed - 5;
-            }
         }
-
     }
-    private void SetLightSpeed(float x )
+
+    public void Reset()
     {
-        lightingManager.dayPeriod = x;
-    }
+        entered = false;
+        clouds.SetActive(false);
+        appleParticles.Stop();
 
+        RenderSettings.skybox = originalSkybox;
+    }
 }

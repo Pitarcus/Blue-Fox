@@ -12,7 +12,7 @@ public class MeleeEnemyFX : MonoBehaviour
     public VisualEffect attackVFX;
 
     private FMOD.Studio.PARAMETER_ID recoveryParameterId;
-    private static FMOD.Studio.EventInstance weak;
+    private FMOD.Studio.EventInstance weak; // This was static wtf
 
     private void Start()
     {

@@ -127,7 +127,6 @@ public class FoxHealth : MonoBehaviour
 
     void ManageDeath()
     {
-        Debug.Log("Dead");
         dead = true;
         foxMovement.m_CinemachineImpulseSource.GenerateImpulse();
         timeManager.PauseTime(1.5f);
@@ -163,6 +162,7 @@ public class FoxHealth : MonoBehaviour
         foxRb.position = foxMovement.spawn.position;
         foxMovement.foxMesh.enabled = true;
         foxMovement.m_Rigidbody.velocity = Vector3.zero;
+        foxMovement.isGrounded = false;
         foxRb.transform.rotation = Quaternion.Euler(0, 0, 0);
         if(triggerUI)
             PlayUIIn();

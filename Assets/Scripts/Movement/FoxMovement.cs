@@ -553,15 +553,23 @@ public class FoxMovement : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True"))
         {
-            if(m_Rigidbody.velocity.y != 0)
-                isGrounded = false;
+            // Check if is still colliding, if it is, dont do what it should when taking off
+            if (!Physics.Raycast(transform.position + transform.forward * 5 + new Vector3(0, 5), Vector3.down, 5.5f, LayerMask.GetMask("Ground")))
+            {
+                if (m_Rigidbody.velocity.y != 0)
+                    isGrounded = false;
 
-            m_Animator.SetBool("isGrounded", isGrounded);
-            m_Animator.applyRootMotion = false;
-            if (!isJumping)
-                m_Animator.SetTrigger("falling");
+                m_Animator.SetBool("isGrounded", isGrounded);
+                m_Animator.applyRootMotion = false;
+                if (!isJumping)
+                    m_Animator.SetTrigger("falling");
 
-            dashSpeed += airborneDashBonus;
+                dashSpeed += airborneDashBonus;
+            }
+            else // If not really airborne
+            {
+                dashSpeed += airborneDashBonus;
+            }
         }
     }
 

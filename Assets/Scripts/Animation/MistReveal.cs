@@ -41,7 +41,7 @@ public class MistReveal : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         foxHealth = player.GetComponent<FoxHealth>();
         //foxHealth.playerDeath.AddListener(HideMistSnap);
-        foxHealth.playerRespawned.AddListener(HideMistSnap2);
+        foxHealth.playerRespawned.AddListener(HideMistSnap2);   // For when respawning from pause menu
 
         remainingEnemies = 0;
 

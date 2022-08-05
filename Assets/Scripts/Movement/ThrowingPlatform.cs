@@ -32,6 +32,7 @@ public class ThrowingPlatform : MonoBehaviour
     public MeshRenderer lightMeshRenderer;
     public Color redColor;
     public Color greenColor;
+    public Color yellowColor;
 
     private Material lightMaterial;
 
@@ -112,7 +113,8 @@ public class ThrowingPlatform : MonoBehaviour
         if (resetPosition)
         {
             movementSequence.AppendInterval(1f);
-            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)).OnComplete(OnOrigin);
+            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)
+                .OnPlay(() => lightMaterial.SetColor("_EmissionColor", yellowColor))).OnComplete(OnOrigin);
         }
 
         // Create the sequence of the values for the inertia of the player jump
@@ -123,6 +125,11 @@ public class ThrowingPlatform : MonoBehaviour
         //DOVirtual.Float(0f, 0.9f, duration + 0.2f, ChangeJumpVelocity).SetEase(Ease.InOutElastic).OnComplete(ResetJumpVelocity);
 
         onOrigin = false;
+    }
+
+    void SetPlatformColor(Color color)
+    {
+        lightMaterial.SetColor("_EmissionColor", color);
     }
     private void FallingPlatform() 
     {

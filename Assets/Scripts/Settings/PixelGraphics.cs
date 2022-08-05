@@ -42,7 +42,7 @@ public class PixelGraphics : MonoBehaviour
         pixelSetUp.SetActive(true);
         textureCamera.targetTexture = renderTexture;
 
-        textureCamera.cullingMask |= (0 << LayerMask.NameToLayer("UI"));    // Not rendering UI camera
+        textureCamera.cullingMask &= ~(1 << LayerMask.NameToLayer("UI"));    // Not rendering UI camera
     }
 
     private void DisablePixelCamera()

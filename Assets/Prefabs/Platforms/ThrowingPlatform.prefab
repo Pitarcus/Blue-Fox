@@ -158,10 +158,10 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: -4, z: 0}
-  - {x: 0, y: -4, z: 30}
-  - {x: 0, y: -7, z: 30}
-  - {x: 0, y: -7, z: 0}
+  - {x: 0, y: 46, z: 2590}
+  - {x: 0, y: 46, z: 2620}
+  - {x: 0, y: 43, z: 2620}
+  - {x: 0, y: 43, z: 2590}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -337,6 +337,7 @@ MonoBehaviour:
   lightMeshRenderer: {fileID: 349144159943753020}
   redColor: {r: 1, g: 0, b: 0, a: 0}
   greenColor: {r: 0.12710953, g: 1, b: 0, a: 0}
+  yellowColor: {r: 1, g: 0.89839506, b: 0, a: 0}
 --- !u!114 &5403231384549358527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,7 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f15aeda5282829499d5c0e01e1f1b11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundType: 1
+  groundType: 3
 --- !u!1 &4259095857292357663
 GameObject:
   m_ObjectHideFlags: 0

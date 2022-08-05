@@ -11478,6 +11478,9 @@ MonoBehaviour:
   isJumping: 0
   isGrounded: 1
   isDashing: 0
+  onTrueGround:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &5975033950554438773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11537,11 +11540,12 @@ MonoBehaviour:
       m_Calls: []
   foodObtainedEvent:
     Guid:
-      Data1: -894776273
-      Data2: 1186735844
-      Data3: 2020320647
-      Data4: 374701665
-    Path: event:/SFX/Ambience/Object_Obtained
+      Data1: 1686396371
+      Data2: 1166054532
+      Data3: 153313678
+      Data4: 573017816
+    Path: event:/SFX/Ambience/Obtained_Item
+  potentialStrawberries: 0
 --- !u!114 &888590632315299240
 MonoBehaviour:
   m_ObjectHideFlags: 0

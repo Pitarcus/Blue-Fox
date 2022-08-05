@@ -38,12 +38,13 @@ public class Strawberry : MonoBehaviour
             foxHealth = other.GetComponent<FoxHealth>();
 
             foxHealth.playerDeath.AddListener(ResetStrawberry);
+            foxHealth.playerRespawned.AddListener(ResetStrawberry);
             foxMovement.onTrueGround.AddListener(CompleteStrawberry);
 
             foxTransform = other.transform;
 
             // Calculate Position
-            zOffset = foxFoodScript.potentialStrawberries;
+            zOffset = foxFoodScript.potentialStrawberries * 5f;
             smoothTime += foxFoodScript.potentialStrawberries * 0.05f;
             foxFoodScript.potentialStrawberries++;
 
@@ -71,6 +72,7 @@ public class Strawberry : MonoBehaviour
         followingPlayer = false;
 
         foxHealth.playerDeath.RemoveListener(ResetStrawberry);
+        foxHealth.playerRespawned.RemoveListener(ResetStrawberry);
         foxMovement.onTrueGround.RemoveListener(CompleteStrawberry);
 
         foxFoodScript.potentialStrawberries--;
@@ -80,9 +82,11 @@ public class Strawberry : MonoBehaviour
     }
     void ResetStrawberry()
     {
+        foxFoodScript.potentialStrawberries = 0;
         followingPlayer = false;
 
         foxHealth.playerDeath.RemoveListener(ResetStrawberry);
+        foxHealth.playerRespawned.RemoveListener(ResetStrawberry);
         foxMovement.onTrueGround.RemoveListener(CompleteStrawberry);
 
         transform.position = originalPosition;

@@ -9,7 +9,10 @@ public class FoxFootSteps : MonoBehaviour
     { 
         Snow,
         Stone,
-        Hay
+        Hay,
+        Metal,
+        Water,
+        Crystal
     };
 
     public FMODUnity.EventReference footStepEvent;
