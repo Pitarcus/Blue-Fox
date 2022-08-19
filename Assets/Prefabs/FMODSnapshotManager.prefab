@@ -51,10 +51,17 @@ MonoBehaviour:
       Data3: -2031295560
       Data4: 1170662178
     Path: snapshot:/CaveReverb
-  outDoorsSnapshot:
+  battleSnapshot:
     Guid:
-      Data1: 516614496
-      Data2: 1090562752
-      Data3: 2008381073
-      Data4: -1153177218
-    Path: snapshot:/Outside
+      Data1: -2110084009
+      Data2: 1299469679
+      Data3: 1144258435
+      Data4: -600950145
+    Path: snapshot:/Battle
+  endSceneSnapshot:
+    Guid:
+      Data1: -710646116
+      Data2: 1114544125
+      Data3: -1883034747
+      Data4: -1124190594
+    Path: snapshot:/ReverbOnly

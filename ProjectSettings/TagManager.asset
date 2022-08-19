@@ -14,6 +14,7 @@ TagManager:
   - FoodBag
   - TimeManager
   - Ground_True
+  - Strawberry
   layers:
   - Default
   - TransparentFX

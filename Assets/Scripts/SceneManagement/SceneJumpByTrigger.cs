@@ -7,8 +7,14 @@ public class SceneJumpByTrigger : MonoBehaviour
     public int sceneToJump;
     public SceneJump sceneJump;
 
+    private bool triggered = false;
+
     private void OnTriggerEnter(Collider other)
     {
-        sceneJump.ChangeScene(sceneToJump);
+        if (!triggered)
+        {
+            sceneJump.ChangeScene(sceneToJump);
+            triggered = true;
+        }
     }
 }

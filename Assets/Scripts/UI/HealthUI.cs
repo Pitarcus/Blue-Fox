@@ -10,7 +10,8 @@ public class HealthUI : MonoBehaviour
     [Header("Assign in inspector")]
     public RectTransform heartsGroupPosition;
     public Image[] heartsImages;
-    private CanvasGroup heartsGroupAlpha;
+    [HideInInspector]
+    public CanvasGroup heartsGroupAlpha;
     public RectTransform heartsMask;
 
     [Space]
@@ -71,7 +72,7 @@ public class HealthUI : MonoBehaviour
         }
     }
 
-    void HideHealth() 
+    public void HideHealth() 
     {
         heartsGroupPosition.DOAnchorPosY(hiddenY, transitionTime).SetUpdate(true);
         heartsGroupAlpha.DOFade(0, transitionTime - 0.1f).SetUpdate(true);

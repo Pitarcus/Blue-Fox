@@ -76,6 +76,7 @@ public class MistReveal : MonoBehaviour
             mistMaterials.Add(mistObjects[i].GetComponent<MeshRenderer>().material);
         }
 
+        // reveal animation tween
         for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
         {
             int i = currentMaterial;
@@ -87,6 +88,9 @@ public class MistReveal : MonoBehaviour
         mistReveal = FMODUnity.RuntimeManager.CreateInstance(mistRevealEvent);
 
         mistReveal.start();
+
+        MusicManager.instance.BattleOutOfTheCave();
+        SnapshotManager.instance.SetBattleSnapshot();
     }
     void SpawnEnemies() 
     {
@@ -122,7 +126,7 @@ public class MistReveal : MonoBehaviour
     {
         CheckRemainingEnemies();
         
-        if (remainingEnemies == 0)
+        if (remainingEnemies == 0)  // end of MIST, continue gameplay
         {
             for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
             {
@@ -134,7 +138,10 @@ public class MistReveal : MonoBehaviour
 
             fog.Stop();
 
-            Invoke("DisableMist", transitionDuration + 0.1f);
+            colliders.SetActive(false);
+
+            Invoke("DisableMist", transitionDuration);
+            Invoke("DestroyMist", transitionDuration + 0.1f);
         }
     }
 
@@ -164,7 +171,7 @@ public class MistReveal : MonoBehaviour
             for (int currentMaterial = 0; currentMaterial < mistObjects.Length; currentMaterial++)
             {
                 int i = currentMaterial;
-                DOVirtual.Float(endRevealValue, startRevealValue, 0.1f, x => ChangeMaterialRevealValue(x, i));
+                ChangeMaterialRevealValue(startRevealValue, currentMaterial);
             }
         mistReveal.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         mistReveal.release();
@@ -190,6 +197,14 @@ public class MistReveal : MonoBehaviour
         }
         colliders.SetActive(false);
         DeSpawnEnemies();
+
+        MusicManager.instance.ResumeOutOfTheCave();
+
+        SnapshotManager.instance.SetNormalSnapshot();
+    }
+    private void DestroyMist()
+    {
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)

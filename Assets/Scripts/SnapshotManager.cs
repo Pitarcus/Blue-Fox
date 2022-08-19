@@ -6,14 +6,19 @@ using UnityEngine.SceneManagement;
 public class SnapshotManager : MonoBehaviour
 {
     public FMODUnity.EventReference caveSnapshot;
-    public FMODUnity.EventReference outDoorsSnapshot;
+    public FMODUnity.EventReference battleSnapshot;
+    public FMODUnity.EventReference endSceneSnapshot;
 
     private static FMOD.Studio.EventInstance snapshot;
+
+    public static SnapshotManager instance;
 
     private void Awake()
     {
         SceneManager.sceneLoaded += SetSnapshot;
         SceneManager.sceneUnloaded += ResetSnapshot;
+
+        instance = this;
     }
 
     void SetSnapshot(Scene scene, LoadSceneMode mode)
@@ -22,12 +27,12 @@ public class SnapshotManager : MonoBehaviour
         if (SceneManager.GetActiveScene().name == "Cave") 
         {
             snapshot = FMODUnity.RuntimeManager.CreateInstance(caveSnapshot);
+            snapshot.start();
         }   
         else 
         {
-            snapshot = FMODUnity.RuntimeManager.CreateInstance(outDoorsSnapshot);
+            snapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         }
-        snapshot.start();
     }
 
     private void ResetSnapshot(Scene scene)
@@ -38,4 +43,24 @@ public class SnapshotManager : MonoBehaviour
         snapshot.release();
     }
 
+    public void SetBattleSnapshot()
+    {
+        snapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        snapshot.release();
+        snapshot = FMODUnity.RuntimeManager.CreateInstance(battleSnapshot);
+        snapshot.start();
+    }
+
+    public void SetNormalSnapshot()
+    {
+        snapshot.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        snapshot.release();
+    }
+
+    public void SetEndSceneSnapshot() 
+    {
+        snapshot.release();
+        snapshot = FMODUnity.RuntimeManager.CreateInstance(endSceneSnapshot);
+        snapshot.start();
+    }
 }

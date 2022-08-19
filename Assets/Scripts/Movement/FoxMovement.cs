@@ -100,7 +100,7 @@ public class FoxMovement : MonoBehaviour
     // Jump
     public bool isJumping = false;
     public bool isGrounded = true;
-    private bool canJump = true;    // Variable that allows jump (coyote time implemented)
+    public bool canJump = true;    // Variable that allows jump (coyote time implemented)
     private bool landing = false;
     private float jumpTimer = 0f;    // To check for how much the player is jumping
     private float maxShadowWidth = 3;
@@ -187,6 +187,70 @@ public class FoxMovement : MonoBehaviour
 
     void FixedUpdate()
     {
+        // RAYCAST GROUND CHECK
+        RaycastHit rayCastHit;
+        /*if(Physics.Raycast(transform.position + transform.forward * 5 + new Vector3(-2, 5), Vector3.down, out rayCastHit, 5.1f, LayerMask.GetMask("Ground"))
+            || Physics.Raycast(transform.position + transform.forward * 5 + new Vector3(2, 5), Vector3.down, out rayCastHit, 5.1f, LayerMask.GetMask("Ground"))
+            || Physics.Raycast(transform.position + transform.forward * -5 + new Vector3(-2, 5), Vector3.down, out rayCastHit, 5.1f, LayerMask.GetMask("Ground"))
+            || Physics.Raycast(transform.position + transform.forward * -5 + new Vector3(2, 5), Vector3.down, out rayCastHit, 5.1f, LayerMask.GetMask("Ground"))
+            || Physics.Raycast(transform.position + new Vector3(0, 5), Vector3.down, out rayCastHit, 5.1f, LayerMask.GetMask("Ground"))) {*/
+        if (Physics.SphereCast(transform.position + transform.forward * 4 + new Vector3(-2, 5), 1f, Vector3.down, out rayCastHit, 5f, LayerMask.GetMask("Ground"))
+            || Physics.SphereCast(transform.position + transform.forward * 4 + new Vector3(2, 5), 1f, Vector3.down, out rayCastHit, 5f, LayerMask.GetMask("Ground"))
+            || Physics.SphereCast(transform.position + transform.forward * -6 + new Vector3(-2, 5), 1f, Vector3.down, out rayCastHit, 5f, LayerMask.GetMask("Ground"))
+            || Physics.SphereCast(transform.position + transform.forward * -6 + new Vector3(2, 5), 1f, Vector3.down, out rayCastHit, 5f, LayerMask.GetMask("Ground"))
+            || Physics.SphereCast(transform.position + new Vector3(0, 5), 1f, Vector3.down, out rayCastHit, 5f, LayerMask.GetMask("Ground")))
+        {
+            if (!isGrounded)    // Ground enter
+            {
+                
+                if (rayCastHit.collider.CompareTag("Ground_True"))
+                {
+                    onTrueGround.Invoke(); // Inform Strawberries
+                }
+
+                if (Mathf.Approximately(inputVector.magnitude, 0))
+                {
+                    m_Rigidbody.velocity = new Vector3 (0, m_Rigidbody.velocity.y, 0);
+                }
+
+                jumpParticles.Play();
+
+                landing = false;
+
+                if (!canDash)
+                    canDashAnimation();
+
+                canDash = true;
+                dashSpeed -= airborneDashBonus;
+
+                jumpTimer = 0f;
+
+                coyoteTimer = 0f;
+
+                shadowDecal.size = new Vector3(maxShadowWidth, maxShadowHeight, 15);
+            }
+            isGrounded = true;
+            if(!isJumping)
+                canJump = true;
+            m_Animator.SetBool("isGrounded", isGrounded);
+            m_Animator.applyRootMotion = true;
+        }
+        else
+        {
+            if (isGrounded)
+            {
+
+                if (!isJumping)
+                    m_Animator.SetTrigger("falling");
+
+                dashSpeed += airborneDashBonus;
+            }
+            isGrounded = false;
+            m_Animator.SetBool("isGrounded", isGrounded);
+            m_Animator.applyRootMotion = false;
+
+        }
+
         if (!isDashing && canMove)  // only move when enabled and is not dashing
         {
             HandleMovement();
@@ -209,18 +273,16 @@ public class FoxMovement : MonoBehaviour
 
     private void Update()
     {
-        if(!isGrounded)
+        if(!isGrounded) // Can jump doesnt change until coyote time has passed or player has jumped
         {
-            coyoteTimer += Time.deltaTime;
-            if(coyoteTimer > coyoteTime)
+            if (canJump)
             {
-                canJump = false;
+                coyoteTimer += Time.deltaTime;
+                if (coyoteTimer > coyoteTime)
+                {
+                    canJump = false;
+                }
             }
-        }
-        else
-        {
-            coyoteTimer = 0f;
-            canJump = true;
         }
     }
 
@@ -350,13 +412,13 @@ public class FoxMovement : MonoBehaviour
             m_Rigidbody.velocity += Vector3.up * jumpVelocity;
 
             isJumping = true;
-            isGrounded = false;
+            //isGrounded = false;
             canJump = false;
 
             jumpParticles.Play();
 
             m_Animator.SetTrigger("jump");
-            m_Animator.SetBool("isGrounded", isGrounded);
+            //m_Animator.SetBool("isGrounded", isGrounded);
         }
     }
     public void JumpActionAuto()
@@ -370,13 +432,13 @@ public class FoxMovement : MonoBehaviour
             m_Rigidbody.velocity += Vector3.up * jumpVelocity;
 
             isJumping = true;
-            isGrounded = false;
+            //isGrounded = false;
             canJump = false;
 
             jumpParticles.Play();
 
             m_Animator.SetTrigger("jump");
-            m_Animator.SetBool("isGrounded", isGrounded);
+            //m_Animator.SetBool("isGrounded", isGrounded);
         }
     }
     void HandleJump() // Manage airborne movement
@@ -514,7 +576,7 @@ public class FoxMovement : MonoBehaviour
         m_Rigidbody.MoveRotation(m_Rotation);
     }
 
-    private void OnCollisionEnter(Collision collision)  // Getting the collision with the ground objects (player is grounded)
+    /*private void OnCollisionEnter(Collision collision)  // Getting the collision with the ground objects (player is grounded)
     {
         
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True")) 
@@ -547,9 +609,9 @@ public class FoxMovement : MonoBehaviour
 
             shadowDecal.size = new Vector3(maxShadowWidth, maxShadowHeight, 15);
         }
-    }
+    }*/
 
-    private void OnCollisionExit(Collision collision)
+    /*private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True"))
         {
@@ -571,7 +633,7 @@ public class FoxMovement : MonoBehaviour
                 dashSpeed += airborneDashBonus;
             }
         }
-    }
+    }*/
 
     private void OnTriggerEnter(Collider other) 
     {

@@ -63,7 +63,7 @@ public class ThrowingPlatform : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (onOrigin)
+        if (onOrigin && collision.collider.CompareTag("Player"))
         {
             if (fallingPlatform)
                 FallingPlatform();
@@ -98,7 +98,10 @@ public class ThrowingPlatform : MonoBehaviour
 
     private void ThrowPlatform() 
     {
-        //FMODUnity.RuntimeManager.PlayOneShot(throwingPlatformSoundEvent, transform.position);
+       // Start sound event
+        FMOD.Studio.EventInstance throwingPlatformEventInstance = FMODUnity.RuntimeManager.CreateInstance(throwingPlatformSoundEvent);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(throwingPlatformEventInstance, transform);
+        throwingPlatformEventInstance.start();
 
         throwingPlatformClogs.SetTrigger("Move");
 
@@ -110,10 +113,14 @@ public class ThrowingPlatform : MonoBehaviour
         movementSequence.Append(mesh.DOShakePosition(shakeDuration, shakeStrenght, shakeVibrato));   // May change for a child mesh
         movementSequence.Join(transform.DOMove(targetPosition.position, duration, false).SetEase(easeType));    // Throw movement
 
+        movementSequence.InsertCallback(0.2f, () => throwingPlatformEventInstance.setParameterByName("ThrowingPlatformState", 1));
+
         if (resetPosition)
         {
+            movementSequence.AppendCallback(() => throwingPlatformEventInstance.setParameterByName("ThrowingPlatformState", 2));
             movementSequence.AppendInterval(1f);
-            movementSequence.Append(transform.DOMove(originalPosition, duration + 1f, false)
+            movementSequence.AppendCallback(() => throwingPlatformEventInstance.setParameterByName("ThrowingPlatformState", 3));
+            movementSequence.Join(transform.DOMove(originalPosition, duration + 1f, false)
                 .OnPlay(() => lightMaterial.SetColor("_EmissionColor", yellowColor))).OnComplete(OnOrigin);
         }
 

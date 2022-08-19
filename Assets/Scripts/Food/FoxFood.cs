@@ -7,6 +7,7 @@ public class FoxFood : MonoBehaviour
     public UnityEvent<int> foodChanged;
 
     public FMODUnity.EventReference foodObtainedEvent;
+    public FMODUnity.EventReference strawberryObtainedEvent;
 
     [HideInInspector]
     public int potentialStrawberries = 0;
@@ -29,10 +30,21 @@ public class FoxFood : MonoBehaviour
 
     public void IncreaseFoodAmount(int amount) 
     {
+        
         foodAmount += amount;
         foodChanged.Invoke(foodAmount);
+        if (amount != 0)
+        {
+            if (amount < 5)
+                FMODUnity.RuntimeManager.PlayOneShot(foodObtainedEvent);
+            else // Change for strawberry sound
+                FMODUnity.RuntimeManager.PlayOneShot(strawberryObtainedEvent);
+        }
+    }
 
-        if(amount > 0)
-            FMODUnity.RuntimeManager.PlayOneShot(foodObtainedEvent);
+    public void DecreaseFoodAmount()
+    {
+        foodAmount--;
+        foodChanged.Invoke(foodAmount);
     }
 }

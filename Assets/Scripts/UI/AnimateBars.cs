@@ -29,6 +29,8 @@ public class AnimateBars : MonoBehaviour
     public void PlayExitBars()
     {
         topBar.DOAnchorPosY(-topStartY, animationDuration);
-        botBar.DOAnchorPosY(-botStartY, animationDuration);
+        botBar.DOAnchorPosY(-botStartY, animationDuration)
+            .OnComplete(()=> gameObject.SetActive(false));
+        
     }
 }

@@ -13,6 +13,8 @@ public class EndSceneTrigger : MonoBehaviour
     private GameObject starParticles;
     [SerializeField]
     private ParticleSystem appleParticles;
+    [SerializeField]
+    private GoldenApple goldenAppleScript;
 
     private bool entered = false;
 
@@ -23,6 +25,13 @@ public class EndSceneTrigger : MonoBehaviour
         originalSkybox = RenderSettings.skybox;
     }
 
+    private void Update()
+    {
+        if(entered)
+        {
+            MusicManager.instance.UpdateEndDistance();
+        }
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -34,6 +43,10 @@ public class EndSceneTrigger : MonoBehaviour
                 RenderSettings.skybox = newSkyboxMaterial;
 
                 appleParticles.Play();
+                goldenAppleScript.PlayGoldenAppleLoop();
+
+                MusicManager.instance.PauseOutOfTheCave();
+                MusicManager.instance.PlayEndSceneEvent();
 
                 // Control light rotation speed and change of color through lighting manager
                 lightingManager.enabled = true;
@@ -45,10 +58,12 @@ public class EndSceneTrigger : MonoBehaviour
 
     public void Reset()
     {
-        entered = false;
-        clouds.SetActive(false);
-        appleParticles.Stop();
+        //entered = false;
+        //clouds.SetActive(false);
+        //appleParticles.Stop();
 
-        RenderSettings.skybox = originalSkybox;
+        MusicManager.instance.ResetEndDistance();
+
+        //RenderSettings.skybox = originalSkybox;
     }
 }

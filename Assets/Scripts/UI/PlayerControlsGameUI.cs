@@ -21,6 +21,9 @@ public class PlayerControlsGameUI : MonoBehaviour
     private Sprite currentConfirm;
 
     [Space]
+    public Sprite food;
+
+    [Space]
     public Image imageOnTopOfPlayer;
     public GameObject UICanvas;
 
@@ -89,8 +92,13 @@ public class PlayerControlsGameUI : MonoBehaviour
     }
     private void OnTriggerExit(Collider other)
     {
-        if (dashTut == null)
+        if (other.CompareTag("JumpUITrigger"))
+        {
             TweenCanvasOut();
+        }
+        else if (other.CompareTag("DashUITrigger"))
+        {
+        }
     }
     private void TweenCanvasIn()
     {

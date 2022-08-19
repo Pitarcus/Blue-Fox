@@ -158,10 +158,10 @@ LineRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Positions:
-  - {x: 0, y: 46, z: 2590}
-  - {x: 0, y: 46, z: 2620}
-  - {x: 0, y: 43, z: 2620}
-  - {x: 0, y: 43, z: 2590}
+  - {x: 0, y: -4, z: 0}
+  - {x: 0, y: -4, z: 30}
+  - {x: 0, y: -7, z: 30}
+  - {x: 0, y: -7, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -327,11 +327,11 @@ MonoBehaviour:
   fallingPlatformParticles: {fileID: 0}
   throwingPlatformSoundEvent:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -828371060
+      Data2: 1296252944
+      Data3: -1762828634
+      Data4: 1207268308
+    Path: event:/SFX/ThrowingPlatform
   targetPosition: {fileID: 4538772106495662291}
   throwingPlatformClogs: {fileID: 4538772104920866130}
   lightMeshRenderer: {fileID: 349144159943753020}

@@ -21,6 +21,9 @@ public class FoxHealth : MonoBehaviour
     public UnityEngine.Rendering.Volume hurtVolume;
 
     public FMODUnity.EventReference foxHurtSoundEvent;
+    public FMODUnity.EventReference foxDeadEvent;
+
+    public TutorialTriggerText foodLostTutorialTriggerText;
 
 
     [Space]
@@ -29,7 +32,7 @@ public class FoxHealth : MonoBehaviour
     public float maxHurtMaterialValue;
     public FMODUnity.EventReference slowMoSnapshotEvent;
 
-    [HideInInspector] public float lastHeightValue = 0f;
+    [HideInInspector] public Vector3 lastGroundPosition;
     private bool damaged = false;   // invulnerability boolean
     private bool dead = false;
     private Rigidbody foxRb;
@@ -39,6 +42,8 @@ public class FoxHealth : MonoBehaviour
     private FMOD.Studio.PARAMETER_ID slowMoIntensityParameterId;
 
     private CinemachineImpulseSource m_CinemachineImpulseSource;
+
+    private bool hasDiedOnce = false;
 
     private void Awake()
     {
@@ -79,8 +84,6 @@ public class FoxHealth : MonoBehaviour
 
             m_CinemachineImpulseSource.GenerateImpulse();
 
-            FMODUnity.RuntimeManager.PlayOneShot(foxHurtSoundEvent);
-
             if (health > 0)
             {
                 HitAnimation();
@@ -96,7 +99,6 @@ public class FoxHealth : MonoBehaviour
         {
             if(!dead)
                 ManageDeath();
-            
         }
     }
 
@@ -104,12 +106,14 @@ public class FoxHealth : MonoBehaviour
     {
         if(collision.collider.CompareTag("Ground") || collision.gameObject.CompareTag("Ground_True"))
         {
-            lastHeightValue = transform.position.y;
+            lastGroundPosition = transform.position;
         }
     }
 
     private void ManageHit(Collider other)
     {
+        FMODUnity.RuntimeManager.PlayOneShot(foxHurtSoundEvent);
+
         // Explosion
         Vector3 forceDirection = transform.position - new Vector3(other.transform.position.x, transform.position.y, other.transform.position.z);
         forceDirection = forceDirection.normalized;
@@ -128,6 +132,16 @@ public class FoxHealth : MonoBehaviour
     void ManageDeath()
     {
         dead = true;
+
+        if(!hasDiedOnce)
+        {
+            foodLostTutorialTriggerText.ShowTextSequence();
+        }
+
+        hasDiedOnce = true;
+
+        FMODUnity.RuntimeManager.PlayOneShot(foxDeadEvent);
+
         foxMovement.m_CinemachineImpulseSource.GenerateImpulse();
         timeManager.PauseTime(1.5f);
 

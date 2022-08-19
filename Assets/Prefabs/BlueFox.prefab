@@ -11459,7 +11459,7 @@ MonoBehaviour:
   fallMultiplier: 14
   lowJumpMultiplier: 8.2
   landingDistanceFromGround: 9
-  maxJumpTime: 3
+  maxJumpTime: 2
   coyoteTime: 0.18
   dashSpeed: 225
   dashMaxDrag: 14
@@ -11477,6 +11477,7 @@ MonoBehaviour:
   playerCanDash: 0
   isJumping: 0
   isGrounded: 1
+  canJump: 1
   isDashing: 0
   onTrueGround:
     m_PersistentCalls:
@@ -11513,6 +11514,14 @@ MonoBehaviour:
       Data3: -1260081995
       Data4: -606564895
     Path: event:/SFX/BlueFox/Fox_Hurt
+  foxDeadEvent:
+    Guid:
+      Data1: 26861092
+      Data2: 1117605768
+      Data3: 1684682410
+      Data4: -511848521
+    Path: event:/SFX/BlueFox/Fox_dead
+  foodLostTutorialTriggerText: {fileID: 0}
   health: 30
   maxHurtMaterialValue: 0.6
   slowMoSnapshotEvent:
@@ -11545,6 +11554,13 @@ MonoBehaviour:
       Data3: 153313678
       Data4: 573017816
     Path: event:/SFX/Ambience/Obtained_Item
+  strawberryObtainedEvent:
+    Guid:
+      Data1: -894776273
+      Data2: 1186735844
+      Data3: 2020320647
+      Data4: 374701665
+    Path: event:/SFX/Ambience/Obtained_Strawberry
   potentialStrawberries: 0
 --- !u!114 &888590632315299240
 MonoBehaviour:

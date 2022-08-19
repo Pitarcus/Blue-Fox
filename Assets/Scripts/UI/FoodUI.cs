@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TMPro;
@@ -58,7 +56,7 @@ public class FoodUI : MonoBehaviour
             ShowFood();
     }
 
-    void ShowFood()
+    public void ShowFood()
     {
         if (!foodShowing)
         {
@@ -81,6 +79,8 @@ public class FoodUI : MonoBehaviour
         healthUI.ShowHealth();
         // manage numbers particles and stuff
         foodAmountText.text = foodAmount.ToString();
+
+        foodGroupPosition.DOShakePosition(0.2f).SetUpdate(true);
     }
 
 }

@@ -25,12 +25,14 @@ public class LightingManager : MonoBehaviour
     }
     private void OnEnable()
     {
+        if(foxHealth != null)
         foxHealth.playerRespawned.AddListener(Reset);
     }
 
     private void OnDisable()
     {
-        foxHealth.playerRespawned.RemoveListener(Reset);
+        if (foxHealth != null)
+            foxHealth.playerRespawned.RemoveListener(Reset);
     }
 
     private void Update()
@@ -89,17 +91,17 @@ public class LightingManager : MonoBehaviour
 
     private void Reset()
     {
-        RenderSettings.ambientLight = preset.AmbientColor.Evaluate(0);
-        RenderSettings.fogColor = originalFogColor;
+        //RenderSettings.ambientLight = preset.AmbientColor.Evaluate(0);
+        //RenderSettings.fogColor = originalFogColor;
 
-        directionalLight.color = Color.white;
-        directionalLight.transform.localRotation = originalLightRotation;
+        //directionalLight.color = Color.white;
+        //directionalLight.transform.localRotation = originalLightRotation;
 
         for(int i = 0; i < transform.childCount; i++)
         {
             transform.GetChild(i).GetComponent<EndSceneTrigger>().Reset();
         }
 
-        this.enabled = false;
+        //this.enabled = false;
     }
 }

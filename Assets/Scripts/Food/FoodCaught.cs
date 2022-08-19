@@ -1,6 +1,7 @@
 using UnityEngine.Events;
 using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class FoodCaught : MonoBehaviour
 {
@@ -46,6 +47,8 @@ public class FoodCaught : MonoBehaviour
     {
         foodTriggered.Invoke();
 
+        unlocked = true;
+
         foxFood.IncreaseFoodAmount(extraValue);
 
         // Animate
@@ -66,16 +69,17 @@ public class FoodCaught : MonoBehaviour
 
         transform.parent = fox;
         transform.localPosition = new Vector3(0, 18, 4);
-        transform.DOScale(Vector3.one * objectScale * 1.2f,  0.2f).SetEase(Ease.InCubic);
-        Invoke("AnimateOut", 1.5f);
+        transform.DOScale(Vector3.one * objectScale * 1.2f,  0.2f).SetEase(Ease.InCubic).SetUpdate(true);
+        StartCoroutine("AnimateOut");
     }
 
-    void AnimateOut() 
+    private IEnumerator AnimateOut() 
     {
+        yield return new WaitForSecondsRealtime(1.5f);
         if(destroyAfter)
             Destroy(gameObject, 1f);
-        transform.DOLocalMoveY(25, 0.6f).SetEase(Ease.InBounce);
-        transform.DOScale(0,0.6f).SetEase(Ease.InCubic);
+        transform.DOLocalMoveY(25, 0.6f).SetEase(Ease.InBounce).SetUpdate(true);
+        transform.DOScale(0,0.6f).SetEase(Ease.InCubic).SetUpdate(true);
     }
 
 }

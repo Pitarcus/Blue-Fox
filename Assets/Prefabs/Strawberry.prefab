@@ -4827,9 +4827,10 @@ GameObject:
   - component: {fileID: 389476388146898027}
   - component: {fileID: 389476388146898029}
   - component: {fileID: 3159959417889385909}
+  - component: {fileID: 4504429091093604487}
   m_Layer: 0
   m_Name: Strawberry
-  m_TagString: Untagged
+  m_TagString: Strawberry
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4912,7 +4913,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.3
+  m_Radius: 2.4
   m_Center: {x: -0.08345741, y: 0.23442316, z: -0.04254991}
 --- !u!114 &389476388146898027
 MonoBehaviour:
@@ -4965,6 +4966,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   foodCaughtScript: {fileID: 389476388146898029}
   floatingSineAnimation: {fileID: 389476388146898027}
+  strawberryManager: {fileID: 4504429091093604487}
+  strawberryTouchedEvent:
+    Guid:
+      Data1: 1498525957
+      Data2: 1129881882
+      Data3: -352349771
+      Data4: -1695555307
+    Path: event:/SFX/Ambience/Strawberr_Touched
+  strawberryIndex: 0
   trigger: {fileID: 389476388146898030}
   foodOffset: {x: 3, y: 10, z: 0}
-  smoothTime: 0.3
+  smoothTime: 0.2
+--- !u!114 &4504429091093604487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695484430200991991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbc229b635689174e93bca0c4d7a7d21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strawberryScript: {fileID: 3159959417889385909}

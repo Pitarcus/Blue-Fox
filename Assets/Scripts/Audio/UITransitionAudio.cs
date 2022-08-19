@@ -8,11 +8,11 @@ public class UITransitionAudio : MonoBehaviour
     public FMODUnity.EventReference transitionIN;
     public FMODUnity.EventReference transitionOUT;
 
-    public void playTransitionIn()
+    public void PlayTransitionIn()
     {
         FMODUnity.RuntimeManager.PlayOneShot(transitionIN);
     }   
-    public void playTransitionOut()
+    public void PlayTransitionOut()
     {
         FMODUnity.RuntimeManager.PlayOneShot(transitionOUT);
     }

@@ -8,7 +8,14 @@ public class Strawberry : MonoBehaviour
     private FoodCaught foodCaughtScript;
     [SerializeField]
     private FloatingSineAnimation floatingSineAnimation;
-    
+    [SerializeField]
+    private InitialStrawberryManager strawberryManager;
+
+    [SerializeField]
+    private FMODUnity.EventReference strawberryTouchedEvent;
+
+    public int strawberryIndex = 0;
+
     public Collider trigger;
     [Tooltip("Z value is ignored as it can be modified if ther are more than one strawberries")]
     public Vector3 foodOffset;
@@ -23,7 +30,6 @@ public class Strawberry : MonoBehaviour
     private Vector3 velocity;
 
     private Vector3 originalPosition;
-
 
     private void Awake()
     {
@@ -40,21 +46,23 @@ public class Strawberry : MonoBehaviour
             foxHealth.playerDeath.AddListener(ResetStrawberry);
             foxHealth.playerRespawned.AddListener(ResetStrawberry);
             foxMovement.onTrueGround.AddListener(CompleteStrawberry);
+            foxFoodScript.potentialStrawberries++;
 
             foxTransform = other.transform;
 
             // Calculate Position
             zOffset = foxFoodScript.potentialStrawberries * 5f;
             smoothTime += foxFoodScript.potentialStrawberries * 0.05f;
-            foxFoodScript.potentialStrawberries++;
-
+           
             followingPlayer = true;
             trigger.enabled = false;
             floatingSineAnimation.enabled = false;
+
+            FMODUnity.RuntimeManager.PlayOneShot(strawberryTouchedEvent);
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if(followingPlayer)
         {
@@ -70,6 +78,8 @@ public class Strawberry : MonoBehaviour
     void CompleteStrawberry()
     {
         followingPlayer = false;
+
+        strawberryManager.MarkStrawberry();
 
         foxHealth.playerDeath.RemoveListener(ResetStrawberry);
         foxHealth.playerRespawned.RemoveListener(ResetStrawberry);

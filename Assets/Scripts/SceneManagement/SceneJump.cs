@@ -11,23 +11,35 @@ public class SceneJump : MonoBehaviour
     [SerializeField]
     private float transitionTime;
 
+    private bool chanching = false;
+
     private void Start()
     {
-       // input = new PlayerInput();
-        //input.CharacterControls.Enable();
+        chanching = false;
     }
     public void ChangeScene(int index)
     {
-        // Debug.Log("Changing scene...");
-
-        Time.timeScale = 1;
-        transition.SetTrigger("Start");
-        StartCoroutine(LoadLevel(index));
+        if (!chanching)
+        {
+            chanching = true;
+            Time.timeScale = 1;
+            transition.SetTrigger("Start");
+            StartCoroutine(LoadLevel(index));
+        }
     }
     IEnumerator LoadLevel(int levelIndex)
     {
         yield return new WaitForSeconds(transitionTime);
-       
-        SceneManager.LoadScene(levelIndex);
+
+        Scene activeScene = SceneManager.GetActiveScene();
+
+        //SceneManager.LoadScene(levelIndex);
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(levelIndex, LoadSceneMode.Single);
+
+        // Wait until the level finishes loading
+        while (!asyncLoadLevel.isDone)
+            yield return null;
+        // Wait a frame so every Awake and Start method is called
+        yield return new WaitForEndOfFrame();
     }
 }

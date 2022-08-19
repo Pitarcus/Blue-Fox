@@ -14,6 +14,8 @@ public class MusicTrigger : MonoBehaviour
     private bool addMistery = false;
     [SerializeField]
     private bool noMistery = false;
+    [SerializeField]
+    private bool stopOotC = false;
 
     private bool done = false;
 
@@ -38,6 +40,8 @@ public class MusicTrigger : MonoBehaviour
             {
                 musicManager.OutOfTheCaveRemoveMistery();
             }
+            else if (stopOotC)
+                musicManager.PauseOutOfTheCave();
         }
     }
 }

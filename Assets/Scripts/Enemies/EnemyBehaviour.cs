@@ -128,7 +128,6 @@ public class EnemyBehaviour : MonoBehaviour
         else // Enemy dead
         {
             dead = true;
-            Debug.Log("Enemy says is dead: " + dead);
 
             feathers.Stop();
             smoke.Stop();
