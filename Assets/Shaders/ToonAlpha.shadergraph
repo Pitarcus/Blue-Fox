@@ -5669,7 +5669,8 @@
     "m_AlphaClip": true,
     "m_CastShadows": true,
     "m_ReceiveShadows": true,
-    "m_CustomEditorGUI": ""
+    "m_CustomEditorGUI": "",
+    "m_SupportVFX": false
 }
 
 {
@@ -6187,12 +6188,12 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "SOFT SHADOWS",
     "m_DefaultReferenceName": "_SOFT_SHADOWS",
-    "m_OverrideReferenceName": "",
+    "m_OverrideReferenceName": "_SHADOWS_SOFT",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
     "m_KeywordType": 0,
-    "m_KeywordDefinition": 0,
+    "m_KeywordDefinition": 1,
     "m_KeywordScope": 0,
     "m_KeywordStages": 63,
     "m_Entries": [],
@@ -6908,7 +6909,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "SHADOWS",
     "m_DefaultReferenceName": "_SHADOWS",
-    "m_OverrideReferenceName": "MAIN_LIGHTS_CALCULATE_SHADOWS",
+    "m_OverrideReferenceName": "MAIN_LIGHT_CALCULATE_SHADOWS",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
