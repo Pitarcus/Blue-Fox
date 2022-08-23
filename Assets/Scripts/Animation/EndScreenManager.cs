@@ -23,6 +23,7 @@ public class EndScreenManager : MonoBehaviour
     public FMODUnity.EventReference foxFacesFillingUpEvent;
     public FMODUnity.EventReference foxFaceComplete;
     public FMODUnity.EventReference foxFaceWrong;
+    public FMODUnity.EventReference perfectEndEvent;
     public Volume hurtVolume;
 
 
@@ -212,6 +213,9 @@ public class EndScreenManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(timeToShowDead);
 
         CalculateTextAndAnimateDead();
+
+        if (savedCubs == 3)
+            FMODUnity.RuntimeManager.PlayOneShot(perfectEndEvent);
 
         yield return new WaitForSecondsRealtime(timeToShowText);
 

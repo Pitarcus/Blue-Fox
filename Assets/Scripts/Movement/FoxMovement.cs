@@ -63,6 +63,8 @@ public class FoxMovement : MonoBehaviour
     public float dashSpeed = 100;
     public float dashMaxDrag = 14f;
     public float airborneDashBonus = 25f;
+    private float airborneDash;
+    private float groundedDash;
     [Header("Dash Animation")]
     public float dashFresnelInitAmount = 1f;
     public float dashInitPowerAmount = 0f;
@@ -175,6 +177,9 @@ public class FoxMovement : MonoBehaviour
         CalculateForwardVectors(); // Function that calculates the vectors for correcting movement depending on the camera's view
 
         foxMaterial = foxMesh.materials[0];
+
+        airborneDash = dashSpeed + airborneDashBonus;
+        groundedDash = dashSpeed;
     }
 
     public void CalculateForwardVectors()   // Refresh the vectors depending on the view
@@ -221,7 +226,7 @@ public class FoxMovement : MonoBehaviour
                     canDashAnimation();
 
                 canDash = true;
-                dashSpeed -= airborneDashBonus;
+                dashSpeed = groundedDash;
 
                 jumpTimer = 0f;
 
@@ -243,7 +248,7 @@ public class FoxMovement : MonoBehaviour
                 if (!isJumping)
                     m_Animator.SetTrigger("falling");
 
-                dashSpeed += airborneDashBonus;
+                dashSpeed = airborneDash;
             }
             isGrounded = false;
             m_Animator.SetBool("isGrounded", isGrounded);
