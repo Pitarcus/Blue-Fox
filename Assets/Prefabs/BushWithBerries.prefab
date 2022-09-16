@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 856113366358011383}
   - component: {fileID: 2026640944908071463}
   - component: {fileID: 2026640944908071462}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: BushWithBerries
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5335,6 +5335,10 @@ PrefabInstance:
       value: Berries
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d09a38014c18ea048b6080f0624aafb6, type: 3}
       propertyPath: m_TagString
       value: Berries
       objectReference: {fileID: 0}
@@ -5365,6 +5369,7 @@ MonoBehaviour:
   changesMesh: 1
   unlocked: 0
   destroyAfter: 1
+  instaGet: 1
   extraValue: 0
   objectScale: 1
   foodTriggered:

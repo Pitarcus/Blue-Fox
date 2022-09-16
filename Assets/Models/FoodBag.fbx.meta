@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 3b04426d0e4258943bca4c79cf96a840
 ModelImporter:
-  serializedVersion: 21202
+  serializedVersion: 21300
   internalIDToNameTable:
   - first:
       74: -623603649343465320
@@ -63,28 +63,28 @@ ModelImporter:
       - time: 0.2188065
         functionName: PlayBigWings
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: f91a8684ac1804f47a998e6410976035, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.56669587
         functionName: PlaySmallWings
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: f91a8684ac1804f47a998e6410976035, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.72513556
         functionName: PlaySmallWings
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: f91a8684ac1804f47a998e6410976035, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.9330922
         functionName: PlaySmallWings
         data: 
-        objectReferenceParameter: {instanceID: 0}
+        objectReferenceParameter: {fileID: 11500000, guid: f91a8684ac1804f47a998e6410976035, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -159,6 +159,7 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 0
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  remapMaterialsIfMaterialImportModeIsNone: 1
   additionalBone: 0
   userData: 
   assetBundleName: 

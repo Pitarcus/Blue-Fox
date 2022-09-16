@@ -4828,7 +4828,7 @@ GameObject:
   - component: {fileID: 389476388146898029}
   - component: {fileID: 3159959417889385909}
   - component: {fileID: 4504429091093604487}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Strawberry
   m_TagString: Strawberry
   m_Icon: {fileID: 0}

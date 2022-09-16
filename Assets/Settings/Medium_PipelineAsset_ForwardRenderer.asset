@@ -16,7 +16,9 @@ MonoBehaviour:
     debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
   m_RendererFeatures:
   - {fileID: 449732179823905767}
-  m_RendererFeatureMap: e74b77e608c53d06
+  - {fileID: 616306923212425703}
+  - {fileID: 2726989563919841642}
+  m_RendererFeatureMap: e74b77e608c53d06e7c9b09ee18f8d086ab9a3678f36d825
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   xrSystemData: {fileID: 11400000, guid: 60e1133243b97e347b653163a8c01b64, type: 2}
@@ -32,6 +34,7 @@ MonoBehaviour:
     coreBlitColorAndDepthPS: {fileID: 4800000, guid: d104b2fc1ca6445babb8e90b0758136b, type: 3}
     cameraMotionVector: {fileID: 4800000, guid: c56b7e0d4c7cb484e959caeeedae9bbf, type: 3}
     objectMotionVector: {fileID: 4800000, guid: 7b3ede40266cd49a395def176e1bc486, type: 3}
+  m_AssetVersion: 1
   m_OpaqueLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -51,6 +54,7 @@ MonoBehaviour:
   m_AccurateGbufferNormals: 0
   m_ClusteredRendering: 0
   m_TileSize: 32
+  m_IntermediateTextureMode: 1
 --- !u!114 &449732179823905767
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -74,3 +78,55 @@ MonoBehaviour:
       useGBuffer: 1
   m_CopyDepthPS: {fileID: 4800000, guid: d6dae50ee9e1bfa4db75f19f99355220, type: 3}
   m_DBufferClear: {fileID: 4800000, guid: f056d8bd2a1c7e44e9729144b4c70395, type: 3}
+--- !u!114 &616306923212425703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
+  m_Name: ToonOutline
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  settings:
+    passTag: ToonOutline
+    Event: 300
+    filterSettings:
+      RenderQueueType: 0
+      LayerMask:
+        serializedVersion: 2
+        m_Bits: 1408
+      PassNames: []
+    overrideMaterial: {fileID: 2100000, guid: f4e38e4ae84ed12499899f1b3ae8328a, type: 2}
+    overrideMaterialPassIndex: 0
+    overrideDepthState: 0
+    depthCompareFunction: 4
+    enableWrite: 0
+    stencilSettings:
+      overrideStencilState: 0
+      stencilReference: 0
+      stencilCompareFunction: 8
+      passOperation: 0
+      failOperation: 0
+      zFailOperation: 0
+    cameraSettings:
+      overrideCamera: 0
+      restoreCamera: 1
+      offset: {x: 0, y: 0, z: 0, w: 0}
+      cameraFieldOfView: 60
+--- !u!114 &2726989563919841642
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc31338901b6810448623f19ea331570, type: 3}
+  m_Name: DepthNormals
+  m_EditorClassIdentifier: 
+  m_Active: 0

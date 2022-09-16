@@ -6,6 +6,7 @@ public class DashResetOrb : MonoBehaviour
     private Material dashResetMaterial;
     private MeshRenderer m_renderer;
     private Collider orbCollider;
+    public GameObject outlineObject;
     private ParticleSystem orbParticles;
     private ParticleSystem brokenOrbParticles;
     public FMODUnity.EventReference breakingOrbEvent;
@@ -31,7 +32,8 @@ public class DashResetOrb : MonoBehaviour
     {
         orbCollider.enabled = false;
         m_renderer.enabled = false;
-       
+        outlineObject.SetActive(false);
+
         orbParticles.Stop();
         brokenOrbParticles.Play();
 
@@ -47,5 +49,6 @@ public class DashResetOrb : MonoBehaviour
         DOVirtual.Float(0, 1f, 0.5f, SetOrbFresnel);
         orbParticles.Play();
         orbCollider.enabled = true;
+        outlineObject.SetActive(true);
     }
 }
