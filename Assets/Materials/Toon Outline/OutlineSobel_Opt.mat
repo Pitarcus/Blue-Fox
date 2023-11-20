@@ -33,50 +33,6 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _BaseMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _BumpMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailAlbedoMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailMask:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _DetailNormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _EmissionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MetallicGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _OcclusionMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _ParallaxMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SpecGlossMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -91,50 +47,21 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AlphaClip: 0
-    - _Blend: 0
-    - _BumpScale: 1
-    - _ClearCoatMask: 0
-    - _ClearCoatSmoothness: 0
-    - _Cull: 2
-    - _Cutoff: 0.5
-    - _DetailAlbedoMapScale: 1
-    - _DetailNormalMapScale: 1
-    - _DstBlend: 0
-    - _EnvironmentReflections: 1
-    - _GlossMapScale: 0
-    - _Glossiness: 0
-    - _GlossyReflections: 0
-    - _Metallic: 0
-    - _OcclusionStrength: 1
-    - _OutlinesAcuteDepthStartDot: 100
-    - _OutlinesAcuteDepthThresholdMult: 0.77
-    - _OutlinesDepthStrenght: 1
-    - _OutlinesDepthThreshold: 0.002
-    - _OutlinesDepthTightening: 0.61
-    - _OutlinesFarDepthStart: 0.62
-    - _OutlinesFarDepthThresholdMult: 11.51
-    - _OutlinesFarNormalStartDepth: -0.11
-    - _OutlinesFarNormalThresholdMult: 1
-    - _OutlinesNormalsStrengh: 0.8
-    - _OutlinesNormalsThreshold: 1.8
-    - _OutlinesNormalsTightening: 97.82
-    - _OutlinesThickness: 0.0027
-    - _Parallax: 0.005
+    - _OutlinesAcuteDepthStartDot: 0.24
+    - _OutlinesAcuteDepthThresholdMult: 0.46
+    - _OutlinesDepthStrenght: 498.65
+    - _OutlinesDepthThreshold: 81.68
+    - _OutlinesDepthTightening: 0.27
+    - _OutlinesFarDepthStart: 37.6
+    - _OutlinesFarDepthThresholdMult: 11.5
+    - _OutlinesFarNormalStartDepth: 0.3
+    - _OutlinesFarNormalThresholdMult: 8.21
+    - _OutlinesNormalsStrengh: 0.99
+    - _OutlinesNormalsThreshold: 2.65
+    - _OutlinesNormalsTightening: 11.54
+    - _OutlinesThickness: 0.003
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _ReceiveShadows: 1
-    - _Smoothness: 0.5
-    - _SmoothnessTextureChannel: 0
-    - _SpecularHighlights: 1
-    - _SrcBlend: 1
-    - _Surface: 0
-    - _WorkflowMode: 1
-    - _ZWrite: 1
     m_Colors:
-    - _BaseColor: {r: 0.6037736, g: 0.08202204, b: 0.08202204, a: 1}
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutlineColor: {r: 0, g: 0.19561926, b: 0.38679248, a: 1}
-    - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+    - _OutlineColor: {r: 0.010893533, g: 0.22183813, b: 0.33962262, a: 1}
   m_BuildTextureStacks: []
